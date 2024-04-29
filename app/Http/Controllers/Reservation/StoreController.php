@@ -47,12 +47,12 @@ class StoreController extends Controller
         $time = strtotime($request->get('time'));
         $services = Service::findMany($request->get('services'));
 
-        return response()->json([
-            'matchingService' => $services,
-        ]);
+       
 
         $matchingService = (new findServiceByTime)->handle($services, $time);
-        
+        return response()->json([
+            'matchingService' => $matchingService,
+        ]);
         // $current_resa_date = $request->get('reservation_date');
 
         $current_resa_date_format = (new FormatDate)->Ymd($request->get('reservation_date'));
