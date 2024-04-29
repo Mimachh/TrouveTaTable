@@ -1,4 +1,3 @@
-import { Entreprise } from "@/types/entreprise"
 
 export const DocumentDataFields = (entreprise?: Entreprise | null) => {
     const datafields = {

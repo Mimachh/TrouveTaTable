@@ -9,7 +9,6 @@ import FormFieldLayout from "@/Components/layout/form-field-layout";
 import { Input } from "@/Components/ui/input";
 import { Separator } from "@/Components/ui/separator";
 import { cn } from "@/lib/utils";
-import { Entreprise } from "@/types/entreprise";
 
 const ProfessionalLocation = ({
     setData,

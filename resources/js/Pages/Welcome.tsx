@@ -25,10 +25,10 @@ export default function Welcome({ auth, restaurant }: WelcomeProps) {
                 '
                 initial={{
                     "--x": "100%",
-                }}
+                } as any}
                 animate={{
                     "--x": "-100%",
-                }}
+                } as any}
                 whileTap={{
                     scale: 0.97
                 }}
