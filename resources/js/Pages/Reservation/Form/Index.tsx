@@ -176,6 +176,7 @@ const Index = ({
                 })
                 .then((response) => {
                     // Traiter les données de la réponse ici
+                    console.log(response.data);
                     console.log(response.data.matchingService.id);
                     setTables(response.data.tables);
 
