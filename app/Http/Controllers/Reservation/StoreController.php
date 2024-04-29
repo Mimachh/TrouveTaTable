@@ -50,12 +50,12 @@ class StoreController extends Controller
        
         $current_resa_date_format = (new FormatDate)->Ymd($request->get('reservation_date'));
 
-        return response()->json([
-            'matchingService' => $time = strtotime($request->get('time'))
-        ]);
+        
 
         $matchingService = (new findServiceByTime)->handle($services, $time);
-        
+        return response()->json([
+            'matchingService' => $matchingService
+        ]);
        
         // $current_resa_date = $request->get('reservation_date');
 
