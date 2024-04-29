@@ -64,9 +64,7 @@ class StoreController extends Controller
                 break; // Sortir de la boucle car nous avons trouvé le service correspondant
             }
         }
-        return response()->json([
-            'matchingService' => $matchingService
-        ]);
+      
        
         // $current_resa_date = $request->get('reservation_date');
 
