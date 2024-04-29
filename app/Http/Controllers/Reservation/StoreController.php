@@ -52,7 +52,7 @@ class StoreController extends Controller
 
         
 
-        $matchingService = (new findServiceByTime)->handle($services, $time);
+        $matchingService = (new FindServiceByTime)->handle($services, $time);
         return response()->json([
             'matchingService' => $matchingService
         ]);

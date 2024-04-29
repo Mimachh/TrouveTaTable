@@ -4,13 +4,13 @@ declare(stric_types=1);
 
 namespace App\Actions;
 
-class findServiceByTime
+class FindServiceByTime
 {
 
     public function handle($services, $time)
     {
         $matchingService = null;
-        $time = strtotime($time);
+        
         foreach ($services as $service) {
             $startTime = strtotime($service->start_time);
             $endTime = strtotime($service->end_time);
