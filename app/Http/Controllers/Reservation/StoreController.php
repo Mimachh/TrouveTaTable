@@ -53,9 +53,7 @@ class StoreController extends Controller
         
 
         $matchingService = (new FindServiceByTime)->handle($services, $time);
-        return response()->json([
-            'matchingService' => $matchingService
-        ]);
+        
        
         // $current_resa_date = $request->get('reservation_date');
 
