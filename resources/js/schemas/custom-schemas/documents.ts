@@ -1,5 +1,5 @@
 
-export const DocumentDataFields = (entreprise?: Entreprise | null) => {
+export const DocumentDataFields = (entreprise?: any | null) => {
     const datafields = {
         document_name: "",
         document_uuid: "",
