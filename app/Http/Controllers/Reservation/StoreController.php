@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Reservation;
 
-use App\Actions\findServiceByTime;
+use App\Actions\FindServiceByTime;
 use App\Actions\FormatDate;
 use App\Enums\TableStatus;
 use App\Http\Controllers\Controller;
