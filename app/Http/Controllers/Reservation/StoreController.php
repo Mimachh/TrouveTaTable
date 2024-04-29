@@ -52,7 +52,18 @@ class StoreController extends Controller
 
         
 
-        $matchingService = (new findServiceByTime)->handle($services, $time);
+        // $matchingService = (new findServiceByTime)->handle($services, $time);
+        $matchingService = null;
+        foreach ($services as $service) {
+            $startTime = strtotime($service->start_time);
+            $endTime = strtotime($service->end_time);
+
+            if ($time >= $startTime && $time <= $endTime) {
+                // Si le temps est dans la plage horaire du service, stocker ce service
+                $matchingService = $service;
+                break; // Sortir de la boucle car nous avons trouvé le service correspondant
+            }
+        }
         return response()->json([
             'matchingService' => $matchingService
         ]);
