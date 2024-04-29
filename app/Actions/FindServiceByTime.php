@@ -10,6 +10,7 @@ class findServiceByTime
     public function handle($services, $time)
     {
         $matchingService = null;
+        $time = strtotime($time);
         foreach ($services as $service) {
             $startTime = strtotime($service->start_time);
             $endTime = strtotime($service->end_time);
