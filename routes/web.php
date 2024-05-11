@@ -105,6 +105,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 Route::post('/{restaurant}/reservation/changeStatus/{reservation}', ChangeReservationStatusController::class)->name('reservation.change.status');
                 Route::post('/{restaurant}/reservation/create/stepOne', [CreateReservationController::class, "getTables"])->name('reservation.create.stepOne');
                 Route::post('/{restaurant}/reservation/create/stepTwo', [CreateReservationController::class, "steptwo"])->name('reservation.create.stepTwo');
+                Route::post('/{restaurant}/reservation/create/stepThree', [CreateReservationController::class, "stepthree"])->name('reservation.create.stepThree');
             });
     });
 

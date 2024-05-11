@@ -65,12 +65,11 @@ export const useShowReservationModal = createSelectors(create<useShowReservation
                     axios
                         .get(`/${restaurantId}/reservation/${id}`)
                         .then((response) => {
-                            console.log(response)
                             set({ reservation: response.data.data.reservation });
                             set({ status: response.data.data.reservationStatus });
                         })
                         .catch((error) => {
-                            console.error(error);
+                            // console.error(error);
                         }).then(() => {
                             set({ loading: false });
                         });

@@ -2,9 +2,6 @@ import { FormEventHandler, useEffect, useState } from "react";
 
 import { Modal } from "@/Components/ui/modal";
 
-import { LoaderCircle } from "lucide-react";
-import { useShowReservationModal } from "@/hooks/useShowReservationModal";
-import { formatTime } from "@/lib/format-time";
 import FormFieldLayout from "../layout/form-field-layout";
 import {
     Select,
@@ -13,11 +10,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "../ui/select";
-import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
 import { useForm } from "@inertiajs/react";
-import { Restaurant } from "@/types/restaurant";
 import { toast } from "sonner";
 import { useAddAdminReservationModal } from "@/hooks/useAddAdminReservationModal";
 import { useMultistepForm } from "@/hooks/useMultiStepForm";
@@ -29,7 +23,8 @@ import { DatePickerState, useDatePickerState } from "react-stately";
 import { Table } from "@/types/tables";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import TableInput from "@/Pages/Reservation/Form/TableInput";
+import { formatDateToIsoMidDay } from "@/lib/format-date-to-iso-mid-day";
+import { useReservationAndResetAfterAdding } from "@/hooks/useReservationAndResetAfterAdding";
 
 export const AddAdminReservation = ({}: {}) => {
     const [error, setError] = useState<Record<string, string>>({});
@@ -40,13 +35,24 @@ export const AddAdminReservation = ({}: {}) => {
     const reservationModalIsOpen = useAddAdminReservationModal.use.isOpen();
     const selectedTime = useAddAdminReservationModal.use.time();
 
+    const serviceId = useAddAdminReservationModal.use.serviceId();
+
+    const setResetTheReservation = useReservationAndResetAfterAdding.use.setReset();
+
     const { data, setData, post, processing, errors, reset } = useForm({
         guests: undefined,
         time: "",
         table_id: undefined,
+        first_name: "",
+        last_name: "",
+        email: "",
+        phone: "",
+
+        service_id: undefined,
+        services: [],
+        reservation_date: "",
     });
 
-    const serviceId = useAddAdminReservationModal.use.serviceId();
     const date = useAddAdminReservationModal.use.date();
 
     const timeState = useDatePickerState({ granularity: "minute" });
@@ -69,7 +75,7 @@ export const AddAdminReservation = ({}: {}) => {
             error={error}
             timeState={timeState}
         />,
-        <p>3 : Nom et info.</p>,
+        <UserStep data={data} setData={setData} error={error} />,
     ]);
 
     useEffect(() => {
@@ -81,20 +87,30 @@ export const AddAdminReservation = ({}: {}) => {
         }
     }, [reservationModalIsOpen]);
 
+    useEffect(() => {
+        if (serviceId) {
+            setData({
+                ...data,
+                "service_id": serviceId as any,
+                "services": [serviceId] as any
+              });
+        }
+    }, [serviceId]);
+
     const submit: FormEventHandler = (e?: any) => {
         if (e) e.preventDefault();
         setError({});
 
         if (currentStepIndex + 1 === 1) {
+            setData("reservation_date", formatDateToIsoMidDay({ date: date }));
+
             axios
                 .post(`/${restaurantId}/reservation/create/stepOne`, {
                     guests: data.guests,
-                    // time: data.time,
-                    reservation_date: date,
+                    reservation_date: formatDateToIsoMidDay({ date: date }),
                     service_id: serviceId,
                 })
                 .then((response) => {
-                    console.log(response.data);
                     setTables(response.data.data.tables);
                     return next();
                 })
@@ -105,17 +121,16 @@ export const AddAdminReservation = ({}: {}) => {
                 });
         }
 
-        if(currentStepIndex + 1 === 2) {
+        if (currentStepIndex + 1 === 2) {
             axios
                 .post(`/${restaurantId}/reservation/create/stepTwo`, {
                     guests: data.guests,
                     time: data.time,
                     table_id: data.table_id,
-                    reservation_date: date,
+                    reservation_date: formatDateToIsoMidDay({ date: date }),
                     services: [serviceId],
                 })
                 .then((response) => {
-                    console.log(response.data);
                     return next();
                 })
                 .catch((e) => {
@@ -123,6 +138,24 @@ export const AddAdminReservation = ({}: {}) => {
                     setError(e.response.data.errors);
                     return;
                 });
+        }
+
+        if (currentStepIndex + 1 === 3) {
+            post(`/${restaurantId}/reservation/create/stepThree`, {
+                preserveScroll: true,
+                onSuccess: () => {
+                    toast.success("Réservation effectuée avec succès");
+                    setResetTheReservation(true);
+                    reset()
+                    //@ts-ignore
+                    timeState.setTimeValue(undefined);
+                    reservationModalOnClose();
+                },
+                onError: (errors) => {
+                    setError(errors);
+                },
+              })
+
         }
     };
 
@@ -171,7 +204,7 @@ export const AddAdminReservation = ({}: {}) => {
                                         </small>
                                         <SubmitButton
                                             type="submit"
-                                            disabled={false}
+                                            disabled={processing}
                                             className="w-full col-span-2"
                                         >
                                             {isLastStep
@@ -286,6 +319,77 @@ const TableAndTimeStep = ({
                     </SelectContent>
                 </Select>
             </FormFieldLayout>
+        </div>
+    );
+};
+
+const UserStep = ({
+    data,
+    setData,
+    error,
+}: {
+    data: any;
+    setData: any;
+    error: Record<string, string>;
+}) => {
+    return (
+        <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+                <FormFieldLayout
+                    fieldName="first_name"
+                    label="Prénom"
+                    // error={error.first_name}
+                >
+                    <Input
+                        id="first-name"
+                        value={data.first_name ?? ""}
+                        onChange={(e) => setData("first_name", e.target.value)}
+                        placeholder="Max"
+                    />
+                </FormFieldLayout>
+
+                <FormFieldLayout
+                    fieldName="last_name"
+                    label="Nom"
+                    // error={error.last_name}
+                >
+                    <Input
+                        id="last-name"
+                        value={data.last_name ?? ""}
+                        onChange={(e) => setData("last_name", e.target.value)}
+                        placeholder="Robinson"
+                    />
+                </FormFieldLayout>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+                <FormFieldLayout
+                    fieldName="email"
+                    label="Email"
+                    // error={error.email}
+                >
+                    <Input
+                        value={data.email ?? ""}
+                        onChange={(e) => setData("email", e.target.value)}
+                        id="email"
+                        type="email"
+                        placeholder="m@example.com"
+                    />
+                </FormFieldLayout>
+                <FormFieldLayout
+                    fieldName="phone"
+                    label="Téléphone"
+                    // error={error.phone}
+                >
+                    <Input
+                        value={data.phone ?? ""}
+                        onChange={(e) => setData("phone", e.target.value)}
+                        id="phone"
+                        type="text"
+                        placeholder="06 12 34 56 78"
+                    />
+                </FormFieldLayout>
+            </div>
         </div>
     );
 };

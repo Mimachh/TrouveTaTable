@@ -16,6 +16,7 @@ import { useAddAdminReservationModal } from "@/hooks/useAddAdminReservationModal
 import { AddAdminReservation } from "@/Components/modales/AddAdminReservation";
 import { Separator } from "@/Components/ui/separator";
 import { formatDateToIsoMidDay } from "@/lib/format-date-to-iso-mid-day";
+import { useReservationAndResetAfterAdding } from "@/hooks/useReservationAndResetAfterAdding";
 
 interface ListReservationProps {
     selectedDay: Date;
@@ -46,7 +47,7 @@ const ListOfReservation = ({
     const addAdminReservationModalSetRestaurantId = useAddAdminReservationModal.use.setRestaurantId();
     const addAdminReservationModalSetDate = useAddAdminReservationModal.use.setDate();
     const addAdminReservationModalSetTime = useAddAdminReservationModal.use.setTime();
-
+    
     const getReservations = () => {
         setReservations([]);
         setLoading(true);
@@ -82,11 +83,15 @@ const ListOfReservation = ({
             });
     };
 
+    const resetTheReservation = useReservationAndResetAfterAdding.use.reset()
+    const setResetTheReservation = useReservationAndResetAfterAdding.use.setReset()
     useEffect(() => {
+        if(resetTheReservation) {
+            setResetTheReservation(false);
+        }
         getReservations();
-
         setRestaurantId(restaurant.id);
-    }, [selectedDay]);
+    }, [selectedDay, resetTheReservation]);
 
     return (
         <section className="mt-12 md:mt-0 md:pl-14">

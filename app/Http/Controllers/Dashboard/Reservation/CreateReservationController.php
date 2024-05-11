@@ -8,9 +8,10 @@ use App\Http\Requests\Dashboard\Reservation\CreateReservationFromAdminStepThreeR
 use App\Http\Requests\Dashboard\Reservation\CreateReservationFromAdminStepTwoRequest;
 use App\Http\Resources\TableResource;
 use App\Http\Responses\ApiResponse;
+use App\Models\Reservation;
 use App\Models\Restaurant;
 use App\Repositories\TableRepository;
-
+use Carbon\Carbon;
 
 class CreateReservationController extends Controller
 {
@@ -35,6 +36,20 @@ class CreateReservationController extends Controller
     }
 
     public function stepThree(CreateReservationFromAdminStepThreeRequest $request, Restaurant $restaurant) {
-        // enregistrement ici
+        $data = $request->validated();
+
+        $reservation = Reservation::create([
+            'first_name' => $data['first_name'] ?? null,
+            'last_name' => $data['last_name'] ?? null,
+            'email' => $data['email'] ?? null,
+            'phone' => $data['phone'] ?? null,
+            'reservation_date' => Carbon::parse($request->reservation_date)->toDateString(),
+            'time' => $data['time'],
+            'service_id' => $data['service_id'] ?? null,
+            'table_id' => $data['table_id'] ?? null,
+            'guests' => $data['guests'] ?? null,
+        ]);
+ 
+
     }
 }
