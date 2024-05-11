@@ -20,12 +20,17 @@ return new class extends Migration
             $table->string('zip')->nullable(); // must be required for prod
             $table->string('phone')->nullable();
             $table->string('website')->nullable();
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->string('logo')->nullable();
             $table->string('cover')->nullable();
             $table->string('description')->nullable();
-            $table->string('hours');
+            $table->string('hours')->nullable();
             $table->boolean('active')->default(true);
+
+            $table->time('time_before_service')->nullable();
+            $table->time('time_after_service')->nullable();
+            
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
 
             // latitude and longitude
             $table->timestamps();

@@ -19,8 +19,8 @@ class ServiceResource extends JsonResource
             'name' => $this->name,
             'restaurant_id' => $this->restaurant_id,
             'day_id' => $this->day_id,
-            'start_time' => $this->start_time,
-            'end_time' => $this->end_time,
+            'start_time' => substr($this->start_time, 0, 5),
+            'end_time' => substr($this->end_time, 0, 5)
         ];
     }
 }

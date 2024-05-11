@@ -20,7 +20,7 @@ class CreateController extends Controller
         //    $now = microtime(true) * 1000;
         $before_today = strtotime("yesterday") * 1000 - 1;
 
-
+        
 
         try {
 
@@ -46,7 +46,7 @@ class CreateController extends Controller
 
             // $restaurant = Restaurant::with('days.services')->findOrFail($id);
 
-
+            
             return inertia("Reservation/Form/Index", [
                 'restaurant' => $restaurant,
                 'before_today' => $before_today,

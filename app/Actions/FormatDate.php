@@ -15,4 +15,10 @@ class FormatDate
         $transformDate = Carbon::parse($date);
         return $transformDate->format('Y-m-d');
     }
+
+    public function dmY($date)
+    {
+        $transformDate = Carbon::parse($date);
+        return $transformDate->format('d-m-Y');
+    }
 }

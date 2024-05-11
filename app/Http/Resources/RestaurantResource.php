@@ -28,7 +28,14 @@ class RestaurantResource extends JsonResource
             'cover' => $this->cover,
             'hours' => $this->hours,
             'active' => $this->active,
+            'time_before_service' => $this->time_before_service,
+            'time_after_service' => $this->time_after_service,
             'days' => $this->days,
+            'user_id' => $this->user_id,
+            'services' => ServiceResource::collection($this->services->sortBy('start_time')),
+            'reservations' => $this->whenLoaded('reservations', function () {
+                return ReservationResource::collection($this->reservations);
+            }),
         ];
     }
 }

@@ -32,8 +32,10 @@ export default function ResetPassword({
     };
 
     return (
-        <GuestLayout>
-            <Head title="Reset Password" />
+        <GuestLayout
+            title="Réinitialiser le mot de passe"
+        >
+            <Head title="Réinitialiser le mot de passe" />
 
             <form onSubmit={submit} className="space-form-field">
                 <FormFieldLayout

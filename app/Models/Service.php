@@ -32,4 +32,14 @@ class Service extends Model
         return $this->hasMany(Table::class);
     }
 
+    // public function getStartTimeAttribute($value)
+    // {
+    //     return str_replace(':', 'h', substr($value, 0, -3));
+    // }
+
+    // public function getEndTimeAttribute($value)
+    // {
+    //     return str_replace(':', 'h', substr($value, 0, -3));
+    // }
+
 }

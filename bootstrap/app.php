@@ -20,6 +20,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'redirect.subscribed' => RedirectIfSubscribed::class,
             'redirect.notsubscribed' => \App\Http\Middleware\RedirectIfNotSubscribed::class,
+            'must.have.restaurant' => \App\Http\Middleware\MustHaveRestaurant::class,
+            'abort.not.my.restaurant' => \App\Http\Middleware\AbortIfNotMyRestaurant::class,
         ]);
 
         $middleware->validateCsrfTokens(except: [

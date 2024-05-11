@@ -36,7 +36,9 @@ export default function Login({
     };
 
     return (
-        <GuestLayout>
+        <GuestLayout
+        title="Connexion"
+        >
             <Head title="Connexion" />
 
             {status && (

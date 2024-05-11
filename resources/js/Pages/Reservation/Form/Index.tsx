@@ -20,6 +20,7 @@ import TableInput from "./TableInput";
 import FormFieldLayout from "@/Components/layout/form-field-layout";
 import { time } from "console";
 import { PartySvg } from "@/Components/svg";
+import { formatDateToIsoMidDay } from "@/lib/format-date-to-iso-mid-day";
 
 type ResaFormProps = PageProps & {
     before_today: Date;
@@ -108,12 +109,9 @@ const Index = ({
 
         let isoDate = null;
         if (data.reservation_date) {
-            const d = data.reservation_date as unknown as Date;
-            let date = new Date(d);
-            date.setHours(12);
-            isoDate = date.toISOString();
+            isoDate = formatDateToIsoMidDay({date: data.reservation_date})     
         }
-
+       
         if (currentStepIndex + 1 === 1) {
             setLoading(true);
             setError("reservation_date", "");

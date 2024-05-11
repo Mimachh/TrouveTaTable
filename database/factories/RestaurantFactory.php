@@ -29,6 +29,10 @@ class RestaurantFactory extends Factory
             'cover' => $this->faker->imageUrl,
             'hours' => $this->faker->sentence,
             'active' => $this->faker->boolean,
+            'time_before_service' => null,
+            'time_after_service' => "00:30:00",
+            // 'user_id' => \App\Models\User::factory(),
+            'user_id' => 1,
         ];
     }
 }

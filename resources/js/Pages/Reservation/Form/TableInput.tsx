@@ -20,7 +20,7 @@ const TableInput = ({
     setData: any;
     errors: any;
     tables: Table[];
-    setGoNext: (value: boolean) => void;
+    setGoNext?: (value: boolean) => void;
 }) => {
     return (
         <FormFieldLayout
@@ -31,7 +31,7 @@ const TableInput = ({
             <Select
                 onValueChange={(e) => {
                     setData("table_id", e);
-                    setGoNext(true);
+                    if(setGoNext) setGoNext(true);
                 }}
                 // defaultValue={data.table_id?.toString() ?? undefined}
                 defaultValue={undefined}

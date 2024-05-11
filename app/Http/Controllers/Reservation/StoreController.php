@@ -16,12 +16,20 @@ use App\Models\Reservation;
 use App\Models\Restaurant;
 use App\Models\Service;
 use App\Models\Table;
+use App\Repositories\TableRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class StoreController extends Controller
 {
+    public $tableRepository;
+
+    public function __construct(TableRepository $tableRepository)
+    {
+        $this->tableRepository = $tableRepository;
+    }
+
     public function stepOne(StepOneRequest $request)
     {
         $date = Carbon::parse($request->get('reservation_date'));
@@ -66,22 +74,24 @@ class StoreController extends Controller
         //     })->pluck('table_id'),
         // ]);
 
-        $res_table_ids = Reservation::orderBy('reservation_date')->get()->filter(function ($value) use ($current_resa_date_format, $matchingService) {
-            // return $value->reservation_date->format('Y-m-d') == $current_resa_date->format('Y-m-d');
-            // return $value->reservation_date->format('Y-m-d') == $current_resa_date->format('Y-m-d') && $value->service_id == $matchingService["id"];
-            $valueDateFormat = (new FormatDate)->Ymd($value->reservation_date);
-            return $valueDateFormat == $current_resa_date_format && $value->service_id == $matchingService["id"];
-        })->pluck('table_id');
+        
+        $tables = $this->tableRepository->getFreeTables($request->get('reservation_date'), $matchingService["id"], $request->get('guests'), $request->get('id'));
+        // $res_table_ids = Reservation::orderBy('reservation_date')->get()->filter(function ($value) use ($current_resa_date_format, $matchingService) {
+        //     // return $value->reservation_date->format('Y-m-d') == $current_resa_date->format('Y-m-d');
+        //     // return $value->reservation_date->format('Y-m-d') == $current_resa_date->format('Y-m-d') && $value->service_id == $matchingService["id"];
+        //     $valueDateFormat = (new FormatDate)->Ymd($value->reservation_date);
+        //     return $valueDateFormat == $current_resa_date_format && $value->service_id == $matchingService["id"];
+        // })->pluck('table_id');
 
-        $tables = Table::where('status', TableStatus::AVAILABLE->value)
-            ->where('seats', '>=', $request->get('guests'))
-            ->where('restaurant_id', $request->get('id'))
-            ->whereNotIn('id', $res_table_ids)->get();
+        // $tables = Table::where('status', TableStatus::AVAILABLE->value)
+        //     ->where('seats', '>=', $request->get('guests'))
+        //     ->where('restaurant_id', $request->get('id'))
+        //     ->whereNotIn('id', $res_table_ids)->get();
 
         return response()->json([
             'matchingService' => $matchingService,
             'tables' => $tables,
-            'res_table_ids' => $res_table_ids,
+            // 'res_table_ids' => $res_table_ids,
         ]);
 
 

@@ -20,7 +20,9 @@ export default function ForgotPassword({ status }: { status?: string }) {
     };
 
     return (
-        <GuestLayout>
+        <GuestLayout
+        title="Mot de passe oublié"
+        >
             <Head title="Mot de passe oublié" />
 
             <div className="mb-4 text-sm text-muted-foreground">

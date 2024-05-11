@@ -1,3 +1,5 @@
+import { Restaurant } from "./restaurant";
+
 export interface User {
     id: number;
     name: string;
@@ -46,6 +48,7 @@ export interface Product {
 
 export type FlashMessage = PageProps & {
     message?: string;
+    error?: string;
 };
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {

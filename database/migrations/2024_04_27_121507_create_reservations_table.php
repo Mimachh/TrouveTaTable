@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->dateTime('reservation_date');
             $table->time('time');
+            $table->string('status')->default('accepté');
             $table->foreignId('service_id')->constrained()->onDelete('cascade');
             $table->foreignId('table_id')->constrained()->onDelete('cascade');
             $table->integer('guests');

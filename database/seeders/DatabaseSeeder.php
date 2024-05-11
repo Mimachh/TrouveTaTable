@@ -82,6 +82,7 @@ class DatabaseSeeder extends Seeder
             'day_id' => 1,
             'start_time' => '09:00:00',
             'end_time' => '11:00:00',
+            
         ]);
 
         $restaurant->services()->create([

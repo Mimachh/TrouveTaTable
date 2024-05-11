@@ -23,7 +23,9 @@ export default function ConfirmPassword() {
     };
 
     return (
-        <GuestLayout>
+        <GuestLayout
+        title='Confirmation du mot de passe'
+        >
             <Head title="Confirmation du mot de passe" />
 
             <div className="mb-4 text-sm text-gray-600">

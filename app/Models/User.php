@@ -44,6 +44,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'remember_token',
     ];
 
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new \App\Notifications\Auth\QueuedVerifyEmail);
+    }
+    
     /**
      * Get the attributes that should be cast.
      *
@@ -113,5 +118,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'role_user');
+    }
+
+    public function restaurants()
+    {
+        return $this->hasMany(Restaurant::class);
     }
 }

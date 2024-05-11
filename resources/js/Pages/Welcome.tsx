@@ -1,6 +1,5 @@
 import { Link, Head, router } from '@inertiajs/react';
 import { PageProps } from '@/types';
-import { Button } from '@/Components/ui/button';
 import { motion } from 'framer-motion';
 
 type WelcomeProps = PageProps & {
@@ -48,7 +47,7 @@ export default function Welcome({ auth, restaurant }: WelcomeProps) {
                     }
                 }}
                 onClick={() => {
-                    router.visit('/reservation/' + restaurant.id);
+                    router.visit('/book/' + restaurant.id);
                 }}
                 >
                     <span
