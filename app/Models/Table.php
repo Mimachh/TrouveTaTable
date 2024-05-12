@@ -14,6 +14,8 @@ class Table extends Model
         'name',
         'seats',
         'service_id',
+        'restaurant_id',
+        'status'
     ];
 
 

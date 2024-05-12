@@ -5,3 +5,8 @@ export interface Table {
     seats: number;
     status: string;
 }
+
+
+export interface TableStatus {
+    [key: string]: string;
+}

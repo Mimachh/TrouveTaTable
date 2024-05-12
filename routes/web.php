@@ -10,6 +10,9 @@ use App\Http\Controllers\Dashboard\Hours\IndexHoursController;
 use App\Http\Controllers\Dashboard\Reservation\ChangeReservationStatusController;
 use App\Http\Controllers\Dashboard\Reservation\CreateReservationController;
 use App\Http\Controllers\Dashboard\Reservation\IndexReservationController;
+use App\Http\Controllers\Dashboard\Tables\CreateTableController;
+use App\Http\Controllers\Dashboard\Tables\DeleteTableController;
+use App\Http\Controllers\Dashboard\Tables\IndexTableController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Reservation\CreateController as ReservationCreateController;
@@ -85,9 +88,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
                 Route::prefix('reservation')->as('reservation.')->group(function () {
                     Route::get('', IndexReservationController::class)->name('index');
-
                     // API
                     Route::get('getReservationsByDate/{date}', ShowByServiceAndDateController::class)->name('get.by.date');
+                });
+
+                Route::prefix('tables')->as('tables.')->group(function () {
+                    Route::get('/', IndexTableController::class)->name('index');
+                    Route::post('/', CreateTableController::class)->name('store');
+                    Route::delete('/{table}', DeleteTableController::class)->name('delete');
                 });
             });
         });
@@ -97,7 +105,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Every route here must have policy to check if the restaurant is owned by the user
             Route::get('/getAllMyRestaurants', GetAllMyRestaurants::class)->name('get.my.restaurants');
             
-            // Route::get('/getHoursByDayId/{restaurant}/{day}', [CreateHoursController::class, 'getHoursByDayId'])->name('get.hours.by.day'); // A supprimer si tout fonctionne.
 
             Route::middleware('abort.not.my.restaurant')->group(function () {
                 Route::get('/{restaurant}/getHoursByDayId/{day}', [CreateHoursController::class, 'getHoursByDayId'])->name('get.hours.by.day');
@@ -134,12 +141,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 
-
-Route::get('/book/{id}', ReservationCreateController::class)->name('reservation');
-Route::post('/book/step-one', [ReservationStoreController::class, 'stepOne'])->name('reservation.step-one');
-Route::post('/book/step-two', [ReservationStoreController::class, 'stepTwo'])->name('reservation.step-two');
-Route::post('/book/step-three', [ReservationStoreController::class, 'stepThree'])->name('reservation.step-three');
-Route::post('/book/step-four', [ReservationStoreController::class, 'stepFour'])->name('reservation.step-four');
+Route::prefix('book')->group(function () {
+    Route::get('{id}', ReservationCreateController::class)->name('reservation');
+    Route::post('step-one', [ReservationStoreController::class, 'stepOne'])->name('reservation.step-one');
+    Route::post('step-two', [ReservationStoreController::class, 'stepTwo'])->name('reservation.step-two');
+    Route::post('step-three', [ReservationStoreController::class, 'stepThree'])->name('reservation.step-three');
+    Route::post('step-four', [ReservationStoreController::class, 'stepFour'])->name('reservation.step-four');
+});
+// Route::get('/book/{id}', ReservationCreateController::class)->name('reservation');
+// Route::post('/book/step-one', [ReservationStoreController::class, 'stepOne'])->name('reservation.step-one');
+// Route::post('/book/step-two', [ReservationStoreController::class, 'stepTwo'])->name('reservation.step-two');
+// Route::post('/book/step-three', [ReservationStoreController::class, 'stepThree'])->name('reservation.step-three');
+// Route::post('/book/step-four', [ReservationStoreController::class, 'stepFour'])->name('reservation.step-four');
 
 
 

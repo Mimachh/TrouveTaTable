@@ -14,6 +14,7 @@ import ProjectLink from "./ProjectLink";
 import ProjectNavigation from "./ProjectNavigation";
 import { usePage } from "@inertiajs/react";
 import { Restaurant } from "@/types/restaurant";
+import { HandPlatter } from "lucide-react";
 
 const containerVariants = {
     close: {
@@ -156,6 +157,13 @@ const Navigation = () => {
                         </NavigationLink>
                         <NavigationLink name="Users">
                             <UsersIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
+                        </NavigationLink>
+                        <NavigationLink
+                         name="Tables"
+                         href={route("dashboard.tables.index", current_restaurant.id)}
+                         active={route().current("dashboard.tables.index", current_restaurant.id)}
+                        >
+                            <HandPlatter className="stroke-inherit stroke-[0.75] min-w-8 w-8 h-8"  />
                         </NavigationLink>
                         <NavigationLink
                             name="Horaires"

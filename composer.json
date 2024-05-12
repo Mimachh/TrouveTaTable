@@ -8,6 +8,7 @@
         "php": "^8.2",
         "dompdf/dompdf": "^2.0",
         "firebase/php-jwt": "^6.10",
+        "ifresh/laravel-enum-translations": "^1.0",
         "inertiajs/inertia-laravel": "^1.0",
         "laravel/breeze": "^2.0",
         "laravel/cashier": "^15.3",

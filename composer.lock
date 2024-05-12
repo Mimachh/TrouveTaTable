@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "38b8f21b57052812b16d8232e073686c",
+    "content-hash": "18f91d9039951271d5bb414116831699",
     "packages": [
         {
             "name": "brick/math",
@@ -1169,6 +1169,63 @@
                 }
             ],
             "time": "2023-12-03T19:50:20+00:00"
+        },
+        {
+            "name": "ifresh/laravel-enum-translations",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/iFreshDevelopment/laravel-enum-translations.git",
+                "reference": "6a07883b2fed9e63c11f4b38e68e1c4d08907818"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/iFreshDevelopment/laravel-enum-translations/zipball/6a07883b2fed9e63c11f4b38e68e1c4d08907818",
+                "reference": "6a07883b2fed9e63c11f4b38e68e1c4d08907818",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^10.0|^11.0",
+                "illuminate/support": "^10.0|^11.0",
+                "illuminate/translation": "^10.0|^11.0",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.6",
+                "pestphp/pest": "^2.30"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "IFresh\\EnumTranslations\\EnumTranslationsServiceProvider"
+                    ],
+                    "aliases": {
+                        "EnumTranslator": "IFresh\\EnumTranslations\\EnumTranslatorFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Tests\\": "tests/",
+                    "IFresh\\EnumTranslations\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tom Kuijer",
+                    "email": "t.kuijer@ifresh.nl"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/iFreshDevelopment/laravel-enum-translations/issues",
+                "source": "https://github.com/iFreshDevelopment/laravel-enum-translations/tree/v1.0.2"
+            },
+            "time": "2024-04-05T14:56:13+00:00"
         },
         {
             "name": "inertiajs/inertia-laravel",
