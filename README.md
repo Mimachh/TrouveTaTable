@@ -17,13 +17,10 @@
 
 - Pouvoir activer ou désactiver une table.
 
-- Envoyer un mail après réservation.
 
 - Table et model pour envoyer un message à un restaurant + notification.
 
-- Optimiser mes stores grafikart 
 
-- Sur partie admin: ne pas afficher le bouton d'ajout de résa si la date est inférieure à aujourd'hui et si l'heure de fin de service est inférieur à l'heure actuelle.
 
 - Réfléchir au système de liste d'attente. = renvoyer les autres tables suite à la vérif et les mettre dans un select particulier.
 Le client s'inscrit. Si une réservation sur cette table pour ce service est annulée alors le client 1 en liste d'attente est inscrit en résa et reçoit un mail, mail dans lequel il peut annuler ou confirmer. S'il ne confirme pas avant le début du service la table ne sera pas réservée.

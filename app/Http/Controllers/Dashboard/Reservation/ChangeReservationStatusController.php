@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard\Reservation;
 
 use App\Actions\FormatDate;
+use App\Actions\Reservations\SendMail;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\Reservation\ChangeReservationStatusRequest;
 use App\Http\Resources\ReservationResource;
@@ -22,19 +23,17 @@ class ChangeReservationStatusController extends Controller
     {
         $data = $request->validated();
         $reservationResource = new ReservationResource(Reservation::find($data['reservation_id']));
-    
         $reservationResource->update([
             'status' => $data['status'],
             'reason' => $data['reason'],
         ]);
-        $reservationResource["reservation_date"] = (new FormatDate())->dmY($reservationResource["reservation_date"]);
-        $restaurant = new RestaurantResource($restaurant);
-        
-        Mail::to($reservation['email'])->send(new ChangeStatusMail(
+
+        $restaurantMail = (new SendMail)->AfterStatusChange(
             $restaurant,
-            $reservationResource,
+            $reservation['email'],
+            Reservation::where('id', $data['reservation_id'])->first(),
             $data['status'],
             $data['reason']
-        ));
+        );
     }
 }

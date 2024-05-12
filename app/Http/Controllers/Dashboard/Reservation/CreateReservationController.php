@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Dashboard\Reservation;
 
+use App\Actions\Reservations\SendMail;
+use App\Enums\ReservationStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\Reservation\CreateReservationFromAdminStepOneRequest;
 use App\Http\Requests\Dashboard\Reservation\CreateReservationFromAdminStepThreeRequest;
@@ -45,11 +47,16 @@ class CreateReservationController extends Controller
             'phone' => $data['phone'] ?? null,
             'reservation_date' => Carbon::parse($request->reservation_date)->toDateString(),
             'time' => $data['time'],
+            'status' => ReservationStatus::ACCEPTED->value,
             'service_id' => $data['service_id'] ?? null,
             'table_id' => $data['table_id'] ?? null,
             'guests' => $data['guests'] ?? null,
         ]);
- 
+        
+        $restaurantMail = (new SendMail)->AfterCreated(
+            $restaurant,
+            $reservation
+        );
 
     }
 }

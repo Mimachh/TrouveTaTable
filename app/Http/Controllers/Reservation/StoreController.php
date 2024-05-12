@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Reservation;
 
 use App\Actions\FindServiceByTime;
 use App\Actions\FormatDate;
+use App\Actions\Reservations\SendMail;
 use App\Enums\TableStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reservation\StepFourRequest;
@@ -131,6 +132,13 @@ class StoreController extends Controller
 
         // Créez la réservation en utilisant les données transformées
         $reservation = Reservation::create($data);
+
+        $restaurant = Table::where('id', $data['table_id'])->first()->restaurant;
+
+        $restaurantMail = (new SendMail)->AfterCreated(
+            $restaurant,
+            $reservation
+        );
         return response()->json([
             'reservation' => $reservation,
         ]);

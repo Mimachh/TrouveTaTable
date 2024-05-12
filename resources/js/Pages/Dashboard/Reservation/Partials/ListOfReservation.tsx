@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { format, set } from "date-fns";
+import { endOfDay, format, isBefore, set } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Reservation } from "@/types/reservation";
 import { Services } from "@/types/services";
@@ -115,7 +115,18 @@ const ListOfReservation = ({
             ) : (
                 <>
                     {servicesSelectedDay ? (
-                        servicesSelectedDay.map((service, index) => (
+                        servicesSelectedDay.map((service, index) => {
+                            const endTimeParts = formatTime(service.end_time).split('h');
+                            const endTime = new Date();
+                            endTime.setHours(parseInt(endTimeParts[0]));
+                            endTime.setMinutes(parseInt(endTimeParts[1]));
+                        
+                            // Obtenir l'heure actuelle
+                            const now = new Date();
+
+                            const isPastDay = isBefore(endOfDay(selectedDay), now);
+
+                            return (
                             <div key={service.id} className="mt-4">
                                 <div className="flex  items-center justify-between">
                                     <div>
@@ -128,7 +139,8 @@ const ListOfReservation = ({
                                         </small>
                                     </div>
 
-                                    <Button
+                                    {!isPastDay && now < endTime &&  (
+                                        <Button
                                         size={"xs"}
                                         type="button"
                                         onClick={() => {
@@ -143,6 +155,7 @@ const ListOfReservation = ({
                                     >
                                         <Plus className="w-3 h-3" />
                                     </Button>
+                                    )}
                                 </div>
 
                                 {reservations[service.id] &&
@@ -168,7 +181,7 @@ const ListOfReservation = ({
                                     <Separator className="my-3" />
                                 )}
                             </div>
-                        ))
+                            )})
                     ) : (
                         <>Fermé</>
                     )}
