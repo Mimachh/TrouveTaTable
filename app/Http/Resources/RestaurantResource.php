@@ -34,9 +34,9 @@ class RestaurantResource extends JsonResource
             'days' => $this->days,
             'owner_id' => $this->owner_id,
             'services' => ServiceResource::collection($this->services->sortBy('start_time')),
-            'servicesWithOptions' => $this->whenLoaded('servicesWithOptions', function () {
-                return ServiceWithOptionResource::collection($this->services->sortBy('start_time'), $this->id);
-            }),
+            // 'servicesWithOptions' => $this->whenLoaded('servicesWithOptions', function () {
+            //     return ServiceWithOptionResource::collection($this->services->sortBy('start_time'), $this->id);
+            // }),
             'reservations' => $this->whenLoaded('reservations', function () {
                 return ReservationResource::collection($this->reservations);
             }),

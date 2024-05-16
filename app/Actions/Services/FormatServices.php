@@ -54,20 +54,26 @@ class FormatServices
     {
     }
 
-    public function filterOffTheServiceWhenEndReservationIsPastToday($services, $date_reservation, $restaurant)
+    public function filterOffTheServiceWhenEndReservationIsPastToday($services, $date_reservation_no_format, $restaurant)
     {
         $servicesWithOptions = ServiceWithOptionResource::collection($services);
         
+
+        $date_reservation = Carbon::parse($date_reservation_no_format);
+        $date_reservation->setLocale('fr');
+        // $dayOfWeek = $date->isoFormat('dddd');
+
         $now = Carbon::now();
         $now->setLocale(config('app.locale'));
+        $currentTime = $now->isoFormat('HH:mm');
+        
         $today = Carbon::today();
         $today->setLocale('fr');
 
         // $now->setTimezone('UTC');
-        $currentTime = $now->isoFormat('HH:mm');
+       
         $stop_time_reservation = substr($restaurant->time_to_stop_reservation, 0, 5);
 
-        //retirer les services dont l'heure de fin de réservation est dépassée aujourd'hui
         if ($today->isSameDay($date_reservation)) {
             $servicesWithOptionsArray = [];
             $servicesWithOptions->each(function ($service) use (&$servicesWithOptionsArray, &$currentTime, &$stop_time_reservation) {

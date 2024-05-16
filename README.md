@@ -5,12 +5,6 @@
 
 
 
-- Ajouter une fonction au model restaurant pour savoir si le nombre d'invités est possible. Si aucune table n'accueille il faut un message custom.
-
-- Préciser qu'il s'agit d'heure de service et que la résa doit se situer dedans.
-- Ajouter les heures avant début et fin du service et a quel moment doit se stopper la possibilité de réserver.
-
-
 - Faire les tests pour : créer un restau / créer des horaires / créer une résa / update une résa / ajouter en tant qu'admin une résa / créer , updater et supprimer des tables
 
 
@@ -22,11 +16,6 @@
 Le client s'inscrit. Si une réservation sur cette table pour ce service est annulée alors le client 1 en liste d'attente est inscrit en résa et reçoit un mail, mail dans lequel il peut annuler ou confirmer. S'il ne confirme pas avant le début du service la table ne sera pas réservée.
 
 
-
-
-
-
-- URGENT : nettoyer store controller
 ajouter restaurant type sur welcome.
 nettoyer et clarifier index de reservation.
 

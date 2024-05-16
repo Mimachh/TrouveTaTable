@@ -4,4 +4,7 @@ export interface Services {
     end_time: string;
     id: number;
     name: string;
+    start_time_with_option?: string | null;
+    end_time_with_option?: string | null;
+    time_to_stop_reservation?: string | null;
 }

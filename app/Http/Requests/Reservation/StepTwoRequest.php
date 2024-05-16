@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Reservation;
 
 use App\Rules\TimeInServiceRange;
+use App\Rules\TimeInServiceRangeWithOptionParams;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StepTwoRequest extends FormRequest
@@ -26,7 +27,8 @@ class StepTwoRequest extends FormRequest
             'services' => ['required', 'array'],
             'guests' => ['required', 'integer', 'min:1'],
             'reservation_date' => ['required', 'date'],
-            'time' => ['required', 'string', new TimeInServiceRange],
+            // 'time' => ['required', 'string', new TimeInServiceRange],
+            'time' => ['required', 'string', new TimeInServiceRangeWithOptionParams],
             'id' => ['required', 'string'],
         ];
     }

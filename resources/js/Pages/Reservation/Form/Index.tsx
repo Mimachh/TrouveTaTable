@@ -1,13 +1,11 @@
 import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
-import { Label } from "@/Components/ui/label";
+
 
 import ResaLayout from "@/Layouts/ResaLayout";
 import { useMultistepForm } from "@/hooks/useMultiStepForm";
 import { PageProps } from "@/types";
-import { Head, router, useForm } from "@inertiajs/react";
-import { format, set } from "date-fns";
-import { fr } from "date-fns/locale";
+import { Head, useForm } from "@inertiajs/react";
 import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
 import axios from "axios";
@@ -18,10 +16,11 @@ import DateInput from "./DateInput";
 import TimeAndGuestSelector from "./TimeAndGuestSelector";
 import TableInput from "./TableInput";
 import FormFieldLayout from "@/Components/layout/form-field-layout";
-import { time } from "console";
 import { PartySvg } from "@/Components/svg";
 import { formatDateToIsoMidDay } from "@/lib/format-date-to-iso-mid-day";
 import { Restaurant } from "@/types/restaurant";
+import { toast } from "sonner";
+import { useContactRestaurantModal } from "@/hooks/useContactRestaurantModal";
 
 type ResaFormProps = PageProps & {
     before_today: Date;
@@ -30,14 +29,6 @@ type ResaFormProps = PageProps & {
     restaurant: Restaurant;
 };
 
-const schema = z.object({
-    first_name: z.string(),
-    last_name: z.string(),
-    email: z.string().email(),
-    additionnal_info: z.string().optional(),
-    table: z.string(),
-    reservation_date: z.date(),
-});
 const Index = ({
     before_today,
     disabledDays,
@@ -111,32 +102,12 @@ const Index = ({
 
         let isoDate = null;
         if (data.reservation_date) {
-            isoDate = formatDateToIsoMidDay({date: data.reservation_date})     
+            isoDate = formatDateToIsoMidDay({ date: data.reservation_date });
         }
-       
+
         if (currentStepIndex + 1 === 1) {
             setLoading(true);
             setError("reservation_date", "");
-            // ici je poste la date sur la route step-one
-
-            // alert(data.reservation_date)
-
-            // post(route("reservation.step-one"), {
-            //     preserveScroll: true,
-            //     onSuccess: (response) => {
-            //         // Traiter les données de la réponse ici
-            //         console.log(response);
-
-            //         next();
-            //     },
-            //     onError: (errors) => {
-            //         if (errors.reservation_date) {
-            //             reset("reservation_date");
-            //             reservation_date.current?.focus();
-            //         }
-            //     },
-            // });
-
             axios
                 .post(route("reservation.step-one"), {
                     reservation_date: isoDate,
@@ -144,13 +115,15 @@ const Index = ({
                 })
                 .then((response) => {
                     // Traiter les données de la réponse ici
-                    console.log(response.data);
+                    // console.log(response.data);
                     setServices(response.data.data.services);
-                    setTransformedServices(response.data.data.transformedServices);
+                    setTransformedServices(
+                        response.data.data.transformedServices
+                    );
                     return next();
                 })
                 .catch((error) => {
-                    console.log(error);
+                    // console.log(error);
                     setError(error.response.data.errors);
                     return back();
                 })
@@ -160,12 +133,12 @@ const Index = ({
         }
 
         if (currentStepIndex + 1 === 2) {
-            setError("time", "");
-            // const { hour, minute } = timeState.timeValue;
-            // const time = `${hour.toString().padStart(2, "0")}:${minute
-            //     .toString()
-            //     .padStart(2, "0")}:00`;
+            if (transformedServices && transformedServices.length === 0) {
+                toast.error("Aucun service disponible pour cette date");
+                return;
+            }
 
+            setError("time", "");
             const servicesIds = services.map((service) => service.id);
             axios
                 .post(route("reservation.step-two"), {
@@ -176,16 +149,16 @@ const Index = ({
                     reservation_date: isoDate,
                 })
                 .then((response) => {
-                    // Traiter les données de la réponse ici
-                    console.log(response.data);
-                    console.log(response.data.matchingService.id);
                     setTables(response.data.tables);
-
                     setData("service_id", response.data.matchingService.id);
+                    if (response.data.tables.length === 0) {
+                        toast.error("Aucune table disponible pour cette date");
+                        // return;
+                    }
                     next();
                 })
                 .catch((error) => {
-                    console.log(error.response.data.errors);
+                    // console.log(error.response.data.errors);
                     setError(error.response.data.errors);
                 })
                 .finally(() => {
@@ -199,12 +172,11 @@ const Index = ({
                     table_id: data.table_id,
                 })
                 .then((response) => {
-                    // Traiter les données de la réponse ici
-                    console.log(response.data);
+                    // console.log(response.data);
                     next();
                 })
                 .catch((error) => {
-                    console.log(error.response.data.errors);
+                    // console.log(error.response.data.errors);
                     setError(error.response.data.errors);
                 })
                 .finally(() => {
@@ -213,6 +185,7 @@ const Index = ({
         }
 
         if (currentStepIndex + 1 === 4) {
+            setLoading(true);
             axios
                 .post(route("reservation.step-four"), {
                     table_id: data.table_id,
@@ -226,21 +199,17 @@ const Index = ({
                 })
                 .then((response) => {
                     // Traiter les données de la réponse ici
-                    console.log(response.data);
+                    // console.log(response.data);
                     next();
                 })
                 .catch((error) => {
-                    console.log(error.response.data.errors);
+                    // console.log(error.response.data.errors);
                     setError(error.response.data.errors);
                 })
                 .finally(() => {
                     setLoading(false);
                 });
         }
-        // const check = schema.safeParse(data);
-        // console.log(check);
-        // if (!isLastStep) return next();
-        // alert("Successful Account Creation");
     }
 
     useEffect(() => {
@@ -250,6 +219,14 @@ const Index = ({
         }
     }, [goNext]);
 
+    useEffect(() => {
+        if (currentStepIndex === 2) {
+            setData("table_id", undefined);
+        }
+    }, [currentStepIndex]);
+
+    const contactModalOnOpen = useContactRestaurantModal.use.onOpen();
+    const contactModalSetRestaurant = useContactRestaurantModal.use.setRestaurant();
     return (
         <ResaLayout
             title={
@@ -287,16 +264,44 @@ const Index = ({
                             ) : (
                                 <div className="col-span-2 w-full"></div>
                             )}
-                            <small className="text-center self-center">
+                       
+
+                            {(currentStepIndex === 1 && transformedServices &&
+                                transformedServices.length === 0) || (currentStepIndex === 2 && tables && tables.length === 0) ? (
+                                <Button
+                                    variant={"primaryBlue"}
+                                    className="w-full col-span-3 text-white"
+                                    type="button"
+                                    onClick={() => {
+                                        contactModalOnOpen()
+                                        contactModalSetRestaurant(restaurant)
+                                    }}
+                                >
+                                    Contacter le restaurant
+                                </Button>
+                            ) : (
+                               <>
+                                <small className="text-center self-center">
                                 {currentStepIndex + 1} / {steps.length}
                             </small>
-                            <Button
-                                type="submit"
-                                variant="outline"
-                                className="w-full col-span-2"
-                            >
-                                {isLastStep ? "Confirmer" : "Suivant"}
-                            </Button>
+                                <Button
+                                    type="submit"
+                                    variant="outline"
+                                    className="w-full col-span-2"
+                                    disabled={
+                                        processing ||
+                                        (transformedServices &&
+                                            transformedServices.length === 0) ||
+                                        currentStepIndex + 1 === 3 ||
+                                        loading
+                                    }
+                                >
+                                    {currentStepIndex === 3
+                                        ? "Confirmer"
+                                        : "Suivant"}
+                                </Button>
+                               </>
+                            )}
                         </div>
                     )}
                 </div>

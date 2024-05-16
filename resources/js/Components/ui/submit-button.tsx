@@ -6,10 +6,13 @@ interface SubmitButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
     children: React.ReactNode;
     disabled?: boolean;
     type?: "button" | "submit" | "reset";
+    variant?: string;
 }
-const SubmitButton: FC<SubmitButtonProps> = ({ children, disabled, type, ...props } ) => {
+const SubmitButton: FC<SubmitButtonProps> = ({ children, disabled, type, variant, ...props } ) => {
+    const v = variant ?? "default" as any;
     return (
         <Button
+        variant={v}
         {...props}
         disabled={disabled}
         type={type || "button"}

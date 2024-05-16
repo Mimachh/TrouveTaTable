@@ -8,6 +8,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/Components/ui/card";
+import { ContactRestaurant } from "@/Components/modales/ContactRestaurant";
 
 type Props = PropsWithChildren & {
     name: string;
@@ -38,6 +39,7 @@ export default function ResaLayout({
                     </CardContent>
                 </Card>
             </div>
+            <ContactRestaurant />
         </ToastProvider>
     );
 }
