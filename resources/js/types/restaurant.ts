@@ -19,6 +19,8 @@ export interface Restaurant {
     user_id: number;
     time_before_service?: string;
     time_after_service?: string;
+    time_to_stop_reservation?: string;
     reservations: Reservation[];
     services: Services[];
+    transformedServices?: Services[]
 }

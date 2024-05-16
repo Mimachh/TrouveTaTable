@@ -5,19 +5,17 @@ import { Restaurant } from "@/types/restaurant";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/Components/ui/skeleton";
-
-
+import { useRestaurantModal } from "@/hooks/useRestaurantModal";
 
 
 const DashboardNavbar = () => {
 
-  // const restaurantsData = usePage().props.restaurants as any;
-  // const restaurants = restaurantsData.data as Restaurant[];
-  
+
   const [resto, setResto] = useState<Restaurant[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  // here i need to use axios to get the restaurants data from the url /
+
   const getRestaurants = () => {
+    setLoading(true);
     axios.get(route('get.my.restaurants'))
     .then((response) => {
       // console.log(response.data);
@@ -29,10 +27,18 @@ const DashboardNavbar = () => {
     });
   }
 
+  const restaurantModalReset = useRestaurantModal.use.reset();
+  const restaurantModalSetReset = useRestaurantModal.use.setReset();
   useEffect(() => {
     getRestaurants();
+
+    if(restaurantModalReset) {
+      setLoading(true);
+      getRestaurants();
+      restaurantModalSetReset(false);
+    }
   }
-  , []);
+  , [restaurantModalReset]);
 
   return ( 
     <div className="border-b">

@@ -15,7 +15,7 @@ class CreateRestaurantController extends Controller
     public function store(CreateRestaurantRequest $request) {
         $data = $request->validated();
 
-        $data['user_id'] = auth()->id();
+        $data['owner_id'] = auth()->id();
         $restaurant = Restaurant::create($data);
 
         return Redirect::route('dashboard', ['restaurant' => $restaurant->id])->with('message', 'Nouveau restaurant créé avec succès !');

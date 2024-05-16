@@ -11,11 +11,7 @@
 - Ajouter les heures avant début et fin du service et a quel moment doit se stopper la possibilité de réserver.
 
 
-- Faire les tests pour : créer un restau / créer des horaires / créer une résa / update une résa / ajouter en tant qu'admin une résa.
-
-- Pouvoir créer des tables + tests
-
-- Pouvoir activer ou désactiver une table.
+- Faire les tests pour : créer un restau / créer des horaires / créer une résa / update une résa / ajouter en tant qu'admin une résa / créer , updater et supprimer des tables
 
 
 - Table et model pour envoyer un message à un restaurant + notification.
@@ -36,3 +32,23 @@ nettoyer et clarifier index de reservation.
 
 
 - penser que pour faire des policy il faut vérifier que le owner du restaurant à bien des souscription + que les user font bien parti de la team du restaurant
+
+
+
+
+## Liste des services proposés :
+- page web
+- module de resa
+- api
+- page de contact
+- gestion des résa avec qr code
+- associer son menu à un qrcode
+
+
+
+
+# plus tard 
+- click and collect
+- service de livraison
+- liste d'attente
+- service de mail marketing

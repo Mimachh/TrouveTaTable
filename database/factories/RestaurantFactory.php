@@ -31,8 +31,9 @@ class RestaurantFactory extends Factory
             'active' => $this->faker->boolean,
             'time_before_service' => null,
             'time_after_service' => "00:30:00",
+            'time_to_stop_reservation' => "00:30:00",
             // 'user_id' => \App\Models\User::factory(),
-            'user_id' => 1,
+            'owner_id' => 1,
         ];
     }
 }

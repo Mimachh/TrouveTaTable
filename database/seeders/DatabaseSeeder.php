@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Day;
 use App\Models\Feature;
+use App\Models\Message;
 use App\Models\Product;
 use App\Models\Restaurant;
 use App\Models\User;
@@ -110,6 +111,9 @@ class DatabaseSeeder extends Seeder
             'restaurant_id' => $restaurant->id
         ]);
     
+        Message::factory(50)->create([
+            'restaurant_id' => $restaurant->id
+        ]);
       
         Product::factory()->create([
             "name" => "Basique",

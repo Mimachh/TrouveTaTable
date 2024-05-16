@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Dashboard\Hours;
 
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Hours\StoreEndReservationRequest;
 use App\Http\Requests\Hours\StoreHoursRequest;
 use App\Http\Requests\Hours\StoreTamponDurationRequest;
+use App\Http\Responses\ApiResponse;
 use App\Models\Day;
 use App\Models\Restaurant;
 use App\Repositories\ServiceRepository;
@@ -43,6 +45,14 @@ class CreateHoursController extends Controller
         $data = $request->validated();
         $restaurant->update($data);
 
-        return response()->json([$restaurant]);
+        return ApiResponse::created([$restaurant]);
+    }
+
+    public function storeEndReservation(StoreEndReservationRequest $request, Restaurant $restaurant)
+    {
+        $data = $request->validated();
+        $restaurant->update($data);
+
+        return ApiResponse::created([$restaurant]);
     }
 }

@@ -13,10 +13,10 @@ class DashboardController extends Controller
      */
     public function __invoke($restaurantId = null)
     {
-        $restaurants = RestaurantResource::collection(Restaurant::where('user_id', auth()->id())->active()->get());
+        $restaurants = RestaurantResource::collection(Restaurant::where('owner_id', auth()->id())->active()->get());
 
         if (!$restaurantId) {
-            $restaurant = Restaurant::where('user_id', auth()->id())->oldest()->first();
+            $restaurant = Restaurant::where('owner_id', auth()->id())->oldest()->first();
            
             if ($restaurant) {
                 return redirect()->route('dashboard', ['restaurant' => $restaurant->id]);

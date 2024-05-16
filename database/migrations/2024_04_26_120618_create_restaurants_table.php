@@ -29,8 +29,11 @@ return new class extends Migration
 
             $table->time('time_before_service')->nullable();
             $table->time('time_after_service')->nullable();
+
+            // cut the reservation at
+            $table->time('time_to_stop_reservation')->nullable();
             
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('owner_id')->constrained('users')->onDelete('cascade');
 
             // latitude and longitude
             $table->timestamps();

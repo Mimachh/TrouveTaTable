@@ -37,9 +37,10 @@ class Restaurant extends Model
         'cover',
         'hours',
         'active',
-        'user_id',
+        'owner_id',
         'time_before_service',
         'time_after_service',
+        'time_to_stop_reservation'
     ];
 
     public function services()
@@ -47,14 +48,28 @@ class Restaurant extends Model
         return $this->hasMany(Service::class);
     }
 
-    public function user()
+    public function servicesWithOptions()
+    {
+        return $this->hasMany(Service::class);
+    }
+
+    public function owner()
     {
         return $this->belongsTo(User::class);
     }
 
+    // public function working_users() {
+    //     return $this->belongsToMany(User::class, 'restaurant_user');
+    // }
+
     public function reservations()
     {
         return $this->hasManyThrough(Reservation::class, Table::class);
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
     }
 
     public function scopeActive(Builder $query)

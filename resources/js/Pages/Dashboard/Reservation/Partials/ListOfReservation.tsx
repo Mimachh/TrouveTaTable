@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { endOfDay, format, isBefore, set } from "date-fns";
+import { endOfDay, format, isBefore, isSameDay, set } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Reservation } from "@/types/reservation";
 import { Services } from "@/types/services";
@@ -125,7 +125,8 @@ const ListOfReservation = ({
                             const now = new Date();
 
                             const isPastDay = isBefore(endOfDay(selectedDay), now);
-
+                            const isToday = isSameDay(new Date(), selectedDay);
+                           
                             return (
                             <div key={service.id} className="mt-4">
                                 <div className="flex  items-center justify-between">
@@ -139,7 +140,7 @@ const ListOfReservation = ({
                                         </small>
                                     </div>
 
-                                    {!isPastDay && now < endTime &&  (
+                                    {!isPastDay && (!isToday || (isToday && now < endTime)) && (
                                         <Button
                                         size={"xs"}
                                         type="button"

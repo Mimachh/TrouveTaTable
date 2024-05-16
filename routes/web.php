@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\Reservation\ShowReservationController;
 use App\Http\Controllers\Api\Restaurant\GetAllMyRestaurants;
 use App\Http\Controllers\Dashboard\Hours\CreateHoursController;
 use App\Http\Controllers\Dashboard\Hours\IndexHoursController;
+use App\Http\Controllers\Dashboard\Messages\IndexMessagesController;
+use App\Http\Controllers\Dashboard\Messages\ShowMessageController;
 use App\Http\Controllers\Dashboard\Reservation\ChangeReservationStatusController;
 use App\Http\Controllers\Dashboard\Reservation\CreateReservationController;
 use App\Http\Controllers\Dashboard\Reservation\IndexReservationController;
@@ -84,6 +86,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
                     Route::get('', IndexHoursController::class)->name('index');
                     Route::post('', [CreateHoursController::class, 'store'])->name('store');
                     Route::put('/storeTamponDuration', [CreateHoursController::class, 'storeTamponDuration'])->name('store.tampon.duration');
+                    Route::put('/storeEndReservation', [CreateHoursController::class, 'storeEndReservation'])->name('store.end.reservation');
                 });
 
                 Route::prefix('reservation')->as('reservation.')->group(function () {
@@ -96,6 +99,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
                     Route::get('/', IndexTableController::class)->name('index');
                     Route::post('/', CreateTableController::class)->name('store');
                     Route::delete('/{table}', DeleteTableController::class)->name('delete');
+                });
+
+                Route::prefix('messages')->as('messages.')->group(function () {
+                    Route::get('/', IndexMessagesController::class)->name('index');
                 });
             });
         });
@@ -113,6 +120,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 Route::post('/{restaurant}/reservation/create/stepOne', [CreateReservationController::class, "getTables"])->name('reservation.create.stepOne');
                 Route::post('/{restaurant}/reservation/create/stepTwo', [CreateReservationController::class, "steptwo"])->name('reservation.create.stepTwo');
                 Route::post('/{restaurant}/reservation/create/stepThree', [CreateReservationController::class, "stepthree"])->name('reservation.create.stepThree');
+
+                Route::get('/{restaurant}/message/{message}', ShowMessageController::class)->name('message.show');
             });
     });
 

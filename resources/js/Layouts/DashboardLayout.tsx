@@ -1,5 +1,5 @@
 import { PropsWithChildren, ReactNode, useEffect } from "react";
-import { FlashMessage, User } from "@/types";
+import { FlashMessage, PageProps, User } from "@/types";
 import ToastProvider from "@/providers/ToastProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import Navigation from "@/Components/navigation/sidebar/Navigation";
@@ -10,16 +10,18 @@ import { usePage } from "@inertiajs/react";
 import { toast } from "sonner";
 
 type DasboardLayoutProps = PropsWithChildren & {
-    user: User;
     header?: ReactNode;
     children: ReactNode;
 };
 export default function DashboardLayout({
-    user,
     header,
     children,
 }: DasboardLayoutProps) {
     const restaurantModalOnClose = useRestaurantModal.use.onClose();
+
+    const props = usePage().props as unknown as PageProps;
+
+    const user = props.auth.user as User;
 
     const flash = usePage().props.flash as FlashMessage;
     useEffect(() => {
@@ -43,7 +45,7 @@ export default function DashboardLayout({
         <ThemeProvider>
             <ToastProvider>
                 <ModalProvider />
-                <main className="w-full min-h-screen flex flex-row relative">
+                <main className="w-full h-full flex flex-row relative">
                     <Navigation />
                     <section className="w-full ml-20">
                         <DashboardNavbar />

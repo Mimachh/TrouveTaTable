@@ -14,23 +14,20 @@ type DashboardReservationProps = PageProps & {
     };
 };
 
-
 const Index = ({ auth, restaurant }: DashboardReservationProps) => {
     const today = startOfToday();
     const [selectedDay, setSelectedDay] = useState(today);
     const selectedDayIndex = getSelectedDayIndex(selectedDay);
-    const servicesSelectedDay = findServicesByDayId(selectedDayIndex, restaurant.data);
+    const servicesSelectedDay = findServicesByDayId(
+        selectedDayIndex,
+        restaurant.data
+    );
 
-  
     return (
-        <DashboardLayout
-            user={auth.user}
-            header={
-                <h1 className="text-4xl font-semibold tracking-wide p-2">
-                    Réservations
-                </h1>
-            }
-        >
+        <>
+            <h1 className="text-4xl font-semibold tracking-wide p-2">
+                Réservations
+            </h1>
             <div className="md:grid md:grid-cols-3 p-1 md:divide-x md:divide-background-foreground">
                 <div className="md:col-span-2">
                     <CalendarReservation
@@ -45,8 +42,12 @@ const Index = ({ auth, restaurant }: DashboardReservationProps) => {
                     servicesSelectedDay={servicesSelectedDay}
                 />
             </div>
-        </DashboardLayout>
+        </>
     );
+};
+
+Index.layout = (page: React.ReactNode) => {
+    return <DashboardLayout>{page}</DashboardLayout>;
 };
 
 export default Index;

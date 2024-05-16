@@ -11,6 +11,7 @@ const TimeAndGuestSelector = ({
     services,
     loading,
     timeState,
+    transformedServices
 }: {
     data: any;
     setData: any;
@@ -18,7 +19,10 @@ const TimeAndGuestSelector = ({
     services: Services[];
     loading: boolean;
     timeState: any;
+    transformedServices: any
 }) => {
+
+    console.log(transformedServices)
     return (
         <div>
             {!loading ? (

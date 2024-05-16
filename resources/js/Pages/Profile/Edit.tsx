@@ -15,7 +15,7 @@ type EditProps = PageProps & {
     invoices?: Invoice[];
 };
 
-export default function Edit({
+function Edit({
     auth,
     mustVerifyEmail,
     status,
@@ -71,3 +71,5 @@ export default function Edit({
         </AuthenticatedLayout>
     );
 }
+
+export default Edit;

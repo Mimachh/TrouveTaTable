@@ -21,12 +21,13 @@ import FormFieldLayout from "@/Components/layout/form-field-layout";
 import { time } from "console";
 import { PartySvg } from "@/Components/svg";
 import { formatDateToIsoMidDay } from "@/lib/format-date-to-iso-mid-day";
+import { Restaurant } from "@/types/restaurant";
 
 type ResaFormProps = PageProps & {
     before_today: Date;
     disabledDays: number[];
     id: number;
-    restaurant: any;
+    restaurant: Restaurant;
 };
 
 const schema = z.object({
@@ -47,6 +48,7 @@ const Index = ({
     const [loading, setLoading] = useState<boolean>(false);
 
     const [services, setServices] = useState<Services[]>([]);
+    const [transformedServices, setTransformedServices] = useState<any[]>([]);
     const [tables, setTables] = useState<Table[]>([]);
 
     const { data, setData, reset, post, processing, errors, setError } =
@@ -91,6 +93,7 @@ const Index = ({
             setData={setData}
             errors={errors}
             services={services}
+            transformedServices={transformedServices}
         />,
         <TableInput
             data={data}
@@ -103,7 +106,6 @@ const Index = ({
         <Success />,
     ]);
 
-    console.log(data);
     function onSubmit(e?: any) {
         if (e) e.preventDefault();
 
@@ -143,7 +145,8 @@ const Index = ({
                 .then((response) => {
                     // Traiter les données de la réponse ici
                     console.log(response.data);
-                    setServices(response.data.services);
+                    setServices(response.data.data.services);
+                    setTransformedServices(response.data.data.transformedServices);
                     return next();
                 })
                 .catch((error) => {

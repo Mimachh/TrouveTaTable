@@ -30,9 +30,13 @@ class RestaurantResource extends JsonResource
             'active' => $this->active,
             'time_before_service' => $this->time_before_service,
             'time_after_service' => $this->time_after_service,
+            'time_to_stop_reservation' => $this->time_to_stop_reservation,
             'days' => $this->days,
-            'user_id' => $this->user_id,
+            'owner_id' => $this->owner_id,
             'services' => ServiceResource::collection($this->services->sortBy('start_time')),
+            'servicesWithOptions' => $this->whenLoaded('servicesWithOptions', function () {
+                return ServiceWithOptionResource::collection($this->services->sortBy('start_time'), $this->id);
+            }),
             'reservations' => $this->whenLoaded('reservations', function () {
                 return ReservationResource::collection($this->reservations);
             }),

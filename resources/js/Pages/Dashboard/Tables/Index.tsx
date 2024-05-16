@@ -20,6 +20,7 @@ import { getTableColumns } from "./Partials/columns";
 import { useUpdateTable } from "@/hooks/useUpdateTable";
 import { getKeyOfObject } from "@/lib/get-key-of-object";
 import { toast } from "sonner";
+import SubmitButton from "@/Components/ui/submit-button";
 
 type DashboardTablesProps = PageProps & {
     tables: {
@@ -39,8 +40,6 @@ const Tables = ({ auth, tables, status, restaurant }: DashboardTablesProps) => {
     const setRestaurant = useUpdateTable.use.setRestaurant();
     const tableColumns = getTableColumns();
 
-
-
     const { data, setData, post, processing, errors, reset } = useForm({
         id: undefined,
         name: "",
@@ -48,7 +47,6 @@ const Tables = ({ auth, tables, status, restaurant }: DashboardTablesProps) => {
         status: "",
     });
 
-   
     const [statusKeyReload, setStatusKeyReload] = useState<
         string | undefined | number | null
     >();
@@ -61,7 +59,9 @@ const Tables = ({ auth, tables, status, restaurant }: DashboardTablesProps) => {
                 toast.success("Nouvelle données enregistrées !");
             },
             onError: (e: any) => {
-                toast.error("Une erreur est survenue ! Veillez réessayer plus tard.");
+                toast.error(
+                    "Une erreur est survenue ! Veillez réessayer plus tard."
+                );
             },
         });
     };
@@ -95,10 +95,8 @@ const Tables = ({ auth, tables, status, restaurant }: DashboardTablesProps) => {
     }, []);
 
     return (
-        <DashboardLayout
-            user={auth.user}
-            header={
-                <div className="flex items-center justify-between">
+        <>
+         <div className="flex items-center justify-between">
                     <h1 className="text-4xl font-semibold tracking-wide p-2">
                         Tables
                     </h1>
@@ -120,8 +118,6 @@ const Tables = ({ auth, tables, status, restaurant }: DashboardTablesProps) => {
                         )}
                     </Button>
                 </div>
-            }
-        >
             {open && (
                 <form
                     onSubmit={submit}
@@ -201,13 +197,23 @@ const Tables = ({ auth, tables, status, restaurant }: DashboardTablesProps) => {
                         >
                             Annuler
                         </Button>
-                        <Button type="submit" variant={"default"}>
+                        <SubmitButton type="submit" disabled={processing}>
                             Valider
-                        </Button>
+                        </SubmitButton>
                     </div>
                 </form>
             )}
             <DataTableTables columns={tableColumns} data={tables.data} />
+        </>
+    );
+};
+
+Tables.layout = (page: React.ReactNode) => {
+
+    return (
+        <DashboardLayout
+        >
+            {page}
         </DashboardLayout>
     );
 };

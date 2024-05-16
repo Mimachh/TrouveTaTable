@@ -42,6 +42,7 @@ export default function RestaurantSwitcher({ className, items = [] }: Restaurant
     const props = usePage().props as any;
     const restaurant = props.restaurant.data as Restaurant;
   
+
   const formattedItems = items.map((item) => ({
     label: item.name,
     value: item.id
@@ -57,7 +58,9 @@ export default function RestaurantSwitcher({ className, items = [] }: Restaurant
   };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover
+
+    open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"

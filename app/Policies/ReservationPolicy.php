@@ -22,7 +22,7 @@ class ReservationPolicy
     public function view(User $user, Reservation $reservation): bool
     {
         $restaurant = $reservation->table->restaurant;
-        if($restaurant->user_id === $user->id) {
+        if($restaurant->owner->id === $user->id) {
             return true;
         }
         return false;

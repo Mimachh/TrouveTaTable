@@ -18,19 +18,13 @@ const createSelectors = <S extends UseBoundStore<StoreApi<object>>>(
 }
 
 
-interface useRestaurantModalStore {
-  isOpen: boolean;
-  reset: boolean;
-  onOpen: () => void;
-  onClose: () => void;
-  setReset: (reset: boolean) => void;
+interface useSelectedMessageStore {
+    messageId: number | null;
+    setMessageId: (messageId: number) => void;
 }
 
-export const useRestaurantModal = createSelectors(create<useRestaurantModalStore>((set) => ({
-  isOpen: false,
-  onOpen: () => set({ isOpen: true }),
-  onClose: () => set({ isOpen: false }),
-  reset: false,
-  setReset: (reset) => set({ reset })
+export const useSelectedMessage = createSelectors(create<useSelectedMessageStore>((set) => ({
+    messageId: null,
+    setMessageId: (messageId) => set(() => ({ messageId }))
 })));
 

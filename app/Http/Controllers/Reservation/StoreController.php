@@ -4,23 +4,23 @@ namespace App\Http\Controllers\Reservation;
 
 use App\Actions\FindServiceByTime;
 use App\Actions\FormatDate;
+use App\Actions\Services\FormatServices;
 use App\Actions\Reservations\SendMail;
-use App\Enums\TableStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Reservation\StepFourRequest;
 use App\Http\Requests\Reservation\StepOneRequest;
 use App\Http\Requests\Reservation\StepThreeRequest;
 use App\Http\Requests\Reservation\StepTwoRequest;
 use App\Http\Resources\ServiceResource;
-use App\Http\Resources\TableResource;
+use App\Http\Resources\ServiceWithOptionResource;
+use App\Http\Responses\ApiResponse;
 use App\Models\Reservation;
 use App\Models\Restaurant;
 use App\Models\Service;
 use App\Models\Table;
 use App\Repositories\TableRepository;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
+
 
 class StoreController extends Controller
 {
@@ -35,18 +35,49 @@ class StoreController extends Controller
     {
         $date = Carbon::parse($request->get('reservation_date'));
         $date->setLocale('fr');
-        $dayOfWeek = $date->isoFormat('dddd');
+        // $dayOfWeek = $date->isoFormat('dddd');
+
+        $today = Carbon::today();
+        $today->setLocale('fr');
 
         $dayOfWeekIndex = $date->dayOfWeek;
         $restaurant = Restaurant::with('services')->findOrFail($request->get('id'));
         $services = $restaurant->services->where('day_id', $dayOfWeekIndex);
 
-        // $restaurant = Restaurant::with('days.services')->findOrFail($request->get('id'));
-        // $services = $restaurant->days->where('id', $dayOfWeekIndex)->first()->services;
+        // $servicesWithOptions = ServiceWithOptionResource::collection($services);
+
+        // $now = Carbon::now();
+        // $now->setLocale(config('app.locale'));
+        // $now->setTimezone('UTC');
+        // $currentTime = $now->isoFormat('HH:mm');
+        // $stop_time_reservation = substr($restaurant->time_to_stop_reservation, 0, 5);
+
+        //retirer les services dont l'heure de fin de réservation est dépassée aujourd'hui
+        // if ($today->isSameDay($date)) {
+        //     $servicesWithOptionsArray = [];
+        //     $servicesWithOptions->each(function ($service) use (&$servicesWithOptionsArray, &$currentTime, &$stop_time_reservation) {
+        //         // $start_time = (new FormatServices)->getTheStartTimeWithOption($service->start_time, $stop_time_reservation);
+        //         // le start time au dessus serait lié à l'heure du service..Moi je préfère mettre l'heure d'ouverture.
+        //         $start_time = substr($service->start_time, 0, 5);
+        //         list($hours, $minutes) = explode(':', $stop_time_reservation);
+        //         $time_to_stop_in_seconds = $hours * 3600 + $minutes * 60;
+        //         $endReservationTime = date('H:i', strtotime($start_time) - $time_to_stop_in_seconds);
+        //         if ($endReservationTime > $currentTime) {
+        //             $servicesWithOptionsArray[] = $service;
+        //         }
+        //     });
+        
+        //     $servicesWithOptions = $servicesWithOptionsArray;
+        // }
+        $servicesWithOptions = (new FormatServices)->filterOffTheServiceWhenEndReservationIsPastToday($services, $date, $restaurant);
+
+
+
         $servicesResource = ServiceResource::collection($services);
 
-        return response()->json([
-            'services' => $servicesResource
+        return ApiResponse::ok([
+            'services' => $servicesResource,
+            "transformedServices" => $servicesWithOptions,
         ]);
     }
 
@@ -56,17 +87,17 @@ class StoreController extends Controller
         $time = strtotime($request->get('time'));
         $services = Service::findMany($request->get('services'));
 
-       
+
         $current_resa_date_format = (new FormatDate)->Ymd($request->get('reservation_date'));
 
-        
+
 
         $matchingService = (new FindServiceByTime)->handle($services, $time);
-        
-       
+
+
         // $current_resa_date = $request->get('reservation_date');
 
-        
+
 
         // return response()->json([
         //     'current_resa_date' => Reservation::orderBy('reservation_date')->get()->filter(function ($value) use ($current_resa_date_format, $matchingService) {
@@ -75,7 +106,7 @@ class StoreController extends Controller
         //     })->pluck('table_id'),
         // ]);
 
-        
+
         $tables = $this->tableRepository->getFreeTables($request->get('reservation_date'), $matchingService["id"], $request->get('guests'), $request->get('id'));
         // $res_table_ids = Reservation::orderBy('reservation_date')->get()->filter(function ($value) use ($current_resa_date_format, $matchingService) {
         //     // return $value->reservation_date->format('Y-m-d') == $current_resa_date->format('Y-m-d');

@@ -5,8 +5,10 @@ import {
     CalendarDaysIcon,
     ChartBarIcon,
     ChartPieIcon,
+    ChatBubbleLeftRightIcon,
     ClockIcon,
     DocumentCheckIcon,
+    DocumentIcon,
     Square2StackIcon,
     UsersIcon,
 } from "@heroicons/react/24/outline";
@@ -14,7 +16,7 @@ import ProjectLink from "./ProjectLink";
 import ProjectNavigation from "./ProjectNavigation";
 import { usePage } from "@inertiajs/react";
 import { Restaurant } from "@/types/restaurant";
-import { HandPlatter } from "lucide-react";
+import { HandPlatter, LayoutDashboard, LayoutDashboardIcon } from "lucide-react";
 
 const containerVariants = {
     close: {
@@ -103,14 +105,15 @@ const Navigation = () => {
 
     return (
         <>
-            <div className="sticky z-10 top-0 left-0 h-full">
+            <div className="sticky z-10 top-0 left-0 h-fit">
+                <div className="min-h-[calc(100vh-25rem)]">
                 <motion.nav
                     variants={containerVariants}
                     animate={containerControls}
                     initial="close"
-                    className="bg-secondary border border-r flex flex-col gap-20 p-5 absolute top-0 left-0  min-h-screen shadow"
+                    className="bg-secondary border border-r flex flex-col p-5 justify-between absolute gap-10 top-0 left-0 min-h-full h-fit shadow"
                 >
-                    <div className="flex flex-row w-full justify-between place-items-center ">
+                    <div className="flex flex-row w-full justify-between place-items-center h-full">
                         <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-700 rounded-full" />
                         <button
                             className="p-1 rounded-full flex"
@@ -144,13 +147,16 @@ const Navigation = () => {
                             href={route("dashboard", current_restaurant.id)}
                             active={route().current("dashboard", current_restaurant.id)}
                         >
-                            <ChartBarIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
+                            <LayoutDashboard className="stroke-inherit stroke-[0.75] min-w-8 w-8 h-8" />
                         </NavigationLink>
-                        <NavigationLink name="Projects">
-                            <Square2StackIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
+                        <NavigationLink name="Messages"
+                            href={route("dashboard.messages.index", current_restaurant.id)}
+                            active={route().current("dashboard.messages.index", current_restaurant.id)}
+                        >
+                            <ChatBubbleLeftRightIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
                         </NavigationLink>
-                        <NavigationLink name="Tasks">
-                            <DocumentCheckIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
+                        <NavigationLink name="Ma page">
+                            <DocumentIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
                         </NavigationLink>
                         <NavigationLink name="Reporting">
                             <ChartPieIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
@@ -179,6 +185,9 @@ const Navigation = () => {
                         >
                             <CalendarDaysIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
                         </NavigationLink>
+                     
+                       
+                      
                     </div>
                     <div className="flex flex-col gap-3">
                         <ProjectLink
@@ -207,6 +216,7 @@ const Navigation = () => {
                         </ProjectLink>
                     </div>
                 </motion.nav>
+                </div>
             </div>
             <AnimatePresence>
                 {selectedProject && (
