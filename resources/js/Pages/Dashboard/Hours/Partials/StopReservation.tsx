@@ -14,9 +14,8 @@ import {
     SelectValue,
 } from "@/Components/ui/select";
 import { Restaurant } from "@/types/restaurant";
-import { router, useForm } from "@inertiajs/react";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 
@@ -80,7 +79,7 @@ const StopReservation = ({restaurant}: Props) => {
             time_to_stop_reservation: ""
         });   
         axios.put(`/dashboard/${restaurant.id}/hours/storeEndReservation`, timeStopReservation).then((response) => {
-            console.log(response)
+            // console.log(response)
             toast.success("Paramètre enregistré !");
         }).catch((error) => {
             toast.error("Une erreur est survenue, veuillez réessayer plus tard");

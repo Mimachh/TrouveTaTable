@@ -8,5 +8,6 @@ export interface Day {
 export interface FormatedDayAndHour {
     day_id: number;
     day_name: string;
-    services: Services[]
+    services: Services[];
+    isToday?: boolean
 }

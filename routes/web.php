@@ -7,20 +7,34 @@ use App\Http\Controllers\Api\Reservation\ShowReservationController;
 use App\Http\Controllers\Api\Restaurant\GetAllMyRestaurants;
 use App\Http\Controllers\Dashboard\Hours\CreateHoursController;
 use App\Http\Controllers\Dashboard\Hours\IndexHoursController;
+use App\Http\Controllers\Dashboard\Messages\EnableOrDisableRestaurantContactController;
 use App\Http\Controllers\Dashboard\Messages\IndexMessagesController;
 use App\Http\Controllers\Dashboard\Messages\ShowMessageController;
+use App\Http\Controllers\Dashboard\Newsletter\IndexUserController;
+use App\Http\Controllers\Dashboard\Newsletter\UnsubscribeUserController;
+use App\Http\Controllers\Dashboard\Page\EnablePageController;
+use App\Http\Controllers\Dashboard\Page\IndexPageController;
 use App\Http\Controllers\Dashboard\Reservation\ChangeReservationStatusController;
 use App\Http\Controllers\Dashboard\Reservation\CreateReservationController;
+use App\Http\Controllers\Dashboard\Reservation\EnableOrDisableRestaurantReservationController;
 use App\Http\Controllers\Dashboard\Reservation\IndexReservationController;
+use App\Http\Controllers\Dashboard\Restaurant\DeleteAvatarRestaurantController;
+use App\Http\Controllers\Dashboard\Restaurant\DeleteBannerRestaurantController;
+use App\Http\Controllers\Dashboard\Restaurant\DeleteMediaRestaurantController;
+use App\Http\Controllers\Dashboard\Restaurant\UpdateAvatarRestaurantController;
+use App\Http\Controllers\Dashboard\Restaurant\UpdateBannerRestaurantController;
+use App\Http\Controllers\Dashboard\Restaurant\UpdateMediaRestaurantController;
 use App\Http\Controllers\Dashboard\Tables\CreateTableController;
 use App\Http\Controllers\Dashboard\Tables\DeleteTableController;
 use App\Http\Controllers\Dashboard\Tables\IndexTableController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Newsletter\SubscribeToNewsletterController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Public\PageController;
 use App\Http\Controllers\Reservation\CreateController as ReservationCreateController;
 use App\Http\Controllers\Reservation\StoreController as ReservationStoreController;
 use App\Http\Controllers\Restaurant\CreateRestaurantController;
-use App\Http\Controllers\Restaurant\FindByIdController;
+use App\Http\Controllers\SendMessageToRestaurantController;
 use App\Http\Controllers\Subscribe\CancelSubscriptionController;
 use App\Http\Controllers\Subscribe\CreateController;
 use App\Http\Controllers\Subscribe\StoreController;
@@ -91,8 +105,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
                 Route::prefix('reservation')->as('reservation.')->group(function () {
                     Route::get('', IndexReservationController::class)->name('index');
+
                     // API
                     Route::get('getReservationsByDate/{date}', ShowByServiceAndDateController::class)->name('get.by.date');
+                    Route::put('/status', EnableOrDisableRestaurantReservationController::class)->name('status'); 
                 });
 
                 Route::prefix('tables')->as('tables.')->group(function () {
@@ -103,7 +119,38 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
                 Route::prefix('messages')->as('messages.')->group(function () {
                     Route::get('/', IndexMessagesController::class)->name('index');
+
+                    Route::put('/status', EnableOrDisableRestaurantContactController::class)->name('status');
+                  
                 });
+
+                Route::prefix('page')->as('page.')->group(function () {
+                    Route::get('/', IndexPageController::class)->name('index');
+
+                    Route::put('/enablePage', EnablePageController::class)->name('enable');
+                });
+
+                Route::prefix('newsletter')->as('newsletter.')->group(function () {
+                    Route::get('/', IndexUserController::class)->name('index');
+                    Route::post('/', UnsubscribeUserController::class)->name('unsubcribe');
+                });
+
+
+                Route::prefix('avatar')->as('avatar.')->group(function () {
+                    Route::post('/', UpdateAvatarRestaurantController::class)->name('update');
+                    Route::delete('/', DeleteAvatarRestaurantController::class)->name('delete');
+                });
+
+                Route::prefix('media')->as('media.')->group(function () {
+                    Route::post('/', UpdateMediaRestaurantController::class)->name('update');
+                    Route::delete('/', DeleteMediaRestaurantController::class)->name('delete');
+                });
+
+                Route::prefix('banner')->as('banner.')->group(function () {
+                    Route::post('/', UpdateBannerRestaurantController::class)->name('update');
+                    Route::delete('/', DeleteBannerRestaurantController::class)->name('delete');
+                });
+              
             });
         });
 
@@ -122,12 +169,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 Route::post('/{restaurant}/reservation/create/stepThree', [CreateReservationController::class, "stepthree"])->name('reservation.create.stepThree');
 
                 Route::get('/{restaurant}/message/{message}', ShowMessageController::class)->name('message.show');
+
+               
             });
     });
 
 
     Route::prefix('restaurant')->as('restaurant.')->group(function () {
         Route::post('store', [CreateRestaurantController::class, 'store'])->name('store');
+        
         Route::get('create', function () {
             return Inertia::render('Restaurant/Create/CreateRestaurant', [
                 'canGoHome' => Route::has('home'),
@@ -153,22 +203,28 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::prefix('book')->group(function () {
     Route::get('{id}', ReservationCreateController::class)->name('reservation');
     Route::post('step-one', [ReservationStoreController::class, 'stepOne'])->name('reservation.step-one');
-    Route::post('step-two', [ReservationStoreController::class, 'stepTwo'])->name('reservation.step-two');
-    Route::post('step-three', [ReservationStoreController::class, 'stepThree'])->name('reservation.step-three');
-    Route::post('step-four', [ReservationStoreController::class, 'stepFour'])->name('reservation.step-four');
+    Route::post('step-two/{restaurant}', [ReservationStoreController::class, 'stepTwo'])->name('reservation.step-two');
+    Route::post('step-three/{restaurant}', [ReservationStoreController::class, 'stepThree'])->name('reservation.step-three');
+    Route::post('step-four/{restaurant}', [ReservationStoreController::class, 'stepFour'])->name('reservation.step-four');
 });
+
+Route::get('/restaurant/{slug}', PageController::class)->name('restaurant');
 // Route::get('/book/{id}', ReservationCreateController::class)->name('reservation');
 // Route::post('/book/step-one', [ReservationStoreController::class, 'stepOne'])->name('reservation.step-one');
 // Route::post('/book/step-two', [ReservationStoreController::class, 'stepTwo'])->name('reservation.step-two');
 // Route::post('/book/step-three', [ReservationStoreController::class, 'stepThree'])->name('reservation.step-three');
 // Route::post('/book/step-four', [ReservationStoreController::class, 'stepFour'])->name('reservation.step-four');
 
-
+Route::post('/send-message-to-restaurant', SendMessageToRestaurantController::class)->name('message.send');
+Route::post('/subscribe-to-newsletter-restaurant/{restaurant}', SubscribeToNewsletterController::class)->name('newsletter.subscribe');
 
 Route::get('forbidden', function () {
     return Inertia::render('Error403');
 })->name('forbidden');
 
+Route::get('restaurant/notFound', function () {
+    return Inertia::render('Public/Restaurant/PageNotAvailable');
+})->name('restaurant.notFound');
 
 Route::get('mail', function () {
     return view('mails.reservation.status-change');

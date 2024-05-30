@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers\Reservation;
 
+use App\Actions\Restaurant\RedirectIfCanNotAcceptReservation;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RestaurantResource;
 use App\Models\Day;
 use App\Models\Restaurant;
+use App\Repositories\RestaurantRepository;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class CreateController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
+    public $restaurantRepository;
+    public function __construct(RestaurantRepository $restaurantRepository) {
+        $this->restaurantRepository = $restaurantRepository;
+    }
+
     public function __invoke($id)
     {
         //    $now = microtime(true) * 1000;
@@ -26,7 +29,12 @@ class CreateController extends Controller
 
             // return new RestaurantResource($restaurant);
             $restaurant = Restaurant::findOrFail($id);
-
+     
+            if(!$this->restaurantRepository->isRestaurantCanAcceptReservation($restaurant)) {
+               return (new RedirectIfCanNotAcceptReservation())->action($restaurant);
+            }
+            // scopeReservationOpen
+            // dd($restaurant);
             $services = $restaurant->services;
 
 
@@ -46,8 +54,8 @@ class CreateController extends Controller
 
             // $restaurant = Restaurant::with('days.services')->findOrFail($id);
 
-            
-            return inertia("Reservation/Form/Index", [
+           
+            return inertia("Public/Reservation/Form/Index", [
                 'restaurant' => $restaurant,
                 'before_today' => $before_today,
                 'disabledDays' => $disabledDays,

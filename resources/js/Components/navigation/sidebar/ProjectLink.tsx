@@ -1,12 +1,14 @@
+import { cn } from "@/lib/utils";
 import { ChevronRightIcon } from "@heroicons/react/24/outline"
 
 interface Props {
   children: React.ReactNode
   name: string
   setSelectedProject: (val: string | null) => void
+  className?: string;
 }
 
-const ProjectLink = ({ children, name, setSelectedProject }: Props) => {
+const ProjectLink = ({ children, name, setSelectedProject, className }: Props) => {
   const handleClick = () => {
     setSelectedProject(null)
     setTimeout(() => {
@@ -17,7 +19,7 @@ const ProjectLink = ({ children, name, setSelectedProject }: Props) => {
     <a
       href="#"
       onClick={handleClick}
-      className="flex p-1 rounded cursor-pointer stroke-[0.75] hover:stroke-neutral-100 stroke-neutral-400 text-neutral-400 hover:text-neutral-100 place-items-center gap-3 hover:bg-primary/20 transition-colors duration-100"
+      className={cn("flex p-1 rounded cursor-pointer stroke-[0.75] hover:stroke-neutral-100 stroke-neutral-400 text-neutral-400 hover:text-neutral-100 place-items-center gap-3 hover:bg-primary/20 transition-colors duration-100", className)}
     >
       {children}
       <div className="flex overflow-clip place-items-center justify-between w-full">

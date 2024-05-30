@@ -75,7 +75,7 @@ it('can create if subscribed', function () {
     ]));
     
     assertDatabaseCount('entreprises', 1);
-})->only();
+});
 
 
 it('redirect if not subscribed and post', function () {

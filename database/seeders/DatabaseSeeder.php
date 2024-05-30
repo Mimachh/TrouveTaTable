@@ -5,7 +5,12 @@ namespace Database\Seeders;
 use App\Models\Day;
 use App\Models\Feature;
 use App\Models\Message;
+use App\Models\NewsletterUser;
+use App\Models\NoteRestaurant;
 use App\Models\Product;
+use App\Models\RatingRestaurant;
+use App\Models\RatingRestaurantItem;
+use App\Models\Reservation;
 use App\Models\Restaurant;
 use App\Models\User;
 use App\Models\Role;
@@ -115,6 +120,61 @@ class DatabaseSeeder extends Seeder
             'restaurant_id' => $restaurant->id
         ]);
       
+        NewsletterUser::factory(50)->create([
+            'restaurant_id' => $restaurant->id
+        ]);
+        
+        $services = Service::first();
+        $tables = Table::first();
+        // 'end_time' => $this->faker->time(),
+        // 'restaurant_id' => \App\Models\Restaurant::factory(),
+        // 'day_id' => \App\Models\Day::factory(),
+
+        $reservation = Reservation::factory()->create([
+            "service_id" => $services->id,
+            "table_id" => $tables->id,
+        ]);
+   
+        $quality = RatingRestaurantItem::factory()->create([
+            "name" => "Qualité"
+        ]);
+        $accueil = RatingRestaurantItem::factory()->create([
+            "name" => "Accueil"
+        ]);
+        $proprete = RatingRestaurantItem::factory()->create([
+            "name" => "Propreté"
+        ]);
+        $cadre = RatingRestaurantItem::factory()->create([
+            "name" => "Cadre et ambiance"
+        ]);
+
+        $ratingRestaurant = RatingRestaurant::factory()->create([
+            "restaurant_id" => $restaurant->id,
+            "reservation_id" => $reservation->id
+        ]);
+
+
+        $note1 = NoteRestaurant::factory()->create([
+            "rating_restaurant_id" => $ratingRestaurant->id,
+            "rating_restaurant_item_id" => $quality->id,
+            "note" => 5
+        ]);
+        $note2 = NoteRestaurant::factory()->create([
+            "rating_restaurant_id" => $ratingRestaurant->id,
+            "rating_restaurant_item_id" => $accueil->id,
+            "note" => 4
+        ]);
+        $note3 = NoteRestaurant::factory()->create([
+            "rating_restaurant_id" => $ratingRestaurant->id,
+            "rating_restaurant_item_id" => $proprete->id,
+            "note" => 2
+        ]);
+        $note4 = NoteRestaurant::factory()->create([
+            "rating_restaurant_id" => $ratingRestaurant->id,
+            "rating_restaurant_item_id" => $cadre->id,
+            "note" => 3
+        ]);
+
         Product::factory()->create([
             "name" => "Basique",
             "order" => 1,

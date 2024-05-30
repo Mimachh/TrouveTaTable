@@ -61,7 +61,7 @@ export const RestaurantModal = () => {
                                     >
                                         <Input
                                             id="name"
-                                            type="name"
+                                            type="text"
                                             name="name"
                                             value={data.name}
                                             className="mt-1 block w-full py-3 border"

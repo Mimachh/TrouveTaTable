@@ -16,7 +16,7 @@ import ProjectLink from "./ProjectLink";
 import ProjectNavigation from "./ProjectNavigation";
 import { usePage } from "@inertiajs/react";
 import { Restaurant } from "@/types/restaurant";
-import { HandPlatter, LayoutDashboard, LayoutDashboardIcon } from "lucide-react";
+import { HandPlatter, LayoutDashboard, LayoutDashboardIcon, Settings } from "lucide-react";
 
 const containerVariants = {
     close: {
@@ -106,12 +106,12 @@ const Navigation = () => {
     return (
         <>
             <div className="sticky z-10 top-0 left-0 h-fit">
-                <div className="min-h-[calc(100vh-25rem)]">
+                <div className="min-h-screen">
                 <motion.nav
                     variants={containerVariants}
                     animate={containerControls}
                     initial="close"
-                    className="bg-secondary border border-r flex flex-col p-5 justify-between absolute gap-10 top-0 left-0 min-h-full h-fit shadow"
+                    className="bg-secondary border border-r flex flex-col p-5 justify-start absolute gap-24 top-0 left-0 min-h-full h-fit shadow"
                 >
                     <div className="flex flex-row w-full justify-between place-items-center h-full">
                         <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-700 rounded-full" />
@@ -149,21 +149,27 @@ const Navigation = () => {
                         >
                             <LayoutDashboard className="stroke-inherit stroke-[0.75] min-w-8 w-8 h-8" />
                         </NavigationLink>
+                        <ProjectLink
+                            name="Utilisateurs"
+                            setSelectedProject={setSelectedProject}
+                            className="text-red-600 flex p-1 rounded cursor-pointer stroke-[0.75] hover:stroke-muted stroke-secondary-foreground/60 text-secondary-foreground/60 hover:text-muted place-items-center gap-3 hover:bg-secondary-foreground/80 transition-colors duration-100"
+                        >
+                            <UsersIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
+                        </ProjectLink>
+
                         <NavigationLink name="Messages"
                             href={route("dashboard.messages.index", current_restaurant.id)}
                             active={route().current("dashboard.messages.index", current_restaurant.id)}
                         >
                             <ChatBubbleLeftRightIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
                         </NavigationLink>
-                        <NavigationLink name="Ma page">
+                        <NavigationLink name="Ma page"
+                        href={route("dashboard.page.index", current_restaurant.id)}
+                        active={route().current("dashboard.page.index", current_restaurant.id)}
+                        >
                             <DocumentIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
                         </NavigationLink>
-                        <NavigationLink name="Reporting">
-                            <ChartPieIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
-                        </NavigationLink>
-                        <NavigationLink name="Users">
-                            <UsersIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
-                        </NavigationLink>
+
                         <NavigationLink
                          name="Tables"
                          href={route("dashboard.tables.index", current_restaurant.id)}
@@ -186,10 +192,9 @@ const Navigation = () => {
                             <CalendarDaysIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
                         </NavigationLink>
                      
-                       
                       
                     </div>
-                    <div className="flex flex-col gap-3">
+                    {/* <div className="flex flex-col gap-3">
                         <ProjectLink
                             name="Virtual Reality"
                             setSelectedProject={setSelectedProject}
@@ -214,7 +219,7 @@ const Navigation = () => {
                         >
                             <div className="min-w-4 mx-2 border-yellow-600 border rounded-full aspect-square bg-yellow-700" />
                         </ProjectLink>
-                    </div>
+                    </div> */}
                 </motion.nav>
                 </div>
             </div>
@@ -225,6 +230,7 @@ const Navigation = () => {
                         selectedProject={selectedProject}
                         setSelectedProject={setSelectedProject}
                         isOpen={isOpen}
+                        restaurant={restaurant.data}
                     />
                 )}
             </AnimatePresence>

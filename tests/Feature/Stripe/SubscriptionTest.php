@@ -56,4 +56,4 @@ it('can subscribe', function () {
         ]));
     // ->assertRedirect('/dashboard');
     assertDatabaseCount('subscriptions', 1);
-})->only();
+});

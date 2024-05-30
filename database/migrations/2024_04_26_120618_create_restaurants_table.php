@@ -15,6 +15,7 @@ return new class extends Migration
            
             $table->uuid('id')->primary();
             $table->string('name');
+            $table->string('slug')->unique();
             $table->string('address')->nullable(); // must be required for prod
             $table->string('city')->nullable(); // must be required for prod
             $table->string('zip')->nullable(); // must be required for prod
@@ -24,8 +25,11 @@ return new class extends Migration
             $table->string('logo')->nullable();
             $table->string('cover')->nullable();
             $table->string('description')->nullable();
-            $table->string('hours')->nullable();
             $table->boolean('active')->default(true);
+           
+
+            $table->string('banner', 1024)->nullable();
+            $table->string('avatar', 1024)->nullable();
 
             $table->time('time_before_service')->nullable();
             $table->time('time_after_service')->nullable();
@@ -35,7 +39,12 @@ return new class extends Migration
             
             $table->foreignId('owner_id')->constrained('users')->onDelete('cascade');
 
-            // latitude and longitude
+            
+            $table->boolean('accept_reservations')->default(false);
+            $table->boolean('accept_messages')->default(false);
+            $table->boolean('enable_page')->default(false);
+
+
             $table->timestamps();
         });
     }

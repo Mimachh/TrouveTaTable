@@ -20,8 +20,9 @@ class ServiceFactory extends Factory
             'name' => $this->faker->name,
             'start_time' => $this->faker->time(),
             'end_time' => $this->faker->time(),
+            'restaurant_id' => \App\Models\Restaurant::factory(),
+            'day_id' => \App\Models\Day::factory(),
             // 'restaurant_day_id' =>  \App\Models\Restaurant::factory(),
-          
         ];
     }
 }

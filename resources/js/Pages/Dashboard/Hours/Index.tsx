@@ -7,6 +7,7 @@ import React from "react";
 import SelectTamponService from "./Partials/SelectTamponService";
 import OpeningHours from "./Partials/OpeningHours";
 import StopReservation from "./Partials/StopReservation";
+import AcceptReservation from "./Partials/AcceptReservation";
 
 type Props = PageProps & {
     restaurant: {
@@ -59,6 +60,7 @@ const Hours = ({ restaurant: resto, auth, days, hours, can }: Props) => {
             <div className="md:grid md:grid-cols-3 gap-3 space-y-2 md:space-y-0">
                 <OpeningHours openForm={openForm} days={days} hours={hours} />
                 <div className="space-y-2">
+                    <AcceptReservation restaurant={restaurant} />
                     <SelectTamponService restaurant={restaurant} />
                     <StopReservation restaurant={restaurant} />
                 </div>

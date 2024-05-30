@@ -1,4 +1,4 @@
-import { FormEventHandler, useState } from "react";
+import { FormEventHandler, useEffect, useState } from "react";
 
 import { Modal } from "@/Components/ui/modal";
 import { Input } from "@/Components/ui/input";
@@ -10,6 +10,7 @@ import { useContactRestaurantModal } from "@/hooks/useContactRestaurantModal";
 import SubmitButton from "../ui/submit-button";
 import { toast } from "sonner";
 import { MessageCircle, Phone } from "lucide-react";
+import { Textarea } from "../ui/textarea";
 
 export const ContactRestaurant = () => {
     const contactModalOnClose = useContactRestaurantModal.use.onClose();
@@ -20,12 +21,23 @@ export const ContactRestaurant = () => {
 
     const [loading, setLoading] = useState(false);
     const { data, setData, post, processing, errors, reset } = useForm({
-        name: "",
+        last_name: "",
+        first_name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        content: "",
+        restaurant_id: contactModalRestaurant?.id,
     });
 
+    useEffect(() => {
+        if (contactModalRestaurant) {
+            setData("restaurant_id", contactModalRestaurant.id);
+        }
+    }, [contactModalRestaurant]);
     const onSubmit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route("restaurant.store"), {
+        post(route("message.send"), {
             onStart: () => {
                 setLoading(true);
             },
@@ -35,8 +47,9 @@ export const ContactRestaurant = () => {
                 reset();
                 toast.success("Message envoyé avec succès.");
             },
-            onError: () => {
+            onError: (e) => {
                 setLoading(false);
+                console.log(errors, e);
             },
         });
     };
@@ -53,7 +66,7 @@ export const ContactRestaurant = () => {
                 <div className="space-y-4 py-2 pb-4">
                     <div className="space-y-2">
                         <h2
-                            className="text-lg font-semibold
+                            className="text-md font-semibold
                         flex items-center justify-center gap-3
                         "
                         >
@@ -71,23 +84,131 @@ export const ContactRestaurant = () => {
                                 </div>
                             ) : (
                                 <div>
-                                    <FormFieldLayout
-                                        label="Nom du restaurant"
-                                        fieldName="name"
-                                        error={errors.name}
-                                    >
-                                        <Input
-                                            id="name"
-                                            type="name"
-                                            name="name"
-                                            value={data.name}
-                                            className="mt-1 block w-full py-3 border"
-                                            autoComplete="username"
-                                            onChange={(e) =>
-                                                setData("name", e.target.value)
-                                            }
-                                        />
-                                    </FormFieldLayout>
+                                    <div className="space-y-1.5">
+                                        <div className="grid grid-cols-2 gap-1">
+                                            <FormFieldLayout
+                                                label="Nom"
+                                                fieldName="last_name"
+                                                error={errors.last_name}
+                                            >
+                                                <Input
+                                                    id="last_name"
+                                                    type="text"
+                                                    name="last_name"
+                                                    placeholder="Votre nom"
+                                                    value={data.last_name}
+                                                    className="mt-1 block w-full py-3 border"
+                                                    onChange={(e) =>
+                                                        setData(
+                                                            "last_name",
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                />
+                                            </FormFieldLayout>
+                                            <FormFieldLayout
+                                                label="Prénom"
+                                                fieldName="first_name"
+                                                error={errors.first_name}
+                                            >
+                                                <Input
+                                                    id="first_name"
+                                                    type="text"
+                                                    name="first_name"
+                                                    placeholder="Votre prénom"
+                                                    value={data.first_name}
+                                                    className="mt-1 block w-full py-3 border"
+                                                    onChange={(e) =>
+                                                        setData(
+                                                            "first_name",
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                />
+                                            </FormFieldLayout>
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-1">
+                                            <FormFieldLayout
+                                                label="Mail"
+                                                fieldName="email"
+                                                error={errors.email}
+                                            >
+                                                <Input
+                                                    id="email"
+                                                    type="mail"
+                                                    name="email"
+                                                    placeholder="Votre adresse mail"
+                                                    value={data.email}
+                                                    className="mt-1 block w-full py-3 border"
+                                                    onChange={(e) =>
+                                                        setData(
+                                                            "email",
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                />
+                                            </FormFieldLayout>
+                                            <FormFieldLayout
+                                                label="Téléphone"
+                                                fieldName="phone"
+                                                error={errors.phone}
+                                            >
+                                                <Input
+                                                    id="phone"
+                                                    type="text"
+                                                    name="phone"
+                                                    placeholder="Votre numéro de téléphone"
+                                                    value={data.phone}
+                                                    className="mt-1 block w-full py-3 border"
+                                                    onChange={(e) =>
+                                                        setData(
+                                                            "phone",
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                />
+                                            </FormFieldLayout>
+                                        </div>
+
+                                        <FormFieldLayout
+                                            label="Sujet"
+                                            fieldName="subject"
+                                            error={errors.subject}
+                                        >
+                                            <Input
+                                                id="subject"
+                                                type="text"
+                                                name="subject"
+                                                placeholder="Sujet de votre message"
+                                                value={data.subject}
+                                                className="mt-1 block w-full py-3 border"
+                                                onChange={(e) =>
+                                                    setData(
+                                                        "subject",
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
+                                        </FormFieldLayout>
+
+                                        <FormFieldLayout
+                                            label="Message"
+                                            fieldName="content"
+                                            error={errors.content}
+                                        >
+                                            <Textarea
+                                                placeholder="Contenu de votre message"
+                                                className="resize-none"
+                                                onChange={(e) => {
+                                                    setData(
+                                                        "content",
+                                                        e.target.value
+                                                    );
+                                                }}
+                                            />
+                                        </FormFieldLayout>
+                                    </div>
 
                                     <div className="pt-6 space-x-2 flex items-center justify-center w-full">
                                         <Button
@@ -100,7 +221,7 @@ export const ContactRestaurant = () => {
                                             Annuler
                                         </Button>
                                         <SubmitButton
-                                            disabled={loading}
+                                            disabled={loading || processing}
                                             variant="primaryBlue"
                                             className="w-full  text-white"
                                             type="submit"
@@ -117,7 +238,7 @@ export const ContactRestaurant = () => {
                                 <div className="w-full text-center tracking-wide">
                                     <p className="">OU</p>
                                     <h2
-                                        className="text-lg font-semibold
+                                        className="text-md font-semibold
                          flex items-center justify-center gap-3
                          "
                                     >

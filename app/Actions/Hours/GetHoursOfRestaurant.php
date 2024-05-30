@@ -6,6 +6,7 @@ namespace App\Actions\Hours;
 
 use App\Http\Resources\DayResource;
 use App\Models\Day;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
 class GetHoursOfRestaurant
@@ -20,6 +21,10 @@ class GetHoursOfRestaurant
 
         $hours = [];
 
+        Carbon::setLocale('fr');
+        setlocale(LC_TIME, 'fr_FR.utf8');
+        $today = ucfirst(Carbon::now()->translatedFormat('l'));
+       
         // Loop through each day
         foreach ($days as $day) {
             $dayServices = $services->where('day_id', $day->id);
@@ -39,14 +44,16 @@ class GetHoursOfRestaurant
                 $hours[$day->name] = [
                     'day_id' => $day->id,
                     'day_name' => $day->name,
-                    'services' => $formattedHours
+                    'services' => $formattedHours,
+                    'isToday' => $day->name === $today
                 ];
             } else {
                 // Si aucun service n'existe pour le jour actuel, définissez les heures d'ouverture et de fermeture sur null
                 $hours[$day->name] = [
                     'day_id' => $day->id,
                     'day_name' => $day->name,
-                    'services' => []
+                    'services' => [],
+                    'isToday' => $day->name === $today
                 ];
             }
         }

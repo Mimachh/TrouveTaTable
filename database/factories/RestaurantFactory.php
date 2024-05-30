@@ -18,6 +18,7 @@ class RestaurantFactory extends Factory
     {
         return [
             'name' => $this->faker->company,
+            'slug' => $this->faker->slug,
             'description' => $this->faker->sentence,
             'address' => $this->faker->streetAddress,
             'city' => $this->faker->city,
@@ -27,12 +28,16 @@ class RestaurantFactory extends Factory
             'website' => $this->faker->url,
             'logo' => $this->faker->imageUrl,
             'cover' => $this->faker->imageUrl,
-            'hours' => $this->faker->sentence,
             'active' => $this->faker->boolean,
             'time_before_service' => null,
             'time_after_service' => "00:30:00",
             'time_to_stop_reservation' => "00:30:00",
-            // 'user_id' => \App\Models\User::factory(),
+            'accept_reservations' => $this->faker->boolean,
+            "accept_messages" => $this->faker->boolean,
+            "enable_page" => $this->faker->boolean,
+            "banner" => $this->faker->imageUrl,
+            "avatar" => $this->faker->imageUrl,
+            // 'owner_id' => \App\Models\User::factory(),
             'owner_id' => 1,
         ];
     }

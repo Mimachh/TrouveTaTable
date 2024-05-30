@@ -5,16 +5,16 @@
 
 
 
-- Faire les tests pour : créer un restau / créer des horaires / créer une résa / update une résa / ajouter en tant qu'admin une résa / créer , updater et supprimer des tables
+- Faire les tests pour : créer des horaires / créer une résa / update une résa / ajouter en tant qu'admin une résa / créer , updater et supprimer des tables
 
 
 - Table et model pour envoyer un message à un restaurant + notification.
 
 
-
 - Réfléchir au système de liste d'attente. = renvoyer les autres tables suite à la vérif et les mettre dans un select particulier.
 Le client s'inscrit. Si une réservation sur cette table pour ce service est annulée alors le client 1 en liste d'attente est inscrit en résa et reçoit un mail, mail dans lequel il peut annuler ou confirmer. S'il ne confirme pas avant le début du service la table ne sera pas réservée.
 
+- Mail de rappel la veille de la réservation.
 
 ajouter restaurant type sur welcome.
 nettoyer et clarifier index de reservation.
@@ -23,16 +23,16 @@ nettoyer et clarifier index de reservation.
 - penser que pour faire des policy il faut vérifier que le owner du restaurant à bien des souscription + que les user font bien parti de la team du restaurant
 
 
-
+- ajouter toutes les policy du restaurant + montrer ou non les boutons dans les pages en fonction + (table déjà policy mais bouton pas caché)
 
 ## Liste des services proposés :
 - page web
 - module de resa
-- api
 - page de contact
-- gestion des résa avec qr code
-- associer son menu à un qrcode
-
+- inscription à newsletter
+- gestion des résa avec qr code A FAIRE
+- associer son menu à un qrcode A FAIRE
+- api A FAIRE
 
 
 
@@ -40,4 +40,34 @@ nettoyer et clarifier index de reservation.
 - click and collect
 - service de livraison
 - liste d'attente
-- service de mail marketing
+- service de mail marketing  + possibilité d'exporter en csv
+- notation + avis
+- lutte anti no show (emprunte bancaire ou pré paiement) + informations sur le client
+
+
+
+
+- table menus
+- supprimer son compte et ses cascades
+- supprimer un resto et les cascades : les suppressions doivent être :
+    - les files : banner, avatar, les medias
+    - les services
+    - les réservations
+    - les messages
+    - les newsletter user
+
+
+
+- notif mail pour message reçu
+- abonnement.
+- qr code
+
+
+## à réfléchir :
+- gestion des employés ? avec adresse/ téléphone ...
+- heure travaillée par employé
+jour/date/début/fin
+- heure de travail prévu 
+- tache pour employé
+- vente
+- menu

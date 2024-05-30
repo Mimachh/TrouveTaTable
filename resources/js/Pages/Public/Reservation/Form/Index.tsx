@@ -7,7 +7,6 @@ import { useMultistepForm } from "@/hooks/useMultiStepForm";
 import { PageProps } from "@/types";
 import { Head, useForm } from "@inertiajs/react";
 import { useEffect, useRef, useState } from "react";
-import { z } from "zod";
 import axios from "axios";
 import { Services } from "@/types/services";
 import { useDatePickerState } from "react-stately";
@@ -125,6 +124,9 @@ const Index = ({
                 .catch((error) => {
                     // console.log(error);
                     setError(error.response.data.errors);
+                    if(error.response.status === 403) {
+                        toast.error("Le restaurant ne peut pas accepter de réservation pour le moment.")
+                    }
                     return back();
                 })
                 .finally(() => {
@@ -141,7 +143,7 @@ const Index = ({
             setError("time", "");
             const servicesIds = services.map((service) => service.id);
             axios
-                .post(route("reservation.step-two"), {
+                .post(route("reservation.step-two", {restaurant: restaurant.id}), {
                     time: data.time,
                     id: data.id,
                     services: servicesIds,
@@ -149,9 +151,10 @@ const Index = ({
                     reservation_date: isoDate,
                 })
                 .then((response) => {
-                    setTables(response.data.tables);
-                    setData("service_id", response.data.matchingService.id);
-                    if (response.data.tables.length === 0) {
+                    setTables(response.data.data.tables);
+                    // console.log(response)
+                    setData("service_id", response.data.data.matchingService.id);
+                    if (response.data.data.tables.length === 0) {
                         toast.error("Aucune table disponible pour cette date");
                         // return;
                     }
@@ -160,6 +163,9 @@ const Index = ({
                 .catch((error) => {
                     // console.log(error.response.data.errors);
                     setError(error.response.data.errors);
+                    if(error.response.status === 403) {
+                        toast.error("Le restaurant ne peut pas accepter de réservation pour le moment.")
+                    }
                 })
                 .finally(() => {
                     setLoading(false);
@@ -168,7 +174,7 @@ const Index = ({
 
         if (currentStepIndex + 1 === 3) {
             axios
-                .post(route("reservation.step-three"), {
+                .post(route("reservation.step-three", {restaurant: restaurant.id}), {
                     table_id: data.table_id,
                 })
                 .then((response) => {
@@ -178,6 +184,9 @@ const Index = ({
                 .catch((error) => {
                     // console.log(error.response.data.errors);
                     setError(error.response.data.errors);
+                    if(error.response.status === 403) {
+                        toast.error("Le restaurant ne peut pas accepter de réservation pour le moment.")
+                    }
                 })
                 .finally(() => {
                     setLoading(false);
@@ -187,7 +196,7 @@ const Index = ({
         if (currentStepIndex + 1 === 4) {
             setLoading(true);
             axios
-                .post(route("reservation.step-four"), {
+                .post(route("reservation.step-four", {restaurant: restaurant.id}), {
                     table_id: data.table_id,
                     reservation_date: isoDate,
                     first_name: data.first_name,
@@ -203,8 +212,11 @@ const Index = ({
                     next();
                 })
                 .catch((error) => {
-                    // console.log(error.response.data.errors);
                     setError(error.response.data.errors);
+                    if(error.response.status === 403) {
+                        toast.error("Le restaurant ne peut pas accepter de réservation pour le moment.")
+                    }
+
                 })
                 .finally(() => {
                     setLoading(false);
@@ -225,6 +237,7 @@ const Index = ({
         }
     }, [currentStepIndex]);
 
+  
     const contactModalOnOpen = useContactRestaurantModal.use.onOpen();
     const contactModalSetRestaurant = useContactRestaurantModal.use.setRestaurant();
     return (
@@ -267,7 +280,7 @@ const Index = ({
                        
 
                             {(currentStepIndex === 1 && transformedServices &&
-                                transformedServices.length === 0) || (currentStepIndex === 2 && tables && tables.length === 0) ? (
+                                transformedServices.length === 0) || (currentStepIndex === 2 && tables && tables.length === 0) && restaurant.accept_messages ? (
                                 <Button
                                     variant={"primaryBlue"}
                                     className="w-full col-span-3 text-white"

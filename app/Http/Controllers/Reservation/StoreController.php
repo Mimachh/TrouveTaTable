@@ -34,91 +34,111 @@ class StoreController extends Controller
     public function stepOne(StepOneRequest $request)
     {
         $restaurant = Restaurant::with('services')->findOrFail($request->get('id'));
-        $servicesOfTheDay = $this->restaurantRepository->getServicesFromTheSelectedDate($restaurant, $request->get('reservation_date'));
+        if ($this->restaurantRepository->isRestaurantCanAcceptReservation($restaurant)) {
+            $servicesOfTheDay = $this->restaurantRepository->getServicesFromTheSelectedDate($restaurant, $request->get('reservation_date'));
 
-        $servicesWithOptions = (new FormatServices)->filterOffTheServiceWhenEndReservationIsPastToday($servicesOfTheDay, $request->get('reservation_date'), $restaurant);
+            $servicesWithOptions = (new FormatServices)->filterOffTheServiceWhenEndReservationIsPastToday($servicesOfTheDay, $request->get('reservation_date'), $restaurant);
 
-        $servicesResource = ServiceResource::collection($servicesOfTheDay);
+            $servicesResource = ServiceResource::collection($servicesOfTheDay);
 
-        return ApiResponse::ok([
-            'services' => $servicesResource,
-            "transformedServices" => $servicesWithOptions,
+            return ApiResponse::ok([
+                'services' => $servicesResource,
+                "transformedServices" => $servicesWithOptions,
 
-        ]);
+            ]);
+        }
+
+
+        return ApiResponse::forbidden('Restaurant can not accept reservation');
     }
 
-    public function stepTwo(StepTwoRequest $request)
+    public function stepTwo(StepTwoRequest $request, Restaurant $restaurant)
     {
 
-        $services = Service::findMany(request('services'));        
-        $date = Carbon::parse(request('reservation_date'));
-        $date->setLocale('fr');
-        $restaurant_id = $services->first()->restaurant_id;
-        $restaurant = Restaurant::with('services')->findOrFail($restaurant_id);
 
-        $serviceWithOption = (new FormatServices)->filterOffTheServiceWhenEndReservationIsPastToday($services, $date, $restaurant);
-  
-        $time = strtotime(request('time'));
-        $validServicesCount = 0;
+        if ($this->restaurantRepository->isRestaurantCanAcceptReservation($restaurant)) {
+            $services = Service::findMany(request('services'));
+            $date = Carbon::parse(request('reservation_date'));
+            $date->setLocale('fr');
+            $restaurant_id = $services->first()->restaurant_id;
+            $restaurant = Restaurant::with('services')->findOrFail($restaurant_id);
 
-        $arrayStartAndEnd = [];
-        foreach ($serviceWithOption as $service) {
-            $startTime = (new FormatServices)->getTheStartTimeWithOption($service->start_time, $restaurant->time_before_service);
-            $startTimeToString = strtotime($startTime);
-            $endTime = (new FormatServices)->getTheEndTimeWithOption($service->end_time, $restaurant->time_after_service);
-            $endTimeToString = strtotime($endTime);
-            array_push($arrayStartAndEnd, [$startTime, $endTime]);
-            if ($time >= $startTimeToString && $time <= $endTimeToString) {
-                $validServicesCount++;
+            $serviceWithOption = (new FormatServices)->filterOffTheServiceWhenEndReservationIsPastToday($services, $date, $restaurant);
+
+            $time = strtotime(request('time'));
+            $validServicesCount = 0;
+
+            $arrayStartAndEnd = [];
+            foreach ($serviceWithOption as $service) {
+                $startTime = (new FormatServices)->getTheStartTimeWithOption($service->start_time, $restaurant->time_before_service);
+                $startTimeToString = strtotime($startTime);
+                $endTime = (new FormatServices)->getTheEndTimeWithOption($service->end_time, $restaurant->time_after_service);
+                $endTimeToString = strtotime($endTime);
+                array_push($arrayStartAndEnd, [$startTime, $endTime]);
+                if ($time >= $startTimeToString && $time <= $endTimeToString) {
+                    $validServicesCount++;
+                }
             }
+
+
+            $time = strtotime($request->get('time'));
+            $services = Service::findMany($request->get('services'));
+
+            $matchingService = (new FindServiceByTime)->handle($services, $time);
+            $tables = $this->tableRepository->getFreeTables($request->get('reservation_date'), $matchingService["id"], $request->get('guests'), $request->get('id'));
+            return ApiResponse::ok([
+                'matchingService' => $matchingService,
+                'tables' => $tables,
+            ]);
         }
 
-  
-        $time = strtotime($request->get('time'));
-        $services = Service::findMany($request->get('services'));
 
-        $matchingService = (new FindServiceByTime)->handle($services, $time);
-        $tables = $this->tableRepository->getFreeTables($request->get('reservation_date'), $matchingService["id"], $request->get('guests'), $request->get('id'));
-        return response()->json([
-            'matchingService' => $matchingService,
-            'tables' => $tables,
-        ]);
+        return ApiResponse::forbidden('Restaurant can not accept reservation');
     }
 
-    public function stepThree(StepThreeRequest $request)
+    public function stepThree(StepThreeRequest $request, Restaurant $restaurant)
     {
-        $table = Table::findOrFail($request->get('table_id'));
-        if(!$table) {
-            return ApiResponse::notFound(
-                'Table not found'
+        if ($this->restaurantRepository->isRestaurantCanAcceptReservation($restaurant)) {
+            $table = Table::findOrFail($request->get('table_id'));
+            if (!$table) {
+                return ApiResponse::notFound(
+                    'Table not found'
+                );
+            }
+            return ApiResponse::ok([
+                "ok"
+            ]);
+        }
+
+        return ApiResponse::forbidden('Restaurant can not accept reservation');
+    }
+
+    public function stepFour(StepFourRequest $request, Restaurant $restaurant)
+    {
+
+        if ($this->restaurantRepository->isRestaurantCanAcceptReservation($restaurant)) {
+            $reservationDate = Carbon::parse($request->reservation_date)->toDateString();
+
+            // Ajoutez la date de réservation transformée à la liste des données validées
+            $data = $request->validated();
+
+            $data['reservation_date'] = $reservationDate;
+
+            // Créez la réservation en utilisant les données transformées
+            $reservation = Reservation::create($data);
+
+            $restaurant = Table::where('id', $data['table_id'])->first()->restaurant;
+
+            $restaurantMail = (new SendMail)->AfterCreated(
+                $restaurant,
+                $reservation
             );
+
+            return ApiResponse::created([
+                'reservation' => $reservation,
+            ]);
         }
-        return ApiResponse::ok([
-            "ok"
-        ]);
-    }
 
-    public function stepFour(StepFourRequest $request)
-    {
-
-        $reservationDate = Carbon::parse($request->reservation_date)->toDateString();
-
-        // Ajoutez la date de réservation transformée à la liste des données validées
-        $data = $request->validated();
-
-        $data['reservation_date'] = $reservationDate;
-
-        // Créez la réservation en utilisant les données transformées
-        $reservation = Reservation::create($data);
-
-        $restaurant = Table::where('id', $data['table_id'])->first()->restaurant;
-
-        $restaurantMail = (new SendMail)->AfterCreated(
-            $restaurant,
-            $reservation
-        );
-        return ApiResponse::created([
-            'reservation' => $reservation,
-        ]);
+        return ApiResponse::forbidden('Restaurant can not accept reservation');
     }
 }

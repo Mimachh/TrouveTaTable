@@ -68,4 +68,37 @@ class RestaurantPolicy
     {
         //
     }
+
+    public function createTable(User $user, Restaurant $restaurant): bool {
+        return $user->id === $restaurant->owner_id;
+    }
+    public function enablePage(User $user, Restaurant $restaurant): bool
+    {
+        return $user->id === $restaurant->owner_id;
+    }
+
+    public function updatePage(User $user, Restaurant $restaurant): bool
+    {
+        return $user->id === $restaurant->owner_id;
+    }
+
+    public function updateBanner(User $user, Restaurant $restaurant): bool
+    {
+        return $user->id === $restaurant->owner_id;
+    }
+
+    public function updateAvatar(User $user, Restaurant $restaurant): bool 
+    {
+        return $user->id === $restaurant->owner_id;
+    }
+
+    public function updateMedia(User $user, Restaurant $restaurant): bool
+    {
+        return $user->id === $restaurant->owner_id;
+    }
+
+    public function unsubscribeNewsletterUser(User $user, Restaurant $restaurant): bool
+    {
+        return $user->id === $restaurant->owner_id;
+    }
 }
