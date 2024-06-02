@@ -30,6 +30,7 @@ nettoyer et clarifier index de reservation.
 - module de resa
 - page de contact
 - inscription à newsletter
+- notation + avis EN COURS - Faire page qui affiche tous les avis clients et l'ajouter au mail newRatingNotifyRestaurant
 - gestion des résa avec qr code A FAIRE
 - associer son menu à un qrcode A FAIRE
 - api A FAIRE
@@ -41,7 +42,7 @@ nettoyer et clarifier index de reservation.
 - service de livraison
 - liste d'attente
 - service de mail marketing  + possibilité d'exporter en csv
-- notation + avis
+
 - lutte anti no show (emprunte bancaire ou pré paiement) + informations sur le client
 
 
@@ -71,3 +72,21 @@ jour/date/début/fin
 - tache pour employé
 - vente
 - menu
+
+
+
+
+pour faire un avis : 
+- un controller qui crée un token valable 1 semaine.
+- génère un mail qui envoi un lien contenant le token
+- affichage d'une page avec le token en params + formulaire en body
+- post du formulaire et du token
+- vérification et suppression du token
+
+dans la table token = token, restaurant_id
+
+++ un cron qui checkera les réservation ayant eu lieu hier. Envoie à chaque adresse mail de cette réservation le mail de notation.
+
+
+- dans le mail de CreateReservation il y a un lien vers une page de contact qui n'existe pas.
+Il faudra la créer en utilisant la modal 

@@ -14,7 +14,7 @@ class IndexPageController extends Controller
 {
     public function __invoke(Restaurant $restaurant)
     {
-        $restaurantResource = new RestaurantResource($restaurant->load('notes'));
+        $restaurantResource = new RestaurantResource($restaurant->load('validNotes'));
         $hours = (new GetHoursOfRestaurant)->planning($restaurantResource->services);
 
         $avis = RatingRestaurantResource::collection(

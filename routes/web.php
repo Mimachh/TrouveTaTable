@@ -14,6 +14,7 @@ use App\Http\Controllers\Dashboard\Newsletter\IndexUserController;
 use App\Http\Controllers\Dashboard\Newsletter\UnsubscribeUserController;
 use App\Http\Controllers\Dashboard\Page\EnablePageController;
 use App\Http\Controllers\Dashboard\Page\IndexPageController;
+use App\Http\Controllers\Dashboard\Rating\IndexRatingController;
 use App\Http\Controllers\Dashboard\Reservation\ChangeReservationStatusController;
 use App\Http\Controllers\Dashboard\Reservation\CreateReservationController;
 use App\Http\Controllers\Dashboard\Reservation\EnableOrDisableRestaurantReservationController;
@@ -31,6 +32,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Newsletter\SubscribeToNewsletterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Public\PageController;
+use App\Http\Controllers\Public\Rating\CreateRatingController;
+use App\Http\Controllers\Public\Rating\CreateTokenController;
+use App\Http\Controllers\Public\Rating\IndexRatingFormController;
 use App\Http\Controllers\Reservation\CreateController as ReservationCreateController;
 use App\Http\Controllers\Reservation\StoreController as ReservationStoreController;
 use App\Http\Controllers\Restaurant\CreateRestaurantController;
@@ -38,8 +42,10 @@ use App\Http\Controllers\SendMessageToRestaurantController;
 use App\Http\Controllers\Subscribe\CancelSubscriptionController;
 use App\Http\Controllers\Subscribe\CreateController;
 use App\Http\Controllers\Subscribe\StoreController;
+use App\Http\Resources\RatingRestaurantResource;
 use App\Http\Resources\ReservationResource;
 use App\Http\Resources\RestaurantResource;
+use App\Models\RatingRestaurant;
 use App\Models\Reservation;
 use App\Models\Restaurant;
 use Illuminate\Foundation\Application;
@@ -135,6 +141,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
                     Route::post('/', UnsubscribeUserController::class)->name('unsubcribe');
                 });
 
+                Route::prefix('ratings')->as('ratings.')->group(function () {
+                    Route::get('/', IndexRatingController::class)->name('index');
+                });
+
 
                 Route::prefix('avatar')->as('avatar.')->group(function () {
                     Route::post('/', UpdateAvatarRestaurantController::class)->name('update');
@@ -177,7 +187,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('restaurant')->as('restaurant.')->group(function () {
         Route::post('store', [CreateRestaurantController::class, 'store'])->name('store');
-        
         Route::get('create', function () {
             return Inertia::render('Restaurant/Create/CreateRestaurant', [
                 'canGoHome' => Route::has('home'),
@@ -208,6 +217,14 @@ Route::prefix('book')->group(function () {
     Route::post('step-four/{restaurant}', [ReservationStoreController::class, 'stepFour'])->name('reservation.step-four');
 });
 
+Route::prefix('rating')->as('rating.')->group(function () {
+    Route::get('/', IndexRatingFormController::class)->name('index');
+    Route::post('/', CreateRatingController::class)->name('store');
+
+    Route::get('/createToken', CreateTokenController::class)->name('createToken');
+});
+
+
 Route::get('/restaurant/{slug}', PageController::class)->name('restaurant');
 // Route::get('/book/{id}', ReservationCreateController::class)->name('reservation');
 // Route::post('/book/step-one', [ReservationStoreController::class, 'stepOne'])->name('reservation.step-one');
@@ -218,6 +235,10 @@ Route::get('/restaurant/{slug}', PageController::class)->name('restaurant');
 Route::post('/send-message-to-restaurant', SendMessageToRestaurantController::class)->name('message.send');
 Route::post('/subscribe-to-newsletter-restaurant/{restaurant}', SubscribeToNewsletterController::class)->name('newsletter.subscribe');
 
+
+
+
+
 Route::get('forbidden', function () {
     return Inertia::render('Error403');
 })->name('forbidden');
@@ -226,24 +247,35 @@ Route::get('restaurant/notFound', function () {
     return Inertia::render('Public/Restaurant/PageNotAvailable');
 })->name('restaurant.notFound');
 
-Route::get('mail', function () {
-    return view('mails.reservation.status-change');
-});
+// Route::get('mail', function () {
+//     return view('mails.reservation.status-change');
+// });
 
-Route::get('/mail', function () {
+// Route::get('/mail', function () {
 
-    $reservationResource = new ReservationResource(Reservation::find(1));
-    $reservation = Reservation::where('id', 1)->first();
+//     $reservationResource = new ReservationResource(Reservation::find(1));
+//     $reservation = Reservation::where('id', 1)->first();
 
 
-    $restaurant = new RestaurantResource($reservation->table->restaurant);
+//     $restaurant = new RestaurantResource($reservation->table->restaurant);
 
-    return new App\Mail\Reservation\ChangeStatusMail(
+//     return new App\Mail\Reservation\ChangeStatusMail(
+//         $restaurant,
+//         $reservation,
+//         'refusé',
+//         "sujet",
+//         "Malheuresement le restaurant sera fermé demain."
+//     );
+// });
+Route::get('/rating-mail', function () {
+
+    $ratingRestaurant = new RatingRestaurantResource(RatingRestaurant::find(1));
+    $restaurant = Restaurant::first();
+
+
+    return new App\Mail\Rating\NewRatingNotifyRestaurant(
         $restaurant,
-        $reservation,
-        'refusé',
-        "sujet",
-        "Malheuresement le restaurant sera fermé demain."
+        $ratingRestaurant
     );
 });
 

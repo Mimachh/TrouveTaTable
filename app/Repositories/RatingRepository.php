@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Models\NoteRestaurant;
 use App\Models\RatingRestaurant;
 use App\Models\Restaurant;
 
@@ -55,7 +54,7 @@ class RatingRepository
     }
 
     public function getLastAvisForARestaurant(Restaurant $restaurant) {
-        return RatingRestaurant::where('restaurant_id', $restaurant->id)->paginate(5);
+        return RatingRestaurant::where('restaurant_id', $restaurant->id)->where('isValid', true)->paginate(5);
     }
 
 }

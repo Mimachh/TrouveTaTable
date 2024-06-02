@@ -51,13 +51,13 @@ class RestaurantResource extends JsonResource
             'reservations' => $this->whenLoaded('reservations', function () {
                 return ReservationResource::collection($this->reservations);
             }),
-            'rating' => $this->whenLoaded('notes', function () {
+            'rating' => $this->when('validNotes', function () {
                 $repository = new RatingRepository();
 
                 return [
-                    'countRating' => $this->notes->count(),
-                    'averageRating' => $repository->averageRating($this->notes),
-                    'itemsRating' => $repository->getItemRatings($this->notes),
+                    'countRating' => $this->validNotes->count(),
+                    'averageRating' => $repository->averageRating($this->validNotes),
+                    'itemsRating' => $repository->getItemRatings($this->validNotes),
                 ];
             }), 
         ];

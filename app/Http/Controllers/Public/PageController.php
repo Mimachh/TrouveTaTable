@@ -29,7 +29,7 @@ class PageController extends Controller
             return inertia('Public/Restaurant/PageNotAvailable');
         }
 
-        $restaurantResource = new RestaurantResource($restaurant->load('notes'));
+        $restaurantResource = new RestaurantResource($restaurant->load('validNotes'));
         $hours = (new GetHoursOfRestaurant)->planning($restaurantResource->services);
 
 

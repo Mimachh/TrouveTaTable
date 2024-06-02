@@ -24,7 +24,7 @@ const Note = (props: Props) => {
         "
                 >
                     <div className="text-2xl font-medium tracking-wide">
-                        {rating.averageRating ? formatRating(rating.averageRating) :  "Pas encore de note"}
+                        {rating.averageRating ? formatRating(rating.averageRating) :  "0"}
                     </div>
                 </div>
                 <div className="col-span-4 bg-secondary text-sm tracking-tight leading-6 text-muted-foreground h-fit">
@@ -49,7 +49,7 @@ const Note = (props: Props) => {
 
                     </ul>
                     <div className="w-full text-center pb-2.5">
-                    <small className="text-[12px] font-medium">{rating.countRating} {" "} 
+                    <small className="text-[12px] font-medium ">{rating.countRating} {" "} 
                     {!rating.countRating || rating.countRating < 2 ? 
                     "client a donné son avis" : "clients ont donné leur avis"
                     }</small>

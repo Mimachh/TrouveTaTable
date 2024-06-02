@@ -20,7 +20,8 @@ class RatingRestaurantResource extends JsonResource
             "created_at" => $this->created_at,
             "email" => $this->email,
             "comment" => $this->comment,
-            "notes" => $this->notes,
+            "notes" => NoteRestaurantResource::collection($this->notes),
+            'isValid' => $this->isValid,
             "average" => (new RatingRepository())->getAverageForOneRating($this->notes),
         ];
     }

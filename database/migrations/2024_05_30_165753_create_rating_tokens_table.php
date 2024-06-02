@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rating_restaurants', function (Blueprint $table) {
+        Schema::create('rating_tokens', function (Blueprint $table) {
             $table->id();
             $table->string('email');
-            $table->string('comment', 255);
+            $table->string('token')->unique();
             $table->uuid('restaurant_id');
             $table->foreign('restaurant_id')->references('id')->on('restaurants')->onDelete('cascade');
-            $table->foreignId('reservation_id')->nullable()->constrained('reservations')->onDelete('set null');
-            $table->boolean('isValid')->default(false);
+            $table->foreignId('reservation_id')->nullable()->constrained('reservations')->onDelete('cascade');
+            $table->dateTime('expires_at')->nullable();
+
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rating_restaurants');
+        Schema::dropIfExists('rating_tokens');
     }
 };

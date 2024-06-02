@@ -100,7 +100,10 @@ class Restaurant extends Model implements Sluggable
         return $this->hasMany(RatingRestaurant::class);
     }
 
-
+    public function validNotes()
+    {
+        return $this->hasMany(RatingRestaurant::class)->where('isValid', true);
+    }
 
     public function scopeActive(Builder $query)
     {

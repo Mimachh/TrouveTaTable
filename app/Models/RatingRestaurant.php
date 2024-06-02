@@ -13,7 +13,8 @@ class RatingRestaurant extends Model
         'email',
         'restaurant_id',
         'reservation_id',
-        'comment'
+        'comment',
+        "isValid"
     ];
 
     public function restaurant()
@@ -29,4 +30,5 @@ class RatingRestaurant extends Model
     public function notes() {
         return $this->hasMany(NoteRestaurant::class);
     }
+
 }

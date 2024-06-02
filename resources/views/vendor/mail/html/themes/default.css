@@ -221,6 +221,18 @@ img {
     width: 100%;
 }
 
+.fullbutton {
+    -webkit-text-size-adjust: none;
+    border-radius: 16px;
+    width: 100%;
+    color: #fff;
+    padding: 5px 0;
+    text-align: center;
+    display: inline-block;
+    overflow: hidden;
+    text-decoration: none;
+}
+
 .button {
     -webkit-text-size-adjust: none;
     border-radius: 4px;
@@ -241,11 +253,11 @@ img {
 
 .button-green,
 .button-success {
-    background-color: #48bb78;
-    border-bottom: 8px solid #48bb78;
-    border-left: 18px solid #48bb78;
-    border-right: 18px solid #48bb78;
-    border-top: 8px solid #48bb78;
+    background-color: #2bbe69;
+    border-bottom: 8px solid #2bbe69;
+    border-left: 18px solid #2bbe69;
+    border-right: 18px solid #2bbe69;
+    border-top: 8px solid #2bbe69;
 }
 
 .button-red,
@@ -287,4 +299,53 @@ img {
 
 .break-all {
     word-break: break-all;
+}
+
+
+
+/* styles.css */
+.rating-table-container {
+    /* color: rgb(245, 240, 240); */
+    /* border-radius: 25px; */
+    padding: 5px;
+    /* background-color: #1a3f7730; */
+    width: 100%;
+    border-collapse: collapse;
+    /* border: 1px solid rgb(224, 200, 200); */
+    box-shadow: #bcbec2 2px 2px 5px;
+}
+
+.rating-table-cell {
+    background-color: #fcfcfc;
+    border: 1px solid #ddd;
+    /* border-radius: 20px; */
+    padding: 10px;
+    text-align: center;
+
+}
+
+.rating-table-cell p {
+    margin: 0;
+    font-size: 16px;
+}
+
+.rating-global-rating {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.rating-item-rating-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.rating-item-rating-cell {
+    /* border-bottom: 1px solid #ddd; */
+
+    padding: 5px;
+}
+
+.rating-comment-cell {
+    font-style: italic;
+    text-align: center;
 }
