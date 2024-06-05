@@ -16,8 +16,6 @@
 
 @endforeach
 
-<x-mail::ratingtable :ratingRestaurant="$ratingRestaurant"></x-mail::ratingtable>
-<p>Avis posté par : {{$ratingRestaurant->email}}</p>
 
 {{-- Action Button --}}
 @isset($actionText)

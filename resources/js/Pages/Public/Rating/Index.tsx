@@ -82,7 +82,6 @@ const Index = (props: Props) => {
                             setRatings={setRatings}
                             comment={comment}
                             setComment={setComment}
-                            onSubmit={handleRatingSubmit}
                         />
 
                         <StarButton

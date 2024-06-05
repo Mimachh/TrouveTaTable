@@ -6,14 +6,13 @@ import React, { useState } from "react";
 
 interface Props {
     items: RatingRestaurantItem[];
-    onSubmit: () => void;
     ratings: Record<number, number>;
     setRatings: React.Dispatch<React.SetStateAction<Record<number, number>>>;
     comment: string | null;
     setComment: React.Dispatch<React.SetStateAction<string | null>>;
 }
 const RatingForm = (props: Props) => {
-    const { items, onSubmit, ratings, setRatings, comment, setComment } = props;
+    const { items, ratings, setRatings, setComment } = props;
 
     const [hoverRatings, setHoverRatings] = useState<
         Record<number, number | null>
@@ -37,12 +36,6 @@ const RatingForm = (props: Props) => {
 
     const handleClick = (index: number, itemId: number) => {
         setRatings((prev) => ({ ...prev, [itemId]: index }));
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log(ratings);
-        // onSubmit(ratings);
     };
 
     const maxCharacters = 255;

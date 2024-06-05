@@ -63,10 +63,16 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 
-    public function isSub(): bool
+    public function isSub($userPassed): bool
     {
-        $user = auth()->user();
-        $sub = User::where('id', $user->id)->with('subscriptions')->first();
+        $sub = null;
+        if($userPassed) {
+            $sub = User::where('id', $userPassed->id)->with('subscriptions')->first();
+        } else {
+            $user = auth()->user();
+            $sub = User::where('id', $user->id)->with('subscriptions')->first();
+        }
+      
 
         return $sub->subscriptions->count() > 0;
     }

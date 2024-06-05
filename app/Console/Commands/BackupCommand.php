@@ -35,7 +35,9 @@ class BackupCommand extends Command
         }
 
         exec("mysqldump -u" . env('DB_USERNAME') . " -p" . env('DB_PASSWORD') . " " . $dbName . " > " . $backupFile);
-
+        
+        // exec("pg_dump -U " . env('DB_USERNAME') . " -W " . env('DB_PASSWORD') . " -F t " . $dbName . " > " . $backupFile);
+        
         $this->info('Backup completed successfully.');
 
         $filesBackupPath = storage_path('app/backups');

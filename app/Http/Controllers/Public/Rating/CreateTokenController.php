@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Public\Rating;
 
 use App\Http\Controllers\Controller;
 use App\Models\Reservation;
-use App\Models\Restaurant;
 use Illuminate\Http\Request;
 
 class CreateTokenController extends Controller

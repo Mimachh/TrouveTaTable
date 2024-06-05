@@ -23,6 +23,10 @@ class RatingRestaurantResource extends JsonResource
             "notes" => NoteRestaurantResource::collection($this->notes),
             'isValid' => $this->isValid,
             "average" => (new RatingRepository())->getAverageForOneRating($this->notes),
+            'reservation' => $this->whenLoaded('reservation', function () {
+                return new ReservationResource($this->reservation);
+            }),
+            // 'reservation' => new ReservationResource($this->reservation),
         ];
     }
 }

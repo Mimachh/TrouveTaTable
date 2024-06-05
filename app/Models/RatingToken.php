@@ -17,4 +17,14 @@ class RatingToken extends Model
         'restaurant_id',
         'reservation_id'
     ];
+
+    public function restaurant()
+    {
+        return $this->belongsTo(Restaurant::class);
+    }
+
+    public function reservation()
+    {
+        return $this->belongsTo(Reservation::class);
+    }
 }

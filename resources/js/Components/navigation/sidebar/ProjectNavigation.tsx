@@ -216,8 +216,8 @@ const UserProjectNavigation = (props: Props) => {
                 </NavigationLink>
                 <NavigationLink
                     name="Avis clients"
-                    href={route("dashboard")}
-                    active={route().current("dashboard")}
+                    href={route("dashboard.ratings.index", restaurant.id)}
+                    active={route().current("dashboard.ratings.index", restaurant.id)}
                 >
                     <BoltIcon className="stroke-[0.75] stroke-inherit min-w-8 w-8" />
                 </NavigationLink>
