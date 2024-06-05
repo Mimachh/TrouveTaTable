@@ -65,7 +65,7 @@ const PageContent = (props: Props) => {
    
     const buttonRef = useRef(null);
     const [canBook, setCanBook] = useState(restaurant.accept_reservations);
-
+    console.log(can);
     const [lateralButton, setLateralButton] = useState(false);
     const [isMediumScreen, setIsMediumScreen] = useState(false);
 
