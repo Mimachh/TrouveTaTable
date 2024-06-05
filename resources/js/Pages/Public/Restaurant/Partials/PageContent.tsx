@@ -53,7 +53,13 @@ const PageContent = (props: Props) => {
     const {
         restaurant,
         hours,
-        can,
+        can = {
+            enablePage: false,
+            updatePage: false,
+            updateBanner: false,
+            updateAvatar: false,
+            updateMedia: false,
+        },
         avis
     } = props;
    

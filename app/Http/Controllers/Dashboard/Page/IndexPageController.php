@@ -21,6 +21,7 @@ class IndexPageController extends Controller
             (new RatingRepository())->getLastAvisForARestaurant($restaurant)
         );
         
+        dd(auth()->user()->can('enablePage', $restaurant), auth()->user()->restaurants);
         return inertia('Dashboard/Page/Index', [
             'restaurant' => $restaurantResource,
             'hours' => $hours,
