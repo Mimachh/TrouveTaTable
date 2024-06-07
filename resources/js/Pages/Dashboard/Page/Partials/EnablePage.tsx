@@ -32,7 +32,7 @@ const EnablePage = (props: Props) => {
     const [enablePage, setEnablePage] = useState<boolean>(
         restaurant.enable_page
     );
-
+    console.log(restaurant)
     const [errors, setErrors] = useState({
         enable_page: "",
     });
@@ -49,7 +49,7 @@ const EnablePage = (props: Props) => {
      
         axios
             .put(`/dashboard/${restaurant.id}/page/enablePage`, {
-                enable_page: 1,
+                enable_page: e,
             })
             .then((response) => {
                 console.log(response);
