@@ -12,7 +12,6 @@ import { Input } from "@/Components/ui/input";
 import SubmitButton from "@/Components/ui/submit-button";
 import { Switch } from "@/Components/ui/switch";
 import DashboardLayout from "@/Layouts/DashboardLayout";
-import { checkIfRestaurantMissInformation } from "@/lib/check-missing-information";
 import { PageProps } from "@/types";
 import { Restaurant } from "@/types/restaurant";
 import { router, useForm } from "@inertiajs/react";
