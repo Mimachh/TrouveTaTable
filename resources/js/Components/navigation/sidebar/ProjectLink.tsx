@@ -6,9 +6,10 @@ interface Props {
   name: string
   setSelectedProject: (val: string | null) => void
   className?: string;
+  active?: boolean
 }
 
-const ProjectLink = ({ children, name, setSelectedProject, className }: Props) => {
+const ProjectLink = ({ children, name, setSelectedProject, className, active = false }: Props) => {
   const handleClick = () => {
     setSelectedProject(null)
     setTimeout(() => {
@@ -19,7 +20,7 @@ const ProjectLink = ({ children, name, setSelectedProject, className }: Props) =
     <a
       href="#"
       onClick={handleClick}
-      className={cn("flex p-1 rounded cursor-pointer stroke-[0.75] hover:stroke-neutral-100 stroke-neutral-400 text-neutral-400 hover:text-neutral-100 place-items-center gap-3 hover:bg-primary/20 transition-colors duration-100", className)}
+      className={cn("flex p-1 rounded cursor-pointer stroke-[0.75] hover:stroke-neutral-100 stroke-neutral-400 text-neutral-400 hover:text-neutral-100 place-items-center gap-3 hover:bg-primary/20 transition-colors duration-100", className, active && "stroke-muted text-muted bg-secondary-foreground/80")}
     >
       {children}
       <div className="flex overflow-clip place-items-center justify-between w-full">

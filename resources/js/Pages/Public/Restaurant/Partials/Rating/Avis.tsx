@@ -23,7 +23,7 @@ const Avis = (props: Props) => {
                 avis.data.map((avis) => (
                     <div key={avis.id}>
                         <div className="flex items-center gap-1.5 font-medium">
-                            {formatRating(avis.average)} <Star className="w-4 h-4 fill-primary" />
+                            {formatRating(avis.average)} <Star className="w-4 h-4 fill-neutral-900" />
                         </div>
                         <div>
                             <p className="text-[14px]">

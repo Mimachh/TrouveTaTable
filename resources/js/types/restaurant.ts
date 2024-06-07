@@ -17,9 +17,10 @@ export interface Restaurant {
     logo?: string;
     cover?: string;
     hours?: string;
-    active?: boolean;
+    active: boolean;
     accept_reservations: boolean;
     accept_messages: boolean;
+    accept_rating: boolean;
     enable_page: boolean;
     days?: string;
     user_id: number;
@@ -37,6 +38,15 @@ export interface Restaurant {
         averageRating?: number;
         countRating?: number;
     }
+    can: {
+        accept_booking: boolean;
+        accept_messages: boolean;
+    }
+
+    is_notify_client_after_booking: boolean;
+    is_notify_restaurant_after_booking: boolean;
+    is_notify_client_a_day_before_booking: boolean;
+    is_notify_restaurant_after_contact_message: boolean;
 }
 
 interface Media {

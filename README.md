@@ -10,6 +10,7 @@
 
 - Table et model pour envoyer un message à un restaurant + notification.
 
+- recheck les endroits ou j'utilise la modale de contact, passer le check côté backend pour plus de sécurité
 
 - Réfléchir au système de liste d'attente. = renvoyer les autres tables suite à la vérif et les mettre dans un select particulier.
 Le client s'inscrit. Si une réservation sur cette table pour ce service est annulée alors le client 1 en liste d'attente est inscrit en résa et reçoit un mail, mail dans lequel il peut annuler ou confirmer. S'il ne confirme pas avant le début du service la table ne sera pas réservée.
@@ -58,9 +59,6 @@ nettoyer et clarifier index de reservation.
 
 
 
-- notif mail pour message reçu
-- abonnement.
-- qr code
 
 
 ## à réfléchir :
@@ -77,9 +75,9 @@ jour/date/début/fin
 
 
 
-
-- dans le mail de CreateReservation il y a un lien vers une page de contact qui n'existe pas.
-Il faudra la créer en utilisant la modal 
+- notif mail pour message reçu
+- abonnement.
+- qr code
 
 
 - Faire page qui affiche tous les avis clients + corriger le message d'erreur qui apparait vite fait
@@ -90,6 +88,4 @@ Il faudra la créer en utilisant la modal
 
 
 - CE SOIR : 
-    - Faire page qui affiche tous les avis clients + corriger le message d'erreur qui apparait vite fait
-    - dans le mail de CreateReservation il y a un lien vers une page de contact qui n'existe pas.
-        Il faudra la créer en utilisant la modal 
+    - corriger le message d'erreur qui apparait vite fait

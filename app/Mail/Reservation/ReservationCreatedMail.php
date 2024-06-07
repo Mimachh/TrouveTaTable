@@ -4,15 +4,12 @@ namespace App\Mail\Reservation;
 
 use App\Http\Resources\ReservationResource;
 use App\Http\Resources\RestaurantResource;
-use App\Models\Reservation;
-use App\Models\Restaurant;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Mail\Mailables\Address;
 
 class ReservationCreatedMail extends Mailable implements ShouldQueue
 {
@@ -30,7 +27,7 @@ class ReservationCreatedMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address($this->restaurant['email'], $this->restaurant['name']),
+            // from: new Address($this->restaurant['email'], $this->restaurant['name']),
             subject: 'Nouvelle réservation !',
         );
     }
@@ -45,11 +42,11 @@ class ReservationCreatedMail extends Mailable implements ShouldQueue
             with: [
                 'level' => 'default',
                 'introLines' => [
-                    'Votre réservation au restaurant ' . $this->restaurant['name'] . ' le ' . $this->reservation->reservation_date . '  à' . $this->reservation->time . ' a bien été enregistrée !',
+                    'Votre réservation au restaurant ' . $this->restaurant['name'] . ' le ' . $this->reservation->reservation_date . '  à ' . $this->reservation->time . ' a bien été enregistrée !',
                     'En cas de besoin, vous pouvez contacter le restaurant en cliquant sur le bouton ci-dessous.'
                 ],
                 'actionText' => 'Contacter le restaurant',
-                'actionUrl' => config('app.url') . '/contact/' . $this->restaurant->id,
+                'actionUrl' => config('app.url') . '/restaurant/' . $this->restaurant->slug . '/contact',
                 'outroLines' =>[
                     'Merci de votre confiance !',
                     'A bientôt'

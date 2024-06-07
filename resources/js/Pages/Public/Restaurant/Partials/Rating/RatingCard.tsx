@@ -21,9 +21,6 @@ const RatingCard = (props: Props) => {
         { name: "Avis", value: "avis" },
     ];
 
-    function classNames(...classes: string[]) {
-        return classes.filter(Boolean).join(" ");
-    }
     return (
         <Card
             x-chunk="card-ratings"

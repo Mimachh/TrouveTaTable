@@ -41,10 +41,15 @@ return new class extends Migration
 
             
             $table->boolean('accept_reservations')->default(false);
+            $table->boolean('accept_rating')->default(false);
             $table->boolean('accept_messages')->default(false);
             $table->boolean('enable_page')->default(false);
 
 
+            $table->boolean('is_notify_client_after_booking')->default(true);
+            $table->boolean('is_notify_restaurant_after_booking')->default(true);
+            $table->boolean('is_notify_client_a_day_before_booking')->default(true);
+            $table->boolean('is_notify_restaurant_after_contact_message')->default(true);
             $table->timestamps();
         });
     }

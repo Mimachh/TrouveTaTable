@@ -40,7 +40,7 @@ const Note = (props: Props) => {
                                 {formatRating(ratingData.average)} 
                                 </span>
                                 <span className="mb-0.5">
-                                    <Star className="w-3 h-3 fill-primary" />
+                                    <Star className="w-3 h-3 fill-neutral-900" />
                                 </span>
                             </span>
                        

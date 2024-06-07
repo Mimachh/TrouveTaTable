@@ -34,9 +34,17 @@ class RestaurantFactory extends Factory
             'time_to_stop_reservation' => "00:30:00",
             'accept_reservations' => $this->faker->boolean,
             "accept_messages" => $this->faker->boolean,
+            "accept_rating" => $this->faker->boolean,
             "enable_page" => $this->faker->boolean,
             "banner" => $this->faker->imageUrl,
             "avatar" => $this->faker->imageUrl,
+
+
+            "is_notify_client_after_booking" => $this->faker->boolean,
+            "is_notify_restaurant_after_booking" => $this->faker->boolean,
+            "is_notify_client_a_day_before_booking" => $this->faker->boolean,
+            "is_notify_restaurant_after_contact_message" => $this->faker->boolean,
+            
             // 'owner_id' => \App\Models\User::factory(),
             'owner_id' => 1,
         ];

@@ -53,9 +53,9 @@ class GenerateRatingMail
     }
 
  
-    private function loopOverRestaurantsToGetThoseWhereReservationCanBeRated(): array
+    private function loopOverRestaurantsToGetThoseWhereReservationCanBeRated()
     {
-        $restaurantsEnable = Restaurant::active()->get();
+        $restaurantsEnable = Restaurant::ratingOpen()->active()->get();
         $reservationsByRestaurant = [];
         foreach ($restaurantsEnable as $restaurant) {
             $reservationsByRestaurant[] = $this->reservationsCanReceiveRating($restaurant);

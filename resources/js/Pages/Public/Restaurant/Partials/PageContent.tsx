@@ -18,11 +18,9 @@ import {
     X,
 } from "lucide-react";
 import { router, useForm } from "@inertiajs/react";
-import { isImage } from "@/lib/is-image";
 import { readFile } from "@/lib/read-file";
 import { Button } from "@/Components/ui/button";
 import { toast } from "sonner";
-import { set } from "date-fns";
 import { cn } from "@/lib/utils";
 import SubmitButton from "@/Components/ui/submit-button";
 import InputError from "@/Components/InputError";
@@ -65,7 +63,7 @@ const PageContent = (props: Props) => {
    
     const buttonRef = useRef(null);
     const [canBook, setCanBook] = useState(restaurant.accept_reservations);
-    console.log(can);
+    
     const [lateralButton, setLateralButton] = useState(false);
     const [isMediumScreen, setIsMediumScreen] = useState(false);
 

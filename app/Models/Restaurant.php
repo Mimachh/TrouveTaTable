@@ -48,6 +48,13 @@ class Restaurant extends Model implements Sluggable
         'time_before_service',
         'time_after_service',
         'time_to_stop_reservation',
+
+        "is_notify_client_after_booking",
+        "is_notify_restaurant_after_booking",
+        "is_notify_client_a_day_before_booking",
+        "is_notify_restaurant_after_contact_message",
+
+        'accept_rating',
         "accept_reservations",
         "accept_messages",
         "enable_page",
@@ -108,6 +115,11 @@ class Restaurant extends Model implements Sluggable
     public function scopeActive(Builder $query)
     {
         $query->where('active', 1);
+    }
+
+    public function scopeRatingOpen(Builder $query)
+    {
+        $query->where('accept_rating', 1);
     }
 
     public function scopeReservationOpen(Builder $query)

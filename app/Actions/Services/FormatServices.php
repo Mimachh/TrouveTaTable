@@ -1,6 +1,6 @@
 <?php
 
-declare(stric_types=1);
+declare(strict_types=1);
 
 namespace App\Actions\Services;
 
@@ -72,18 +72,30 @@ class FormatServices
 
         // $now->setTimezone('UTC');
        
-        $stop_time_reservation = substr($restaurant->time_to_stop_reservation, 0, 5);
-
+        // $stop_time_reservation = substr($restaurant->time_to_stop_reservation, 0, 5);
+        $stop_time_reservation = $restaurant->time_to_stop_reservation ? substr($restaurant->time_to_stop_reservation, 0, 5) : null;
+        
         if ($today->isSameDay($date_reservation)) {
             $servicesWithOptionsArray = [];
             $servicesWithOptions->each(function ($service) use (&$servicesWithOptionsArray, &$currentTime, &$stop_time_reservation) {
                 // $start_time = (new FormatServices)->getTheStartTimeWithOption($service->start_time, $stop_time_reservation);
                 // le start time au dessus serait lié à l'heure du service..Moi je préfère mettre l'heure d'ouverture.
                 $start_time = substr($service->start_time, 0, 5);
-                list($hours, $minutes) = explode(':', $stop_time_reservation);
-                $time_to_stop_in_seconds = $hours * 3600 + $minutes * 60;
-                $endReservationTime = date('H:i', strtotime($start_time) - $time_to_stop_in_seconds);
-                if ($endReservationTime > $currentTime) {
+                // list($hours, $minutes) = explode(':', $stop_time_reservation);
+                // $time_to_stop_in_seconds = $hours * 3600 + $minutes * 60;
+                // $endReservationTime = date('H:i', strtotime($start_time) - $time_to_stop_in_seconds);
+                // if ($endReservationTime > $currentTime) {
+                //     $servicesWithOptionsArray[] = $service;
+                // }
+
+                if ($stop_time_reservation !== null) {
+                    list($hours, $minutes) = explode(':', $stop_time_reservation);
+                    $time_to_stop_in_seconds = $hours * 3600 + $minutes * 60;
+                    $endReservationTime = date('H:i', strtotime($start_time) - $time_to_stop_in_seconds);
+                    if ($endReservationTime > $currentTime) {
+                        $servicesWithOptionsArray[] = $service;
+                    }
+                } else {
                     $servicesWithOptionsArray[] = $service;
                 }
             });

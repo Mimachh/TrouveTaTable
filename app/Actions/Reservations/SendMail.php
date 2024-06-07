@@ -1,6 +1,6 @@
 <?php
 
-declare(stric_types=1);
+declare(strict_types=1);
 
 namespace App\Actions\Reservations;
 
@@ -12,6 +12,7 @@ use App\Mail\Reservation\ChangeStatusMail;
 use App\Mail\Reservation\ReservationCreatedMail;
 use App\Models\Reservation;
 use App\Models\Restaurant;
+use App\Repositories\MailRepository;
 use Illuminate\Support\Facades\Mail;
 
 class SendMail
@@ -24,6 +25,11 @@ class SendMail
         string $reason)
         : void
     {
+
+        $checkIfCan = (new MailRepository())->isRestaurantCanSendReservationMail($restaurant);
+        if(!$checkIfCan) {
+            return;
+        }
 
         $restaurant = new RestaurantResource($restaurant);
 
@@ -46,6 +52,11 @@ class SendMail
         : void
     {
 
+        $checkIfCan = (new MailRepository())->isRestaurantCanSendReservationMail($restaurant);
+        if(!$checkIfCan) {
+            return;
+        }
+        
         $restaurant = new RestaurantResource($restaurant);
 
         $reservationResource = new ReservationResource(Reservation::find($reservation->id));

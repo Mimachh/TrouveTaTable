@@ -24,6 +24,6 @@ class SendMailAfterReservationJob extends Command
  
     public function handle()
     {
-        (new GenerateRatingMail())->handle();
+       (new GenerateRatingMail())->handle();
     }
 }

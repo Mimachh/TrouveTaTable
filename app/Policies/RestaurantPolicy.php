@@ -101,4 +101,40 @@ class RestaurantPolicy
     {
         return $user->id == $restaurant->owner_id;
     }
+
+    public function enable_rating(User $user, Restaurant $restaurant): bool
+    {
+        return $user->id == $restaurant->owner_id;
+    }
+
+    public function update_settings(User $user, Restaurant $restaurant): bool 
+    {
+        return $user->id == $restaurant->owner_id; 
+    }
+
+    public function change_status(User $user, Restaurant $restaurant): bool
+    {
+        return $user->id == $restaurant->owner_id;
+    }
+
+    // SETTINGS NOTIFICATIONS
+    public function enable_notifications_after_booking_user(User $user, Restaurant $restaurant): bool
+    {
+        return $user->id == $restaurant->owner_id;
+    }
+
+    public function enable_notifications_after_booking_restaurant(User $user, Restaurant $restaurant): bool
+    {
+        return $user->id == $restaurant->owner_id;
+    }
+
+    public function enable_notifications_day_before_booking_user(User $user, Restaurant $restaurant): bool
+    {
+        return $user->id == $restaurant->owner_id;
+    }
+
+    public function enable_notifications_contact_message_restaurant(User $user, Restaurant $restaurant): bool
+    {
+        return $user->id == $restaurant->owner_id;
+    }
 }

@@ -24,7 +24,8 @@ class RestaurantRepository
     public function isRestaurantCanAcceptReservation(Restaurant $restaurant) {
 
         // here i will add when no subscriptions
-        return $restaurant->accept_reservations && $restaurant->active;       
+        $isMissingInfo = $this->isRestaurantMissingInformation($restaurant);
+        return $restaurant->accept_reservations && $restaurant->active && !$isMissingInfo;       
     }
 
     public function isRestaurantCanEnablePage(Restaurant $restaurant) {
@@ -81,7 +82,16 @@ class RestaurantRepository
         }
     }
 
+    public function isRestaurantMissingInformation(Restaurant $restaurant): bool
+    {
+        return !$restaurant->name || !$restaurant->phone || !$restaurant->email || !$restaurant->address || !$restaurant->city || !$restaurant->zip;
+    }
 
+    public function isRestaurantAcceptMessage(Restaurant $restaurant): bool
+    {
+        return $restaurant->accept_messages && $restaurant->active;
+    }
+    
     public static function reformatFileURL(string $url) {
         $url = str_replace(url('/'), '', $url);
         $url = str_replace('/storage', '', $url);

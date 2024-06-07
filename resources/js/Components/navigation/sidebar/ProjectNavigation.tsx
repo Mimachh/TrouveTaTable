@@ -1,6 +1,7 @@
 import {
     AdjustmentsHorizontalIcon,
     ArrowTrendingUpIcon,
+    BellAlertIcon,
     BoltIcon,
     CursorArrowRaysIcon,
     PencilIcon,
@@ -11,6 +12,7 @@ import {
 import { motion } from "framer-motion";
 import NavigationLink from "./NavigationLink";
 import { Restaurant } from "@/types/restaurant";
+import { Settings } from "lucide-react";
 
 const variants = {
     close: {
@@ -28,7 +30,7 @@ interface Props {
     selectedProject: string;
     isOpen: boolean;
     setSelectedProject: (project: string | null) => void;
-    restaurant: Restaurant
+    restaurant: Restaurant;
 }
 
 const ProjectNavigation = ({
@@ -36,13 +38,20 @@ const ProjectNavigation = ({
     selectedProject,
     isOpen,
     setSelectedProject,
-    restaurant
+    restaurant,
 }: Props) => {
-
     return (
         <>
             {selectedProject === "Utilisateurs" ? (
                 <UserProjectNavigation
+                    id={id}
+                    selectedProject={selectedProject}
+                    isOpen={isOpen}
+                    setSelectedProject={setSelectedProject}
+                    restaurant={restaurant}
+                />
+            ) : selectedProject === "Paramètres" ? (
+                <SettingsProjectNavigation
                     id={id}
                     selectedProject={selectedProject}
                     isOpen={isOpen}
@@ -166,7 +175,8 @@ const DefaultProjectNavigation = (props: Props) => {
 };
 
 const UserProjectNavigation = (props: Props) => {
-    const { id, selectedProject, isOpen, setSelectedProject, restaurant } = props;
+    const { id, selectedProject, isOpen, setSelectedProject, restaurant } =
+        props;
     return (
         <motion.nav
             variants={variants}
@@ -191,7 +201,7 @@ const UserProjectNavigation = (props: Props) => {
                 </button>
             </div>
             <div className="flex flex-col gap-3">
-            <NavigationLink
+                <NavigationLink
                     name="L'équipe"
                     href={route("dashboard")}
                     active={route().current("dashboard")}
@@ -206,21 +216,87 @@ const UserProjectNavigation = (props: Props) => {
                 >
                     <ArrowTrendingUpIcon className="stroke-[0.75] stroke-inherit min-w-8 w-8" />
                 </NavigationLink>
-                
+
                 <NavigationLink
                     name="Newsletter"
                     href={route("dashboard.newsletter.index", restaurant.id)}
-                    active={route().current("dashboard.newsletter.index", restaurant.id)}
+                    active={route().current(
+                        "dashboard.newsletter.index",
+                        restaurant.id
+                    )}
                 >
                     <PencilIcon className="stroke-[0.75] stroke-inherit min-w-8 w-8" />
                 </NavigationLink>
                 <NavigationLink
                     name="Avis clients"
                     href={route("dashboard.ratings.index", restaurant.id)}
-                    active={route().current("dashboard.ratings.index", restaurant.id)}
+                    active={route().current(
+                        "dashboard.ratings.index",
+                        restaurant.id
+                    )}
                 >
                     <BoltIcon className="stroke-[0.75] stroke-inherit min-w-8 w-8" />
                 </NavigationLink>
+            </div>
+        </motion.nav>
+    );
+};
+
+const SettingsProjectNavigation = (props: Props) => {
+    const { id, selectedProject, isOpen, setSelectedProject, restaurant } =
+        props;
+    return (
+        <motion.nav
+            variants={variants}
+            initial="close"
+            id={id}
+            animate="open"
+            exit="close"
+            transition={{
+                duration: 0.25,
+                ease: "easeInOut",
+            }}
+            className={`h-full min-h-screen flex flex-col gap-16 w-64 absolute bg-secondary ml-0 z-50 ${
+                isOpen ? "left-64" : "left-20"
+            } border-r border-secondary-foreground/20 p-5`}
+        >
+            <div className="flex flex-row w-full h-fit justify-between place-items-center">
+                <h1 className="tracking-wide text-secondary-foreground/80 text-lg">
+                    {selectedProject}
+                </h1>
+                <button onClick={() => setSelectedProject(null)}>
+                    <XMarkIcon className="w-8 stroke-secondary-foreground/60" />
+                </button>
+            </div>
+            <div className="flex flex-col gap-3">
+                <NavigationLink
+                    name="Généraux"
+                    href={route(
+                        "dashboard.settings.index",
+                        restaurant.id
+                    )}
+                    active={route().current(
+                        "dashboard.settings.index",
+                        restaurant.id
+                    )}
+                >
+                    <Settings className="stroke-inherit stroke-[0.75] min-w-6 w-6 h-6" />
+                </NavigationLink>
+
+                <NavigationLink
+                    name="Notifications"
+                    href={route(
+                        "dashboard.settings.notifications.index",
+                        restaurant.id
+                    )}
+                    active={route().current(
+                        "dashboard.settings.notifications.index",
+                        restaurant.id
+                    )}
+                >
+                    <BellAlertIcon className="stroke-inherit stroke-[0.75] min-w-6 w-6 h-6" />
+                </NavigationLink>
+
             </div>
         </motion.nav>
     );

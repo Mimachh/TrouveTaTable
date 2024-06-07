@@ -115,6 +115,7 @@ const Navigation = () => {
                 >
                     <div className="flex flex-row w-full justify-between place-items-center h-full">
                         <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-700 rounded-full" />
+                        
                         <button
                             className="p-1 rounded-full flex"
                             onClick={() => handleOpenClose()}
@@ -191,8 +192,20 @@ const Navigation = () => {
                         >
                             <CalendarDaysIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
                         </NavigationLink>
-                     
+
                       
+                        <ProjectLink
+                            name="Paramètres"
+                            active={
+                                route().current("dashboard.settings.index", current_restaurant.id) ||
+                                route().current("dashboard.settings.notifications.index", current_restaurant.id)
+                            }
+                            setSelectedProject={setSelectedProject}
+                            className="text-red-600 flex p-1 rounded cursor-pointer stroke-[0.75] hover:stroke-muted stroke-secondary-foreground/60 text-secondary-foreground/60 hover:text-muted place-items-center gap-3 hover:bg-secondary-foreground/80 transition-colors duration-100"
+                        >
+                            <Settings className="stroke-inherit stroke-[0.75] min-w-8 w-8 h-8" />
+                        </ProjectLink>
+                        
                     </div>
                     {/* <div className="flex flex-col gap-3">
                         <ProjectLink

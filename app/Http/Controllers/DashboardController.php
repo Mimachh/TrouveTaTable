@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\RestaurantResource;
 use App\Models\Restaurant;
+use App\Repositories\RestaurantRepository;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -25,9 +26,11 @@ class DashboardController extends Controller
         }
 
         $restaurant = Restaurant::find($restaurantId);
+        $isMissingInfo = (new RestaurantRepository())->isRestaurantMissingInformation($restaurant);
         return inertia("Dashboard", [
             "restaurant" => new RestaurantResource($restaurant),
             "restaurants" => $restaurants,
+            "isMissingInfo" => $isMissingInfo
         ]);
     }
 }

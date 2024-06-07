@@ -15,6 +15,7 @@ use App\Http\Controllers\Dashboard\Newsletter\UnsubscribeUserController;
 use App\Http\Controllers\Dashboard\Page\EnablePageController;
 use App\Http\Controllers\Dashboard\Page\IndexPageController;
 use App\Http\Controllers\Dashboard\Rating\IndexRatingController;
+use App\Http\Controllers\Dashboard\Rating\UpdateRatingStatusClientFormController;
 use App\Http\Controllers\Dashboard\Reservation\ChangeReservationStatusController;
 use App\Http\Controllers\Dashboard\Reservation\CreateReservationController;
 use App\Http\Controllers\Dashboard\Reservation\EnableOrDisableRestaurantReservationController;
@@ -25,12 +26,18 @@ use App\Http\Controllers\Dashboard\Restaurant\DeleteMediaRestaurantController;
 use App\Http\Controllers\Dashboard\Restaurant\UpdateAvatarRestaurantController;
 use App\Http\Controllers\Dashboard\Restaurant\UpdateBannerRestaurantController;
 use App\Http\Controllers\Dashboard\Restaurant\UpdateMediaRestaurantController;
+use App\Http\Controllers\Dashboard\Settings\ChangeRestaurantStatusController;
+use App\Http\Controllers\Dashboard\Settings\IndexSettingsController;
+use App\Http\Controllers\Dashboard\Settings\Notification\IndexRestaurantNotificationController;
+use App\Http\Controllers\Dashboard\Settings\Notification\UpdateNotifyRestaurantAfterBookingStatusController;
+use App\Http\Controllers\Dashboard\Settings\UpdateSettingsController;
 use App\Http\Controllers\Dashboard\Tables\CreateTableController;
 use App\Http\Controllers\Dashboard\Tables\DeleteTableController;
 use App\Http\Controllers\Dashboard\Tables\IndexTableController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Newsletter\SubscribeToNewsletterController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Public\Contact\IndexRestaurantContactController;
 use App\Http\Controllers\Public\PageController;
 use App\Http\Controllers\Public\Rating\CreateRatingController;
 use App\Http\Controllers\Public\Rating\CreateTokenController;
@@ -143,6 +150,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
                 Route::prefix('ratings')->as('ratings.')->group(function () {
                     Route::get('/', IndexRatingController::class)->name('index');
+
+                    Route::put('/status', UpdateRatingStatusClientFormController::class)->name('status');
+                });
+
+                Route::prefix('settings')->as('settings.')->group(function () {
+                    Route::get('/', IndexSettingsController::class)->name('index');
+                    Route::put('/', UpdateSettingsController::class)->name('update');
+
+                    Route::put('/change-status', ChangeRestaurantStatusController::class)->name('change-status');
+
+
+                    Route::prefix('notifications')->as('notifications.')->group(function () {
+                        Route::get('/', IndexRestaurantNotificationController::class)->name('index');
+
+                        Route::put('/update-after-booking-restaurant', UpdateNotifyRestaurantAfterBookingStatusController::class)->name('notify-after-booking-restaurant');
+                    });
                 });
 
 
@@ -226,6 +249,7 @@ Route::prefix('rating')->as('rating.')->group(function () {
 
 
 Route::get('/restaurant/{slug}', PageController::class)->name('restaurant');
+Route::get('/restaurant/{slug}/contact', IndexRestaurantContactController::class)->name('restaurant.contact.get');
 // Route::get('/book/{id}', ReservationCreateController::class)->name('reservation');
 // Route::post('/book/step-one', [ReservationStoreController::class, 'stepOne'])->name('reservation.step-one');
 // Route::post('/book/step-two', [ReservationStoreController::class, 'stepTwo'])->name('reservation.step-two');

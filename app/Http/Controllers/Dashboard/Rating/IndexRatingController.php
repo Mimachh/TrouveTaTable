@@ -10,17 +10,19 @@ use App\Models\Restaurant;
 class IndexRatingController extends Controller
 {
     public function __invoke(Restaurant $restaurant)
-    {  
+    {
         $restaurantResource = new RestaurantResource($restaurant);
-       
+
         $ratings = RatingRestaurantResource::collection($restaurant->notes()->with('reservation')->paginate(10));
         $countRating = $restaurant->notes()->count();
-        
+
         return inertia('Dashboard/Ratings/Index', [
             'restaurant' => $restaurantResource,
             'ratings' => $ratings,
             'countRating' => $countRating,
+            'can' => [
+                'enable_rating' => auth()->user()->can('enable_rating', $restaurant),
+            ]
         ]);
-
     }
 }
