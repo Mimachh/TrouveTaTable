@@ -46,7 +46,7 @@ const EnablePage = (props: Props) => {
         setErrors({
             enable_page: "",
         });
-    
+        console.log(e);
         axios
             .put(`/dashboard/${restaurant.id}/page/enablePage`, {
                 enable_page: e,
