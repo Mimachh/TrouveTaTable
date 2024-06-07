@@ -140,7 +140,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 Route::prefix('page')->as('page.')->group(function () {
                     Route::get('/', IndexPageController::class)->name('index');
 
-                    Route::put('/enablePage', EnablePageController::class)->name('enable');
+                    Route::post('/enablePage', EnablePageController::class)->name('enable');
                 });
 
                 Route::prefix('newsletter')->as('newsletter.')->group(function () {

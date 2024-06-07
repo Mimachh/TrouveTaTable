@@ -48,7 +48,7 @@ const EnablePage = (props: Props) => {
         });
         console.log(e);
         axios
-            .put(`/dashboard/${restaurant.id}/page/enablePage`, {
+            .post(`/dashboard/${restaurant.id}/page/enablePage`, {
                 enable_page: e,
             })
             .then((response) => {
