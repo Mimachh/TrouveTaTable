@@ -46,34 +46,68 @@ const ClientNotificationBooking = (
             is_notify_client_after_booking: "",
         });
 
-        // axios
-        //     .put(
-        //         route(
-        //             `dashboard.settings.notifications.notify-after-booking-restaurant`,
-        //             { restaurant: restaurant.id }
-        //         ),
-        //         {
-        //             is_notify_client_after_booking: e,
-        //         }
-        //     )
-        //     .then((response) => {
-        //         // console.log(response);
-        //         toast.success("Statut modifié !");
-        //     })
-        //     .catch((error) => {
-        //         toast.error(
-        //             "Une erreur est survenue, veuillez réessayer plus tard"
-        //         );
-        //         setErrors(error.response.data.errors);
-        //         // console.log(error)
-        //     })
-        //     .finally(() => {
-        //         setLoading(false);
-        //     });
+        axios
+            .put(
+                route(
+                    `dashboard.settings.notifications.notify-after-booking-client`,
+                    { restaurant: restaurant.id }
+                ),
+                {
+                    is_notify_client_after_booking: e,
+                }
+            )
+            .then((response) => {
+                // console.log(response);
+                toast.success("Statut modifié !");
+            })
+            .catch((error) => {
+                toast.error(
+                    "Une erreur est survenue, veuillez réessayer plus tard"
+                );
+                setErrors(error.response.data.errors);
+                // console.log(error)
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     const submitDayBefore = (e: boolean) => {
+        if (!can.enable_notifications_day_before_booking_user) {
+            toast.error(
+                "Vous n'avez pas la permission de modifier ce paramètre"
+            );
+            return;
+        }
+        setLoading(true);
+        setErrorsDayBefore({
+            is_notify_client_a_day_before_booking: "",
+        });
 
+        axios
+            .put(
+                route(
+                    `dashboard.settings.notifications.notify-day-before-booking-client`,
+                    { restaurant: restaurant.id }
+                ),
+                {
+                    is_notify_client_a_day_before_booking: e,
+                }
+            )
+            .then((response) => {
+                // console.log(response);
+                toast.success("Statut modifié !");
+            })
+            .catch((error) => {
+                toast.error(
+                    "Une erreur est survenue, veuillez réessayer plus tard"
+                );
+                setErrors(error.response.data.errors);
+                // console.log(error)
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     }
     return (
         <div className="space-y-3">
@@ -83,7 +117,7 @@ const ClientNotificationBooking = (
             <FormFieldLayout
                 label="Notifier le client après sa réservation ?"
                 description={`Un mail sera envoyé au mail du client lorsqu'il aura effectué une réservation.`}
-                fieldName="enable_notifications_after_booking_user"
+                fieldName="is_notify_client_after_booking"
                 className="flex gap-6 w-full items-center border border-muted rounded-lg p-4 bg-background space-y-0"
                 error={errors?.is_notify_client_after_booking ?? ""}
             >
@@ -110,7 +144,7 @@ const ClientNotificationBooking = (
             <FormFieldLayout
                 label="Envoyer un rappel au client ?"
                 description={`Un mail sera envoyé au mail du client la veille de sa réservation, pour lutter contre les no-shows.`}
-                fieldName="enable_notifications_after_booking_user"
+                fieldName="is_notify_client_a_day_before_booking"
                 className="flex gap-6 w-full items-center border border-muted rounded-lg p-4 bg-background space-y-0"
                 error={errorsDayBefore?.is_notify_client_a_day_before_booking ?? ""}
             >
@@ -118,7 +152,7 @@ const ClientNotificationBooking = (
                     disabled={
                         loading || !can.enable_notifications_day_before_booking_user
                     }
-                    checked={enable}
+                    checked={enableDayBefore}
                     onCheckedChange={(e) => {
                         if (!can.enable_notifications_day_before_booking_user) {
                             toast.error(
@@ -126,7 +160,7 @@ const ClientNotificationBooking = (
                             );
                             return;
                         }
-                        setEnable(() => {
+                        setEnableDayBefore(() => {
                             submitDayBefore(e);
                             return e;
                         });

@@ -59,10 +59,12 @@ it('can create a restaurant if auth', function () {
     assertDatabaseCount('restaurants', 1);
 });
 
+
+
 // can and can't add settings informations
 // can and can't add hours
 // can and can't add tables
-// can and can't enables all the notifications
+
 // can and can't activate the site
 // can and can't book for a client
 // can and can't unsubscribe newsletter client

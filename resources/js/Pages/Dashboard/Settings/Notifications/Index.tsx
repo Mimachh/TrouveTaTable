@@ -14,6 +14,7 @@ import CanNotUseMessages from "./Partials/CanNotUseMessages";
 import { useForm } from "@inertiajs/react";
 import AdminNotificationBooking from "./Partials/Forms/AdminNotificationBooking";
 import ClientNotificationBooking from "./Partials/Forms/ClientNotificationBooking";
+import AdminNotificationMessages from "./Partials/Forms/AdminNotificationMessages";
 
 type Props = PageProps & {
     restaurant: {
@@ -94,8 +95,13 @@ const Notifications = (props: Props) => {
                         {!restaurant.data.can.accept_messages ? (
                             <CanNotUseMessages restaurant={restaurant.data} />
                         ) : (
-                            <div>
-                                <div>Notifications du restauratn</div>
+                            <div className="md:grid md:grid-cols-2 md:gap-7 bg-background/30 rounded-md p-2">
+                                <AdminNotificationMessages
+                                    restaurant={restaurant.data}
+                                    loading={loading}
+                                    setLoading={setLoading}
+                                    can={can}
+                                />
                             </div>
                         )}
                     </CardContent>

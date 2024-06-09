@@ -12,6 +12,5 @@ class UpdateNotifyClientAfterBookingStatusController extends Controller
     {
         $data = $request->validated();
         $restaurant->update($data);
-
     }
 }

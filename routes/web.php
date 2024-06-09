@@ -29,7 +29,10 @@ use App\Http\Controllers\Dashboard\Restaurant\UpdateMediaRestaurantController;
 use App\Http\Controllers\Dashboard\Settings\ChangeRestaurantStatusController;
 use App\Http\Controllers\Dashboard\Settings\IndexSettingsController;
 use App\Http\Controllers\Dashboard\Settings\Notification\IndexRestaurantNotificationController;
+use App\Http\Controllers\Dashboard\Settings\Notification\UpdateNotifyClientAfterBookingStatusController;
+use App\Http\Controllers\Dashboard\Settings\Notification\UpdateNotifyClientDayBeforeBookingStatusController;
 use App\Http\Controllers\Dashboard\Settings\Notification\UpdateNotifyRestaurantAfterBookingStatusController;
+use App\Http\Controllers\Dashboard\Settings\Notification\UpdateNotifyRestaurantMessageStatusController;
 use App\Http\Controllers\Dashboard\Settings\UpdateSettingsController;
 use App\Http\Controllers\Dashboard\Tables\CreateTableController;
 use App\Http\Controllers\Dashboard\Tables\DeleteTableController;
@@ -165,6 +168,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
                         Route::get('/', IndexRestaurantNotificationController::class)->name('index');
 
                         Route::put('/update-after-booking-restaurant', UpdateNotifyRestaurantAfterBookingStatusController::class)->name('notify-after-booking-restaurant');
+                        Route::put('/update-after-booking-client', UpdateNotifyClientAfterBookingStatusController::class)->name('notify-after-booking-client');
+                        Route::put('/update-day-before-booking-client', UpdateNotifyClientDayBeforeBookingStatusController::class)->name('notify-day-before-booking-client');
+                        Route::put('/update-after-message-restaurant', UpdateNotifyRestaurantMessageStatusController::class)->name("notify-after-message-restaurant");
                     });
                 });
 
