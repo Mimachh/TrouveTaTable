@@ -30,15 +30,19 @@ type Props = PageProps & {
             last_page: number;
         };
     };
+    can: {
+        enableMessages: boolean
+    }
 };
 
 const Messages = (props: Props) => {
-    const { messages, restaurant } = props;
+    const { messages, restaurant, can } = props;
     const setSelectMessageId = useSelectedMessage.use.setMessageId();
     return (
+    
         <div className=" px-4 md:px-0 grid  md:grid-cols-3  md:divide-x md:divide-background-foreground min-h-[calc(100vh-6.5rem)]">
             <div className="grid md:col-span-1 h-full pr-1 space-y-3">
-                <EnableDisableContactMessage restaurant={restaurant.data} />
+                <EnableDisableContactMessage restaurant={restaurant.data} can={can} />
                 <div>
                     <h3 className="text-lg font-semibold mb-4">
                         Vos messages reçus

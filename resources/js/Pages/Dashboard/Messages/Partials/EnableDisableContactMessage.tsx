@@ -14,10 +14,13 @@ import { toast } from "sonner";
 
 interface Props {
     restaurant: Restaurant;
+    can: {
+        enableMessages: boolean
+    }
 }
 const EnableDisableContactMessage = (props: Props) => {
 
-    const { restaurant } = props;
+    const { restaurant, can} = props;
 
     const [loading, setLoading] = useState<boolean>(false);
     const [acceptMessages, setAcceptMessages] = useState<boolean>(
@@ -29,6 +32,10 @@ const EnableDisableContactMessage = (props: Props) => {
     });
 
     const submit = (e: boolean) => {
+        if(!can.enableMessages) {
+            toast.error("Vous n'avez pas la permission de modifier ce paramètre");
+            return;
+        }
         setLoading(true);
         setErrors({
             accept_messages: "",
@@ -73,11 +80,16 @@ const EnableDisableContactMessage = (props: Props) => {
                     className="flex gap-6 w-full items-center border border-muted rounded-lg p-4
             bg-background space-y-0
             "
-                    error={errors.accept_messages}
+                    error={errors?.accept_messages ?? ""}
                 >
                     <Switch
+                        disabled={loading || !can.enableMessages}
                         checked={acceptMessages}
                         onCheckedChange={(e) => {
+                            if(!can.enableMessages) {
+                                toast.error("Vous n'avez pas la permission de modifier ce paramètre");
+                                return;
+                            }
                             setAcceptMessages(() => {
                                 submit(e);
                                 return e;

@@ -23,6 +23,9 @@ class IndexMessagesController extends Controller
         return inertia('Dashboard/Messages/Index', [
             'restaurant' => $restaurantResource,
             'messages' => $messagesResource,
+            'can' => [
+                'enableMessages' => auth()->user()->can('enableMessages', $restaurant),
+            ]
         ]);
     }
 }

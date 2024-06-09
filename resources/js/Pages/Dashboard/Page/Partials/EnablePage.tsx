@@ -32,7 +32,7 @@ const EnablePage = (props: Props) => {
     const [enablePage, setEnablePage] = useState<boolean>(
         restaurant.enable_page
     );
-    console.log(restaurant)
+
     const [errors, setErrors] = useState({
         enable_page: "",
     });
@@ -46,13 +46,13 @@ const EnablePage = (props: Props) => {
         setErrors({
             enable_page: "",
         });
-     
+    
         axios
             .put(`/dashboard/${restaurant.id}/page/enablePage`, {
                 enable_page: e,
             })
             .then((response) => {
-                console.log(response);
+                // console.log(response);
                 toast.success("Page activée !");
                 router.reload()
             })
@@ -61,7 +61,7 @@ const EnablePage = (props: Props) => {
                     "Une erreur est survenue, veuillez réessayer plus tard"
                 );
                 setErrors(error.response.data.errors);
-                console.log(error)
+                // console.log(error)
             })
             .finally(() => {
                 setLoading(false);

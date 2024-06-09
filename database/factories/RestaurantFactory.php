@@ -45,8 +45,8 @@ class RestaurantFactory extends Factory
             "is_notify_client_a_day_before_booking" => $this->faker->boolean,
             "is_notify_restaurant_after_contact_message" => $this->faker->boolean,
             
-            // 'owner_id' => \App\Models\User::factory(),
-            'owner_id' => 1,
+            'owner_id' => \App\Models\User::factory(),
+            // 'owner_id' => 1,
         ];
     }
 }

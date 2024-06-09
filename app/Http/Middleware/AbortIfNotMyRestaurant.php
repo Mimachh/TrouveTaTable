@@ -16,7 +16,9 @@ class AbortIfNotMyRestaurant
     public function handle(Request $request, Closure $next): Response
     {
         $restaurant = $request->route('restaurant');
-        if (auth()->user()->restaurants->contains($restaurant->id) || auth()->user()->isAdmin()) {
+        if (auth()->user()->restaurants->contains($restaurant->id) 
+        // || auth()->user()->isAdmin()
+        ) {
             return $next($request);
         }
         abort(403, 'Vous n\'avez pas accès à ce restaurant');

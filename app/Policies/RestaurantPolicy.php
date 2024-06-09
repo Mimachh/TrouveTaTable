@@ -77,6 +77,11 @@ class RestaurantPolicy
         return $user->id == $restaurant->owner_id;
     }
 
+    public function enableMessages(User $user, Restaurant $restaurant): bool
+    {
+        return $user->id == $restaurant->owner_id;
+    }
+
     public function updatePage(User $user, Restaurant $restaurant): bool
     {
         return $user->id == $restaurant->owner_id;

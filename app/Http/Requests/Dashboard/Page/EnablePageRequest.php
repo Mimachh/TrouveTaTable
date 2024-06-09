@@ -8,8 +8,7 @@ class EnablePageRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        // return auth()->user()->can('enablePage', $this->route('restaurant'));
-        return true;
+        return auth()->user()->can('enablePage', $this->route('restaurant'));
     }
 
     public function rules(): array

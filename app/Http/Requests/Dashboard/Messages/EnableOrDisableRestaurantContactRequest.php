@@ -11,7 +11,7 @@ class EnableOrDisableRestaurantContactRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->user()->can('enableMessages', $this->route('restaurant'));
     }
 
     /**
