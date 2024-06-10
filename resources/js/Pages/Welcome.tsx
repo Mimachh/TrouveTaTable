@@ -1,63 +1,45 @@
-import { Link, Head, router } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import DesktopNav from '@/Components/welcome/nav/DesktopNav';
 
 type WelcomeProps = PageProps & {
     restaurant: any;
 };
 
 export default function Welcome({ auth, restaurant }: WelcomeProps) {
-    const handleImageError = () => {
-        document.getElementById('screenshot-container')?.classList.add('!hidden');
-        document.getElementById('docs-card')?.classList.add('!row-span-1');
-        document.getElementById('docs-card-content')?.classList.add('!flex-row');
-        document.getElementById('background')?.classList.add('!hidden');
-    };
-    // https://www.youtube.com/watch?v=jcpLprT5F0I
+    const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+    const tabs = [
+        { id: "Home", label: "Home" },
+        { id: "About", label: "About" },
+        { id: "Services", label: "Services" },
+        { id: "Contact", label: "Contact" },
+    ];
+
     return (
-        <>
+        <div className="min-h-[300vh] bg-background">
             <Head title="Welcome" />
-            <div className='min-h-screen bg-foreground/90 flex items-center justify-center'>
-                <motion.button
-                className='px-8 py-5 rounded-md relative
-                radial-gradient
-                '
-                initial={{
-                    "--x": "100%",
-                } as any}
-                animate={{
-                    "--x": "-100%",
-                } as any}
-                whileTap={{
-                    scale: 0.97
-                }}
-                transition={{
-                    repeat: Infinity,
-                    repeatType: "loop",
-                    repeatDelay: 1,
-                    type: "spring",
-                    stiffness: 20,
-                    damping: 15,
-                    mass: 2,
-                    scale: {
-                        type: "spring",
-                        stiffness: 10,
-                        damping: 5,
-                        mass: 0.1
-                    }
-                }}
-                onClick={() => {
-                    router.visit('/book/' + restaurant.id);
-                }}
-                >
-                    <span
-                    className='text-neutral-100 tracking-wide font-light
-                    h-full w-full block relative linear-mask
-                    '
-                    >Réserver au {restaurant.name}</span>
-                    <span className='block absolute inset-0 rounded-md p-px linear-overlay' />
-                </motion.button>
+
+            <DesktopNav
+                tabs={tabs}
+                sectionRefs={sectionRefs}
+            />
+
+            <div className='min-h-screen flex flex-col items-center justify-center'>
+                <div id="Home" ref={el => sectionRefs.current[0] = el} className="min-h-screen">
+                    HOME
+                </div>
+                <div id="About" ref={el => sectionRefs.current[1] = el} className="min-h-screen">
+                    About
+                </div>
+                <div id="Services" ref={el => sectionRefs.current[2] = el} className="min-h-screen">
+                    Services
+                </div>
+                <div id="Contact" ref={el => sectionRefs.current[3] = el} className="min-h-screen">
+                    Contact
+                </div>
             </div>
-        </>
+        </div>
     );
 }

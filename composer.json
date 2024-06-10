@@ -9,7 +9,7 @@
         "dompdf/dompdf": "^2.0",
         "firebase/php-jwt": "^6.10",
         "ifresh/laravel-enum-translations": "^1.0",
-        "inertiajs/inertia-laravel": "^1.0",
+        "inertiajs/inertia-laravel": "^1.2",
         "laravel/breeze": "^2.0",
         "laravel/cashier": "^15.3",
         "laravel/framework": "^11.0",

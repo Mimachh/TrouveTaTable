@@ -4,7 +4,7 @@ import { Product, User } from "@/types";
 import axios from "axios";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { ClipLoader } from "react-spinners";
+import { LoaderCircle } from "lucide-react";
 
 interface Props {
     stripeKey: string;
@@ -206,7 +206,7 @@ const Create = ({
                     id="card-button"
                 >
                     {loading ? (
-                        <ClipLoader color="#36d7b7" />
+                        <LoaderCircle className="w-6 h-6 animate animate-spin" />
                     ) : (
                         <span id="button-text">Je m'abonne</span>
                     )}
