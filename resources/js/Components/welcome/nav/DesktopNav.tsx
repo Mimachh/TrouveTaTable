@@ -51,7 +51,7 @@ const DesktopNav = (props: ExtendedWelcomeNavProps) => {
                                     activeTab === tab.id
                                         ? ""
                                         : " hover:text-green-900/50",
-                                    "relative rounded-full transition px-3 py-2 text-sm font-normal text-green-850/40 outline-2 outline-welcomeBackground focus-visible:outline"
+                                    "relative rounded-full transition px-3 py-2 text-sm font-normal text-neutral-800 outline-2 outline-welcomeBackground focus-visible:outline"
                                 )}
                             >
                                 {activeTab === tab.id && (
