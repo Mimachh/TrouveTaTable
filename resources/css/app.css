@@ -28,6 +28,9 @@
         --input: 0 0% 89.8%;
         --ring: 0 0% 3.9%;
         --radius: 0.5rem;
+
+        --welcome-primary: 142 76.2% 36.3%;
+        --welcome-background: 142 76.6% 73.1%
     }
 
     .dark {
@@ -51,6 +54,10 @@
         --border: 0 0% 14.9%;
         --input: 0 0% 14.9%;
         --ring: 0 0% 83.1%;
+
+
+        --welcome-primary: 142 76.2% 36.3%;
+        --welcome-background: 142 76.6% 73.1%
     }
 }
 
