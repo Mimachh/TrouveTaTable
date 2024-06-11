@@ -1,4 +1,5 @@
 import { Button } from "@/Components/ui/button";
+import { cn } from "@/lib/utils";
 import { Reservation } from "@/types/reservation";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import {
@@ -27,8 +28,10 @@ interface Props {
     today: Date;
     selectedDay: Date;
     setSelectedDay: (day: Date) => void;
+    containerClassNames?: string;
+    todaySelectedClassNames?: string;
 }
-const CalendarReservation = ({today, selectedDay, setSelectedDay}: Props) => {
+const CalendarReservation = ({today, selectedDay, setSelectedDay, containerClassNames, todaySelectedClassNames = "bg-primaryBlue text-white"}: Props) => {
  
     
     let [currentMonth, setCurrentMonth] = useState(
@@ -63,7 +66,7 @@ const CalendarReservation = ({today, selectedDay, setSelectedDay}: Props) => {
 
     
     return (
-        <div className="md:pr-14">
+        <div className={cn("md:pr-14", containerClassNames)}>
             <div className="flex items-center">
                 <h2 className="flex-auto text-sm font-semibold text-muted-foreground capitalize">
                     {format(firstDayCurrentMonth, "MMMM yyyy", { locale: fr })}
@@ -127,7 +130,7 @@ const CalendarReservation = ({today, selectedDay, setSelectedDay}: Props) => {
                                     "text-muted-foreground/60",
                                 isEqual(day, selectedDay) &&
                                     isToday(day) &&
-                                    "bg-primaryBlue text-white",
+                                    todaySelectedClassNames,
                                 isEqual(day, selectedDay) &&
                                     !isToday(day) &&
                                     "bg-secondary",
