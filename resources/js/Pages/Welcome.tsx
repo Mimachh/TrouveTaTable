@@ -32,9 +32,11 @@ export default function Welcome({ auth, restaurant }: WelcomeProps) {
                 <Head title="Welcome" />
 
                 <Index tabs={tabs} sectionRefs={sectionRefs} />
-                {/* <HeroHighlight className="w-full" containerClassName="h-screen md:h-[40rem] items-start md:items-center pt-[150px] md:pt-0"> */}
-
-                <div className="md:mt-[150px] flex md:flex-row flex-col space-y-10 md:space-y-0 items-center justify-between gap-16 md:px-16 md:w-full">
+                <div 
+                  id="Home"
+                  ref={(el) => (sectionRefs.current[0] = el)}
+                className="min-h-screen px-8 flex lg:flex-row flex-col space-y-10 md:space-y-0 items-center md:justify-between justify-center  md:px-8 lg:px-16 md:w-full">
+          
                     <motion.h1
                         initial={{
                             opacity: 0,
@@ -48,15 +50,33 @@ export default function Welcome({ auth, restaurant }: WelcomeProps) {
                             duration: 0.5,
                             ease: [0.4, 0.0, 0.2, 1],
                         }}
-                        className="text-2xl px-4 md:text-4xl lg:text-5xl font-bold text-neutral-700 max-w-4xl leading-relaxed lg:leading-snug "
+                        className="text-3xl px-4 md:text-4xl lg:text-[3.25rem] font-bold text-neutral-700 max-w-2xl leading-relaxed lg:leading-snug "
                     >
                         Modernisez votre restaurant avec notre outil innovant et  {" "}
-                        <Highlight className="text-welcomePrimaryText">
+                        {/* <Highlight className="text-welcomePrimaryText">
                         complet.
-                        </Highlight>
+                        </Highlight> */}
+                        <span className="relative w-fit inline-block">
+                            <span className="z-1 absolute  md:translate-x-[-2px] md:translate-y-[3px] translate-x-[-1px] translate-y-[2px] text-neutral-700">complet !</span>
+                            <span className="z-2 relative font-outline-2 text-white">complet !</span>
+                        </span>
                     </motion.h1>
                   
-                    <div className="w-full border border-welcomePrimary p-4 rounded-xl bg-welcomeBackground/5">
+                    <motion.div 
+                        initial={{
+                            opacity: 0,
+                            x: -20,
+                        }}
+                        animate={{
+                            opacity: 1,
+                            x: [-20, 5, 0],
+                        }}
+                        transition={{
+                            duration: 0.5,
+                            delay: 0.2,
+                            ease: [0.4, 0.0, 0.2, 1],
+                        }}
+                    className="w-full border border-welcomePrimary p-4 rounded-xl bg-welcomeBackground/5">
                     <HeroHighlight containerClassName="h-fit block">
                         <div className="grid grid-cols-5 gap-3">
                             <div className="col-span-2">
@@ -110,20 +130,14 @@ export default function Welcome({ auth, restaurant }: WelcomeProps) {
                             </div>
                         </div>
                         </HeroHighlight>
-                    </div>
+                    </motion.div>
                     
                 </div>
-                {/* </HeroHighlight> */}
+        
 
           
                 <div className="min-h-screen flex flex-col items-center justify-center">
-                    <div
-                        id="Home"
-                        ref={(el) => (sectionRefs.current[0] = el)}
-                        className="min-h-screen"
-                    >
-                        HOME
-                    </div>
+               
                     <div
                         id="About"
                         ref={(el) => (sectionRefs.current[1] = el)}
