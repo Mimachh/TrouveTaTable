@@ -50,28 +50,22 @@ const StarterPrice = forwardRef<HTMLDivElement>((props, ref) => {
                         </p>
                         <div className="mt-16 flex justify-center">
                             <fieldset aria-label="Payment frequency">
-                                <RadioGroup
-                                    value={frequency}
-                                    onChange={setFrequency}
-                                    className="grid grid-cols-2 gap-x-1 rounded-full bg-white/5 p-1 text-center text-xs font-semibold leading-5 text-muted"
-                                >
-                                    {frequencies.map((option) => (
-                                        <Radio
-                                            key={option.value}
-                                            value={option}
-                                            className={({ checked }) =>
-                                                cn(
-                                                    checked
-                                                        ? "bg-welcomeBackground text-green-900"
-                                                        : "",
-                                                    "cursor-pointer rounded-full px-2.5 py-1"
-                                                )
-                                            }
-                                        >
-                                            {option.label}
-                                        </Radio>
-                                    ))}
-                                </RadioGroup>
+                            <div className="grid grid-cols-2 gap-x-1 rounded-full bg-white/5 p-1 text-center text-xs font-semibold leading-5 text-muted">
+                                {frequencies.map((option) => (
+                                    <button
+                                        key={option.value}
+                                        onClick={() => setFrequency(option)}
+                                        className={cn(
+                                            frequency.value === option.value
+                                                ? "bg-welcomeBackground text-green-900"
+                                                : "",
+                                            "cursor-pointer rounded-full px-2.5 py-1"
+                                        )}
+                                    >
+                                        {option.label}
+                                    </button>
+                                ))}
+                            </div>
                             </fieldset>
                         </div>
                     </div>
