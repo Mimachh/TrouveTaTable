@@ -1,6 +1,5 @@
 import { forwardRef, useState } from "react";
-import { Radio, RadioGroup } from "@headlessui/react";
-import { CheckIcon, XMarkIcon } from "@heroicons/react/20/solid";
+import { CheckIcon } from "@heroicons/react/20/solid";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 
