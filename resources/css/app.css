@@ -4,7 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
     :root {
         --primary-blue: 271 100% 50%;
@@ -30,7 +29,7 @@
         --radius: 0.5rem;
 
         --welcome-primary: 142 76.2% 36.3%;
-        --welcome-background: 142 76.6% 73.1%
+        --welcome-background: 142 76.6% 73.1%;
     }
 
     .dark {
@@ -55,9 +54,8 @@
         --input: 0 0% 14.9%;
         --ring: 0 0% 83.1%;
 
-
         --welcome-primary: 142 76.2% 36.3%;
-        --welcome-background: 142 76.6% 73.1%
+        --welcome-background: 142 76.6% 73.1%;
     }
 }
 
@@ -71,10 +69,14 @@
 
     .font-outline-2 {
         -webkit-text-stroke: 2px black;
-      }
-      .font-outline-4 {
+    }
+    .font-outline-4 {
         -webkit-text-stroke: 4px black;
-      }
+    }
+
+    .header-welcome {
+        @apply text-3xl  md:text-4xl lg:text-[3.25rem] font-bold text-neutral-800  leading-relaxed lg:leading-snug
+    }
 }
 
 @layer components {
@@ -94,8 +96,7 @@
         background: radial-gradient(
                 circle at 50% 0%,
                 hsl(var(--primary-blue) / 0.3) 0%,
-                    /* rgba(250, 250, 250, 0.05) 0%, */
-                transparent 80%
+                /* rgba(250, 250, 250, 0.05) 0%, */ transparent 80%
             ),
             rgba(15, 15, 15, 1);
     }

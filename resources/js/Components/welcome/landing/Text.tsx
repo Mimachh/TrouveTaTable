@@ -34,7 +34,7 @@ const Text = () => {
             duration: 0.5,
             ease: [0.4, 0.0, 0.2, 1],
         }}
-        className="text-3xl  md:text-4xl lg:text-[3.25rem] font-bold text-neutral-800  leading-relaxed lg:leading-snug "
+        className="header-welcome "
     >
         <span className="text-shadow shadow-gray-400">
             {" "}

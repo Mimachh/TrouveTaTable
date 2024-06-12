@@ -7,7 +7,7 @@ const LandingHeader = forwardRef<HTMLDivElement>((props, ref) => {
         <div 
         id="Home"
         ref={ref} {...props}
-        className="min-h-screen px-2 flex lg:flex-row flex-col space-y-10 md:space-y-0 items-center md:justify-between justify-center  md:px-8 lg:px-16 md:w-full">
+        className="max-w-[1480px] mx-auto min-h-screen px-2 flex lg:flex-row flex-col space-y-10 md:space-y-0 items-center md:justify-between justify-center  md:px-8 lg:px-16 md:w-full">
             <Text />
             <CalendarCard />
         </div>

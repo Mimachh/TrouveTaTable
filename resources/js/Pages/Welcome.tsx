@@ -6,6 +6,13 @@ import Index from "@/Components/welcome/nav/Index";
 
 import LandingHeader from "@/Components/welcome/landing/Header";
 import { PrimaryFeatures } from "@/Components/welcome/features/PrimaryFeatures";
+import CardBook from "@/Components/welcome/features/CardBook";
+import CardRating from "@/Components/welcome/features/CardRating";
+import CardStoreFront from "@/Components/welcome/features/CardStoreFront";
+import { Card, CardContent } from "@/Components/ui/card";
+import Features from "@/Components/welcome/features/Features";
+import StarterPrice from "@/Components/welcome/pricing/starter-price";
+import NewsletterSection from "@/Components/welcome/newsletter/NewsletterSection";
 
 type WelcomeProps = PageProps & {
     restaurant: any;
@@ -15,9 +22,9 @@ export default function Welcome({ auth, restaurant }: WelcomeProps) {
     const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     const tabs = [
-        { id: "Home", label: "Home" },
-        { id: "About", label: "About" },
-        { id: "Services", label: "Services" },
+        { id: "Home", label: "Accueil" },
+        { id: "Features", label: "Nos avantages" },
+        { id: "Price", label: "Prix" },
         { id: "Contact", label: "Contact" },
     ];
 
@@ -28,30 +35,11 @@ export default function Welcome({ auth, restaurant }: WelcomeProps) {
 
                 <Index tabs={tabs} sectionRefs={sectionRefs} />
                 <LandingHeader ref={(el) => (sectionRefs.current[0] = el)} />
-                <PrimaryFeatures />
-                <div className="min-h-screen flex flex-col items-center justify-center">
-                    <div
-                        id="About"
-                        ref={(el) => (sectionRefs.current[1] = el)}
-                        className="min-h-screen"
-                    >
-                        About
-                    </div>
-                    <div
-                        id="Services"
-                        ref={(el) => (sectionRefs.current[2] = el)}
-                        className="min-h-screen"
-                    >
-                        Services
-                    </div>
-                    <div
-                        id="Contact"
-                        ref={(el) => (sectionRefs.current[3] = el)}
-                        className="min-h-screen"
-                    >
-                        Contact
-                    </div>
-                </div>
+                {/* <PrimaryFeatures /> */}
+                <Features ref={(el) => (sectionRefs.current[1] = el)} />
+                <StarterPrice ref={(el) => (sectionRefs.current[2] = el)} />
+                <NewsletterSection />
+                <div className="w-full h-[230px] bg-foreground">Footer</div>
             </div>
         </LazyMotion>
     );
