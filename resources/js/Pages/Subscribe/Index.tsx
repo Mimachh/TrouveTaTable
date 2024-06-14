@@ -40,10 +40,8 @@ const Subscribe = (props: SubscribeProps) => {
 
                     <div className="md:w-[55%] rounded-xl min-h-[280px] md:min-h-[320px] bg-background/60 shadow w-full border px-6 py-4  flex  justify-center items-center">
                         <Create
-                            user={props.auth.user}
                             stripeKey={props.stripeKey}
                             intent={props.intent}
-                            products={products}
                             product={product}
                             recurrence={recurrence}
                         />

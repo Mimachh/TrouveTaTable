@@ -7,6 +7,7 @@ import { Link } from "@inertiajs/react";
 import { User } from "@/types";
 import { Button } from "@/Components/ui/button";
 import ToastProvider from "@/providers/ToastProvider";
+import StripeLoader from "@/utils/stripe-loader";
 
 export default function PaiementLayout({
     user,
@@ -16,6 +17,7 @@ export default function PaiementLayout({
     return (
         <ToastProvider>
             <div className="min-h-screen bg-gray-100">
+                <StripeLoader />
                 <main>{children}</main>
             </div>
         </ToastProvider>

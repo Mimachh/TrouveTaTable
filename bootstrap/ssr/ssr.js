@@ -1,17 +1,17 @@
 import { jsx, jsxs, Fragment } from "react/jsx-runtime";
 import * as React from "react";
-import React__default, { useEffect, createContext, useState, useContext, useRef, Fragment as Fragment$1 } from "react";
+import React__default, { useEffect, createContext, useState, useContext, useRef, Fragment as Fragment$1, forwardRef } from "react";
 import { useTheme as useTheme$1 } from "next-themes";
 import { Toaster as Toaster$1, toast } from "sonner";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { useForm, Head, Link, usePage, router, createInertiaApp } from "@inertiajs/react";
+import { useForm, Head, router, Link, usePage, createInertiaApp } from "@inertiajs/react";
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { cva } from "class-variance-authority";
 import { Slot } from "@radix-ui/react-slot";
-import { motion, useAnimationControls, AnimatePresence, m, LazyMotion, domAnimation, useAnimate, stagger, useScroll, useMotionValueEvent } from "framer-motion";
-import { ChevronRightIcon, XMarkIcon, ArrowTrendingUpIcon, UserGroupIcon, PencilIcon, BoltIcon, CursorArrowRaysIcon, AdjustmentsHorizontalIcon, UserIcon, BellAlertIcon, UsersIcon, ChatBubbleLeftRightIcon, DocumentIcon, ClockIcon, CalendarDaysIcon, ChartBarIcon } from "@heroicons/react/24/outline";
-import { Settings as Settings$1, LayoutDashboard, HandPlatter, X, Search, Store, ChevronsUpDown, Check, PlusCircle, ChevronRight, Circle, Sun, Moon, Trash, Plus, ChevronDown, ChevronUp, Edit as Edit$1, ArrowRight, Copy, ChevronLeft, MoreHorizontal, ArrowUpDown, LoaderCircle, MessageCircle, Phone, MessageSquare, Star, CalendarDays, Camera, CameraIcon, Upload, CalendarX, ExternalLink, Minus } from "lucide-react";
+import { LoaderCircle, MailIcon, ArrowLeft, Settings as Settings$1, LayoutDashboard, HandPlatter, X, Search, Store, ChevronsUpDown, Check, PlusCircle, ChevronRight, Circle, Sun, Moon, Trash, Plus, ChevronDown, ChevronUp, Edit as Edit$1, ArrowRight, Copy, ChevronLeft, MoreHorizontal, ArrowUpDown, MessageCircle, Phone, MessageSquare, Star as Star$1, CalendarDays, Camera, CameraIcon, Upload, CalendarX, ExternalLink, Minus, Calendar as Calendar$2, Clock, User2, CalendarCheck, StarIcon, CheckIcon } from "lucide-react";
+import { motion, useAnimationControls, AnimatePresence, m, LazyMotion, domAnimation, useAnimate, stagger, useCycle, MotionConfig, useScroll, useMotionValueEvent, useMotionValue, useMotionTemplate } from "framer-motion";
+import { ChevronRightIcon, XMarkIcon, ArrowTrendingUpIcon, UserGroupIcon, PencilIcon, BoltIcon, CursorArrowRaysIcon, AdjustmentsHorizontalIcon, UserIcon, BellAlertIcon, UsersIcon, ChatBubbleLeftRightIcon, DocumentIcon, ClockIcon, CalendarDaysIcon, ChartBarIcon, BugAntIcon, ComputerDesktopIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { Command as Command$1 } from "cmdk";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
@@ -220,7 +220,7 @@ const Button = React.forwardRef(
 );
 Button.displayName = "Button";
 function ConfirmPassword() {
-  const { data, setData, post, processing, errors, reset } = useForm({
+  const { data: data2, setData, post, processing, errors, reset } = useForm({
     password: ""
   });
   useEffect(() => {
@@ -252,7 +252,7 @@ function ConfirmPassword() {
                   id: "password",
                   type: "password",
                   name: "password",
-                  value: data.password,
+                  value: data2.password,
                   className: "mt-1 block w-full",
                   onChange: (e) => setData("password", e.target.value)
                 }
@@ -270,7 +270,7 @@ const __vite_glob_0_0 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   default: ConfirmPassword
 }, Symbol.toStringTag, { value: "Module" }));
 function ForgotPassword({ status }) {
-  const { data, setData, post, processing, errors } = useForm({
+  const { data: data2, setData, post, processing, errors } = useForm({
     email: ""
   });
   const submit = (e) => {
@@ -298,7 +298,7 @@ function ForgotPassword({ status }) {
                   id: "email",
                   type: "email",
                   name: "email",
-                  value: data.email,
+                  value: data2.email,
                   onChange: (e) => setData("email", e.target.value)
                 }
               )
@@ -324,11 +324,13 @@ function Checkbox({ className = "", ...props }) {
     }
   );
 }
-function Login({
-  status,
-  canResetPassword
-}) {
-  const { data, setData, post, processing, errors, reset } = useForm({
+const LoginForm = (props) => {
+  const {
+    canResetPassword = true,
+    mode,
+    onAlreadyHaveAnAccountClick
+  } = props;
+  const { data: data2, setData, post, processing, errors, reset } = useForm({
     email: "",
     password: "",
     remember: false
@@ -340,8 +342,107 @@ function Login({
   }, []);
   const submit = (e) => {
     e.preventDefault();
-    post(route("login"));
+    post(route("login"), {
+      preserveScroll: true
+    });
   };
+  return /* @__PURE__ */ jsxs("form", { onSubmit: submit, children: [
+    /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(
+      FormFieldLayout,
+      {
+        label: "Email",
+        fieldName: "email",
+        error: errors.email,
+        children: /* @__PURE__ */ jsx(
+          Input,
+          {
+            id: "email",
+            type: "email",
+            name: "email",
+            value: data2.email,
+            className: "mt-1 block w-full py-3 border",
+            autoComplete: "username",
+            onChange: (e) => setData("email", e.target.value)
+          }
+        )
+      }
+    ) }),
+    /* @__PURE__ */ jsx("div", { className: "mt-4", children: /* @__PURE__ */ jsx(
+      FormFieldLayout,
+      {
+        label: "Mot de passe",
+        fieldName: "password",
+        error: errors.password,
+        children: /* @__PURE__ */ jsx(
+          Input,
+          {
+            id: "password",
+            type: "password",
+            name: "password",
+            value: data2.password,
+            className: "mt-1 block w-full py-3 border",
+            autoComplete: "username",
+            onChange: (e) => setData("password", e.target.value)
+          }
+        )
+      }
+    ) }),
+    /* @__PURE__ */ jsxs("div", { className: " mt-4 flex items-center justify-between", children: [
+      /* @__PURE__ */ jsxs("label", { className: "flex items-center", children: [
+        /* @__PURE__ */ jsx(
+          Checkbox,
+          {
+            name: "remember",
+            checked: data2.remember,
+            onChange: (e) => setData("remember", e.target.checked)
+          }
+        ),
+        /* @__PURE__ */ jsx("span", { className: "ms-2 text-sm ", children: "Se souvenir de moi" })
+      ] }),
+      canResetPassword && /* @__PURE__ */ jsx(
+        Button,
+        {
+          type: "button",
+          variant: "link",
+          onClick: () => {
+            router.visit(route("password.request"));
+          },
+          children: "Mot de passe oublié ?"
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "pt-4 w-full text-center", children: [
+      /* @__PURE__ */ jsx(Button, { className: "w-full", disabled: processing, children: "Connexion" }),
+      /* @__PURE__ */ jsxs(
+        Button,
+        {
+          variant: "link",
+          type: "button",
+          onClick: () => {
+            if (mode == "modal" && onAlreadyHaveAnAccountClick) {
+              onAlreadyHaveAnAccountClick("register");
+            } else {
+              router.visit(route("register"));
+            }
+          },
+          children: [
+            " ",
+            "Pas encore de compte ?",
+            " "
+          ]
+        }
+      )
+    ] })
+  ] });
+};
+const __vite_glob_0_3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  default: LoginForm
+}, Symbol.toStringTag, { value: "Module" }));
+function Login({
+  status,
+  canResetPassword = true
+}) {
   return /* @__PURE__ */ jsxs(
     Guest$1,
     {
@@ -349,78 +450,7 @@ function Login({
       children: [
         /* @__PURE__ */ jsx(Head, { title: "Connexion" }),
         status && /* @__PURE__ */ jsx("div", { className: "mb-4 font-medium text-sm text-green-600", children: status }),
-        /* @__PURE__ */ jsxs("form", { onSubmit: submit, children: [
-          /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(
-            FormFieldLayout,
-            {
-              label: "Email",
-              fieldName: "email",
-              error: errors.email,
-              children: /* @__PURE__ */ jsx(
-                Input,
-                {
-                  id: "email",
-                  type: "email",
-                  name: "email",
-                  value: data.email,
-                  className: "mt-1 block w-full py-3 border",
-                  autoComplete: "username",
-                  onChange: (e) => setData("email", e.target.value)
-                }
-              )
-            }
-          ) }),
-          /* @__PURE__ */ jsx("div", { className: "mt-4", children: /* @__PURE__ */ jsx(
-            FormFieldLayout,
-            {
-              label: "Mot de passe",
-              fieldName: "password",
-              error: errors.password,
-              children: /* @__PURE__ */ jsx(
-                Input,
-                {
-                  id: "password",
-                  type: "password",
-                  name: "password",
-                  value: data.password,
-                  className: "mt-1 block w-full py-3 border",
-                  autoComplete: "username",
-                  onChange: (e) => setData("password", e.target.value)
-                }
-              )
-            }
-          ) }),
-          /* @__PURE__ */ jsx("div", { className: "block mt-4", children: /* @__PURE__ */ jsxs("label", { className: "flex items-center", children: [
-            /* @__PURE__ */ jsx(
-              Checkbox,
-              {
-                name: "remember",
-                checked: data.remember,
-                onChange: (e) => setData("remember", e.target.checked)
-              }
-            ),
-            /* @__PURE__ */ jsx("span", { className: "ms-2 text-sm text-gray-600", children: "Se souvenir de moi" })
-          ] }) }),
-          /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-end mt-4", children: [
-            canResetPassword && /* @__PURE__ */ jsx(
-              Link,
-              {
-                href: route("password.request"),
-                className: "underline text-sm text-muted-foreground hover:text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primaryBlue",
-                children: "Mot de passe oublié ?"
-              }
-            ),
-            /* @__PURE__ */ jsx(Button, { className: "ms-4", disabled: processing, children: "Connexion" })
-          ] }),
-          /* @__PURE__ */ jsx(
-            Link,
-            {
-              href: route("register"),
-              className: "underline text-sm text-muted-foreground hover:text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primaryBlue",
-              children: "Pas encore de compte ? "
-            }
-          )
-        ] })
+        /* @__PURE__ */ jsx(LoginForm, {})
       ]
     }
   );
@@ -429,8 +459,9 @@ const __vite_glob_0_2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.def
   __proto__: null,
   default: Login
 }, Symbol.toStringTag, { value: "Module" }));
-function Register() {
-  const { data, setData, post, processing, errors, reset } = useForm({
+const RegisterForm = (props) => {
+  const { mode = "page", onAlreadyHaveAnAccountClick } = props;
+  const { data: data2, setData, post, processing, errors, reset } = useForm({
     name: "",
     email: "",
     password: "",
@@ -443,110 +474,130 @@ function Register() {
   }, []);
   const submit = (e) => {
     e.preventDefault();
-    post(route("register"));
+    post(route("register"), {
+      preserveScroll: true
+    });
   };
+  return /* @__PURE__ */ jsxs("form", { onSubmit: submit, className: "space-form-field", children: [
+    /* @__PURE__ */ jsxs("div", { className: "md:grid md:grid-cols-2 md:gap-3", children: [
+      /* @__PURE__ */ jsx(
+        FormFieldLayout,
+        {
+          fieldName: "name",
+          label: "Nom",
+          error: errors.name,
+          children: /* @__PURE__ */ jsx(
+            Input,
+            {
+              id: "name",
+              name: "name",
+              value: data2.name,
+              autoComplete: "name",
+              onChange: (e) => setData("name", e.target.value),
+              required: true
+            }
+          )
+        }
+      ),
+      /* @__PURE__ */ jsx(
+        FormFieldLayout,
+        {
+          fieldName: "email",
+          label: "Email",
+          error: errors.email,
+          children: /* @__PURE__ */ jsx(
+            Input,
+            {
+              id: "email",
+              name: "email",
+              value: data2.email,
+              autoComplete: "email",
+              onChange: (e) => setData("email", e.target.value),
+              required: true
+            }
+          )
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsx(
+      FormFieldLayout,
+      {
+        fieldName: "password",
+        label: "Mot de passe",
+        error: errors.password,
+        children: /* @__PURE__ */ jsx(
+          Input,
+          {
+            id: "password",
+            name: "password",
+            value: data2.password,
+            type: "password",
+            autoComplete: "password",
+            onChange: (e) => setData("password", e.target.value),
+            required: true
+          }
+        )
+      }
+    ),
+    /* @__PURE__ */ jsx(
+      FormFieldLayout,
+      {
+        fieldName: "password_confirmation",
+        label: "Confirmation du mot de passe",
+        error: errors.password_confirmation,
+        children: /* @__PURE__ */ jsx(
+          Input,
+          {
+            id: "password_confirmation",
+            name: "password_confirmation",
+            value: data2.password_confirmation,
+            type: "password",
+            autoComplete: "password_confirmation",
+            onChange: (e) => setData("password_confirmation", e.target.value),
+            required: true
+          }
+        )
+      }
+    ),
+    /* @__PURE__ */ jsxs("div", { className: "text-center pt-4 block", children: [
+      /* @__PURE__ */ jsx(Button, { className: "w-full", disabled: processing, children: "S'inscrire" }),
+      /* @__PURE__ */ jsx(
+        Button,
+        {
+          type: "button",
+          variant: "link",
+          onClick: () => {
+            if (mode == "modal") {
+              if (!onAlreadyHaveAnAccountClick)
+                return;
+              onAlreadyHaveAnAccountClick("login");
+            } else {
+              router.visit(route("login"));
+            }
+          },
+          children: "Déjà un compte ?"
+        }
+      )
+    ] })
+  ] });
+};
+const __vite_glob_0_4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  default: RegisterForm
+}, Symbol.toStringTag, { value: "Module" }));
+function Register() {
   return /* @__PURE__ */ jsxs(
     Guest$1,
     {
       title: "Inscription",
       children: [
         /* @__PURE__ */ jsx(Head, { title: "Inscription" }),
-        /* @__PURE__ */ jsxs("form", { onSubmit: submit, className: "space-form-field", children: [
-          /* @__PURE__ */ jsx(
-            FormFieldLayout,
-            {
-              fieldName: "name",
-              label: "Nom",
-              error: errors.name,
-              children: /* @__PURE__ */ jsx(
-                Input,
-                {
-                  id: "name",
-                  name: "name",
-                  value: data.name,
-                  autoComplete: "name",
-                  onChange: (e) => setData("name", e.target.value),
-                  required: true
-                }
-              )
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            FormFieldLayout,
-            {
-              fieldName: "email",
-              label: "Email",
-              error: errors.email,
-              children: /* @__PURE__ */ jsx(
-                Input,
-                {
-                  id: "email",
-                  name: "email",
-                  value: data.email,
-                  autoComplete: "email",
-                  onChange: (e) => setData("email", e.target.value),
-                  required: true
-                }
-              )
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            FormFieldLayout,
-            {
-              fieldName: "password",
-              label: "Mot de passe",
-              error: errors.password,
-              children: /* @__PURE__ */ jsx(
-                Input,
-                {
-                  id: "password",
-                  name: "password",
-                  value: data.password,
-                  type: "password",
-                  autoComplete: "password",
-                  onChange: (e) => setData("password", e.target.value),
-                  required: true
-                }
-              )
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            FormFieldLayout,
-            {
-              fieldName: "password_confirmation",
-              label: "Confirmation du mot de passe",
-              error: errors.password_confirmation,
-              children: /* @__PURE__ */ jsx(
-                Input,
-                {
-                  id: "password_confirmation",
-                  name: "password_confirmation",
-                  value: data.password_confirmation,
-                  type: "password",
-                  autoComplete: "password_confirmation",
-                  onChange: (e) => setData("password_confirmation", e.target.value),
-                  required: true
-                }
-              )
-            }
-          ),
-          /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-end mt-4", children: [
-            /* @__PURE__ */ jsx(
-              Link,
-              {
-                href: route("login"),
-                className: "underline text-sm text-muted-foreground hover:text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primaryBlue",
-                children: "Déjà un compte ?"
-              }
-            ),
-            /* @__PURE__ */ jsx(Button, { className: "ms-4", disabled: processing, children: "S'inscrire" })
-          ] })
-        ] })
+        /* @__PURE__ */ jsx(RegisterForm, {})
       ]
     }
   );
 }
-const __vite_glob_0_3 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Register
 }, Symbol.toStringTag, { value: "Module" }));
@@ -554,7 +605,7 @@ function ResetPassword({
   token,
   email
 }) {
-  const { data, setData, post, processing, errors, reset } = useForm({
+  const { data: data2, setData, post, processing, errors, reset } = useForm({
     token,
     email,
     password: "",
@@ -588,7 +639,7 @@ function ResetPassword({
                   id: "email",
                   type: "email",
                   name: "email",
-                  value: data.email,
+                  value: data2.email,
                   onChange: (e) => setData("email", e.target.value)
                 }
               )
@@ -606,7 +657,7 @@ function ResetPassword({
                   id: "password",
                   type: "password",
                   name: "password",
-                  value: data.password,
+                  value: data2.password,
                   onChange: (e) => setData("password", e.target.value)
                 }
               )
@@ -624,7 +675,7 @@ function ResetPassword({
                   id: "password_confirmation",
                   type: "password",
                   name: "password_confirmation",
-                  value: data.password_confirmation,
+                  value: data2.password_confirmation,
                   onChange: (e) => setData("password_confirmation", e.target.value)
                 }
               )
@@ -636,7 +687,7 @@ function ResetPassword({
     }
   );
 }
-const __vite_glob_0_4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: ResetPassword
 }, Symbol.toStringTag, { value: "Module" }));
@@ -682,7 +733,7 @@ function VerifyEmail({ status }) {
     }
   );
 }
-const __vite_glob_0_5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_7 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: VerifyEmail
 }, Symbol.toStringTag, { value: "Module" }));
@@ -700,9 +751,133 @@ const Bye = () => {
     ] }) })
   ] });
 };
-const __vite_glob_0_6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_8 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Bye
+}, Symbol.toStringTag, { value: "Module" }));
+const SubmitButton = ({ children, disabled, type, variant, ...props }) => {
+  const v = variant ?? "default";
+  return /* @__PURE__ */ jsx(
+    Button,
+    {
+      variant: v,
+      ...props,
+      disabled,
+      type: type || "button",
+      children: disabled ? /* @__PURE__ */ jsx("div", { className: "w-full flex items-center justify-center", children: /* @__PURE__ */ jsx(LoaderCircle, { className: "w-6 h-6 animate animate-spin" }) }) : /* @__PURE__ */ jsx(Fragment, { children })
+    }
+  );
+};
+const NewsletterForm = () => {
+  const { data: data2, setData, processing, errors, post, reset } = useForm({
+    email: ""
+  });
+  const submit = (e) => {
+    e.preventDefault();
+    post(route("newsletter.app.subscribe"), {
+      preserveScroll: true,
+      onSuccess: () => {
+        toast.success("Vous êtes inscrit à notre newsletter");
+        reset();
+      },
+      onError: (errors2) => {
+        toast.error("Une erreur s'est produite lors de l'inscription");
+      }
+    });
+  };
+  return /* @__PURE__ */ jsxs("form", { onSubmit: submit, children: [
+    /* @__PURE__ */ jsx(InputError, { message: errors.email, className: "mt-2 font-semibold" }),
+    /* @__PURE__ */ jsxs("div", { className: "relative w-full ", children: [
+      /* @__PURE__ */ jsx(
+        Input,
+        {
+          id: "email",
+          type: "email",
+          name: "email",
+          value: data2.email,
+          onChange: (e) => setData("email", e.target.value),
+          placeholder: "email@gmail.com",
+          className: "z-0 rounded-full border w-full pl-10 focus:ring-2 focus:ring-teal-500 relative mt-4 h-11 bg-background"
+        }
+      ),
+      /* @__PURE__ */ jsx(MailIcon, { className: "w-5 h-5 absolute left-3 text-neutral-500 top-1/2 -translate-y-1/2" }),
+      /* @__PURE__ */ jsx(
+        SubmitButton,
+        {
+          disabled: processing,
+          type: "submit",
+          className: "rounded-full absolute right-1 top-1/2 -translate-y-1/2 h-9",
+          children: "Inscription"
+        }
+      )
+    ] })
+  ] });
+};
+const data$1 = [
+  {
+    date: "2024-05-24",
+    formatDate: "May 24, 2024",
+    goal: "Catalyst: Application layouts, navigation menus, description lists, and more",
+    body: [
+      {
+        content: `We just published the first major update to Catalyst since releasing the development preview, with two new application layouts, navbar and sidebar components, description lists, and more. Here's a complete list of all the new components, available in both JavaScript and TypeScript:`
+      },
+      {
+        content: `We just published the first major update to Catalyst since releasing the development preview, with two new application layouts, navbar and sidebar components, description lists, and more. Here's a complete list of all the new components, available in both JavaScript and TypeScript:`
+      }
+    ]
+  }
+];
+const Index$5 = () => {
+  return /* @__PURE__ */ jsx(ToastProvider, { children: /* @__PURE__ */ jsxs("main", { children: [
+    /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pt-20 text-center pb-20", children: [
+      /* @__PURE__ */ jsx("div", { className: "w-full flex items-center justify-center", children: /* @__PURE__ */ jsxs(
+        Link,
+        {
+          href: route("home"),
+          className: " gap-2 border w-fit flex items-center rounded-md px-3 py-1.5 hover:bg-secondary/30 transition-all",
+          children: [
+            /* @__PURE__ */ jsx("span", { children: /* @__PURE__ */ jsx(ArrowLeft, { className: "w-3 h-3 mr-0.5" }) }),
+            /* @__PURE__ */ jsx("span", { children: "Retour à l'accueil" })
+          ]
+        }
+      ) }),
+      /* @__PURE__ */ jsx("h1", { className: "mt-6 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl", children: "Changelog" }),
+      /* @__PURE__ */ jsx("p", { className: "pt-5 text-neutral-600 tracking-tight", children: "Soyez tenu au courant des changements apportés à nos services." }),
+      /* @__PURE__ */ jsx("div", { className: "max-w-sm mx-auto", children: /* @__PURE__ */ jsx(NewsletterForm, {}) })
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: "relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8", children: data$1.map((item, index) => /* @__PURE__ */ jsxs(
+      "section",
+      {
+        id: item.date,
+        "aria-labelledby": `${item.date}-heading`,
+        className: "md:flex",
+        children: [
+          /* @__PURE__ */ jsx(
+            "h2",
+            {
+              id: `${item.date}-heading`,
+              className: "pl-7 text-sm leading-6 text-slate-500 md:w-1/4 md:pl-0 md:pr-12 md:text-right",
+              children: /* @__PURE__ */ jsx("a", { href: `#${item.date}`, children: item.formatDate })
+            }
+          ),
+          /* @__PURE__ */ jsxs("div", { className: "relative pl-7 pt-2 md:w-3/4 md:pl-12 md:pt-0 pb-16", children: [
+            /* @__PURE__ */ jsx("div", { className: "absolute bottom-0 left-0 w-px bg-slate-200 -top-3 md:top-2.5" }),
+            /* @__PURE__ */ jsx("div", { className: "absolute -left-1 -top-[1.0625rem] h-[0.5625rem] w-[0.5625rem] rounded-full border-2 border-slate-300 bg-white md:top-[0.4375rem]" }),
+            /* @__PURE__ */ jsxs("div", { className: "max-w-none prose-h3:mb-4 prose-h3:text-base prose-h3:leading-6 prose-sm prose prose-slate prose-a:font-semibold prose-a:text-sky-500 hover:prose-a:text-sky-600", children: [
+              /* @__PURE__ */ jsx("h3", { children: item.goal }),
+              item.body.map((body, index2) => /* @__PURE__ */ jsx("p", { children: body.content }, index2))
+            ] })
+          ] })
+        ]
+      },
+      index
+    )) })
+  ] }) });
+};
+const __vite_glob_0_9 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  default: Index$5
 }, Symbol.toStringTag, { value: "Module" }));
 const initialState = {
   theme: "system",
@@ -1421,7 +1596,7 @@ const PopoverContent = React.forwardRef(({ className, align = "center", sideOffs
   }
 ) }));
 PopoverContent.displayName = PopoverPrimitive.Content.displayName;
-const createSelectors$6 = (_store) => {
+const createSelectors$a = (_store) => {
   let store = _store;
   store.use = {};
   for (let k of Object.keys(store.getState())) {
@@ -1429,7 +1604,7 @@ const createSelectors$6 = (_store) => {
   }
   return store;
 };
-const useRestaurantModal = createSelectors$6(create((set) => ({
+const useRestaurantModal = createSelectors$a(create((set) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),
@@ -1766,7 +1941,7 @@ const RestaurantModal = () => {
   const restaurantModalOnClose = useRestaurantModal.use.onClose();
   const restaurantModalIsOpen = useRestaurantModal.use.isOpen();
   const [loading, setLoading] = useState(false);
-  const { data, setData, post, processing, errors, reset } = useForm({
+  const { data: data2, setData, post, processing, errors, reset } = useForm({
     name: ""
   });
   const restaurantModalSetReset = useRestaurantModal.use.setReset();
@@ -1807,7 +1982,7 @@ const RestaurantModal = () => {
                 id: "name",
                 type: "text",
                 name: "name",
-                value: data.name,
+                value: data2.name,
                 className: "mt-1 block w-full py-3 border",
                 autoComplete: "username",
                 onChange: (e) => setData("name", e.target.value)
@@ -2479,7 +2654,7 @@ const Dashboard = ({
 Dashboard.layout = (page) => {
   return /* @__PURE__ */ jsx(DashboardLayout, { children: page });
 };
-const __vite_glob_0_7 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_10 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Dashboard
 }, Symbol.toStringTag, { value: "Module" }));
@@ -2557,18 +2732,18 @@ const HoursModal = (props) => {
     setLoading,
     can
   } = props;
-  const { data, setData, post, processing, errors, reset } = useForm({
+  const { data: data2, setData, post, processing, errors, reset } = useForm({
     day_id: id,
     services: [{ id: null, name: "", start_time: "", end_time: "" }]
   });
-  const [services, setServices] = useState(data.services);
+  const [services, setServices] = useState(data2.services);
   const addField = () => {
     setServices([
       ...services,
       { id: null, name: "", start_time: "", end_time: "" }
     ]);
     setData("services", [
-      ...data.services,
+      ...data2.services,
       { id: null, name: "", start_time: "", end_time: "" }
     ]);
   };
@@ -2631,7 +2806,7 @@ const HoursModal = (props) => {
       dialogContentClasses: "max-w-2xl",
       children: loading ? /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(Loader, {}) }) : /* @__PURE__ */ jsx(Fragment, { children: /* @__PURE__ */ jsxs("form", { onSubmit: submit, children: [
         /* @__PURE__ */ jsxs("div", { children: [
-          data.services.map((service, index) => /* @__PURE__ */ jsxs("div", { className: "", children: [
+          data2.services.map((service, index) => /* @__PURE__ */ jsxs("div", { className: "", children: [
             /* @__PURE__ */ jsxs("div", { className: "flex items-end gap-1 w-full", children: [
               /* @__PURE__ */ jsx(
                 FormFieldLayout,
@@ -2654,7 +2829,7 @@ const HoursModal = (props) => {
                       className: "mt-1 block w-full py-3 border",
                       onChange: (e) => {
                         const newFields = [
-                          ...data.services
+                          ...data2.services
                         ];
                         newFields[index].name = e.target.value;
                         setData(
@@ -2693,7 +2868,7 @@ const HoursModal = (props) => {
                           "0"
                         )}:${minute.toString().padStart(2, "0")}:00`;
                         const newFields = [
-                          ...data.services
+                          ...data2.services
                         ];
                         newFields[index].start_time = time;
                         setData(
@@ -2732,7 +2907,7 @@ const HoursModal = (props) => {
                           "0"
                         )}:${minute.toString().padStart(2, "0")}:00`;
                         const newFields = [
-                          ...data.services
+                          ...data2.services
                         ];
                         newFields[index].end_time = time;
                         setData(
@@ -3078,7 +3253,7 @@ const SelectTamponService = ({ restaurant }) => {
     }
   );
 };
-const __vite_glob_0_11 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_14 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: SelectTamponService
 }, Symbol.toStringTag, { value: "Module" }));
@@ -3241,7 +3416,7 @@ const OpeningHours = ({ openForm, days: days2, hours }) => {
     }
   );
 };
-const __vite_glob_0_10 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_13 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: OpeningHours
 }, Symbol.toStringTag, { value: "Module" }));
@@ -3352,7 +3527,7 @@ const StopReservation = ({ restaurant }) => {
     }
   );
 };
-const __vite_glob_0_12 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_15 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: StopReservation
 }, Symbol.toStringTag, { value: "Module" }));
@@ -3476,7 +3651,7 @@ const AcceptReservation = (props) => {
     }
   );
 };
-const __vite_glob_0_9 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_12 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: AcceptReservation
 }, Symbol.toStringTag, { value: "Module" }));
@@ -3526,11 +3701,11 @@ const Hours = ({ restaurant: resto, auth, days: days2, hours, can }) => {
 Hours.layout = (page) => {
   return /* @__PURE__ */ jsx(DashboardLayout, { children: page });
 };
-const __vite_glob_0_8 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_11 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Hours
 }, Symbol.toStringTag, { value: "Module" }));
-const createSelectors$5 = (_store) => {
+const createSelectors$9 = (_store) => {
   let store = _store;
   store.use = {};
   for (let k of Object.keys(store.getState())) {
@@ -3538,7 +3713,7 @@ const createSelectors$5 = (_store) => {
   }
   return store;
 };
-const useSelectedMessage = createSelectors$5(create((set) => ({
+const useSelectedMessage = createSelectors$9(create((set) => ({
   messageId: null,
   setMessageId: (messageId) => set(() => ({ messageId }))
 })));
@@ -3616,7 +3791,7 @@ const SelectedMessage = (props) => {
     ] })
   ] }) : /* @__PURE__ */ jsx("div", { children: "Pas de message sélectionné" }) }) : /* @__PURE__ */ jsx("div", { children: "Pas de message sélectionné" }) });
 };
-const __vite_glob_0_15 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_18 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: SelectedMessage
 }, Symbol.toStringTag, { value: "Module" }));
@@ -3781,7 +3956,7 @@ const EnableDisableContactMessage = (props) => {
     }
   );
 };
-const __vite_glob_0_14 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_17 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: EnableDisableContactMessage
 }, Symbol.toStringTag, { value: "Module" }));
@@ -3867,7 +4042,7 @@ const Messages = (props) => {
 Messages.layout = (page) => {
   return /* @__PURE__ */ jsx(DashboardLayout, { children: page });
 };
-const __vite_glob_0_13 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_16 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Messages
 }, Symbol.toStringTag, { value: "Module" }));
@@ -3901,7 +4076,7 @@ const AlertModal = ({
   );
 };
 const CellAction$1 = ({
-  data,
+  data: data2,
   can,
   restaurant
 }) => {
@@ -3919,7 +4094,7 @@ const CellAction$1 = ({
     try {
       setLoading(true);
       await axios.post(`/dashboard/${restaurant.id}/newsletter`, {
-        id: data.id
+        id: data2.id
       });
       toast.success("Utilisateur désinscrit");
       router.reload();
@@ -3967,7 +4142,7 @@ const CellAction$1 = ({
     ] })
   ] });
 };
-const __vite_glob_0_16 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_19 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   CellAction: CellAction$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -4035,19 +4210,19 @@ const getTableColumns$1 = (props) => {
   ];
   return tablesColumns;
 };
-const __vite_glob_0_17 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_20 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   getTableColumns: getTableColumns$1
 }, Symbol.toStringTag, { value: "Module" }));
 function DataNewsletterUserTables({
   columns,
-  data,
+  data: data2,
   meta
 }) {
   var _a;
   const [sorting, setSorting] = React__default.useState([]);
   const table = useReactTable({
-    data,
+    data: data2,
     columns,
     getCoreRowModel: getCoreRowModel(),
     // getPaginationRowModel: getPaginationRowModel(),
@@ -4129,7 +4304,7 @@ function DataNewsletterUserTables({
     ] })
   ] });
 }
-const __vite_glob_0_18 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_21 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   DataNewsletterUserTables
 }, Symbol.toStringTag, { value: "Module" }));
@@ -4167,7 +4342,7 @@ Users.layout = (page) => {
     }
   );
 };
-const __vite_glob_0_19 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_22 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Users
 }, Symbol.toStringTag, { value: "Module" }));
@@ -4230,11 +4405,11 @@ const MenuCard = (props) => {
     }
   );
 };
-const __vite_glob_0_61 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_64 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: MenuCard
 }, Symbol.toStringTag, { value: "Module" }));
-const createSelectors$4 = (_store) => {
+const createSelectors$8 = (_store) => {
   let store = _store;
   store.use = {};
   for (let k of Object.keys(store.getState())) {
@@ -4242,26 +4417,13 @@ const createSelectors$4 = (_store) => {
   }
   return store;
 };
-const useContactRestaurantModal = createSelectors$4(create((set) => ({
+const useContactRestaurantModal = createSelectors$8(create((set) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),
   restaurant: null,
   setRestaurant: (restaurant) => set({ restaurant })
 })));
-const SubmitButton = ({ children, disabled, type, variant, ...props }) => {
-  const v = variant ?? "default";
-  return /* @__PURE__ */ jsx(
-    Button,
-    {
-      variant: v,
-      ...props,
-      disabled,
-      type: type || "button",
-      children: disabled ? /* @__PURE__ */ jsx("div", { className: "w-full flex items-center justify-center", children: /* @__PURE__ */ jsx(LoaderCircle, { className: "w-6 h-6 animate animate-spin" }) }) : /* @__PURE__ */ jsx(Fragment, { children })
-    }
-  );
-};
 const Textarea = React.forwardRef(
   ({ className, ...props }, ref) => {
     return /* @__PURE__ */ jsx(
@@ -4284,7 +4446,7 @@ const ContactRestaurant = () => {
   useContactRestaurantModal.use.setRestaurant();
   const contactModalRestaurant = useContactRestaurantModal.use.restaurant();
   const [loading, setLoading] = useState(false);
-  const { data, setData, post, processing, errors, reset } = useForm({
+  const { data: data2, setData, post, processing, errors, reset } = useForm({
     last_name: "",
     first_name: "",
     email: "",
@@ -4355,7 +4517,7 @@ const ContactRestaurant = () => {
                       type: "text",
                       name: "last_name",
                       placeholder: "Votre nom",
-                      value: data.last_name,
+                      value: data2.last_name,
                       className: "mt-1 block w-full py-3 border",
                       onChange: (e) => setData(
                         "last_name",
@@ -4378,7 +4540,7 @@ const ContactRestaurant = () => {
                       type: "text",
                       name: "first_name",
                       placeholder: "Votre prénom",
-                      value: data.first_name,
+                      value: data2.first_name,
                       className: "mt-1 block w-full py-3 border",
                       onChange: (e) => setData(
                         "first_name",
@@ -4403,7 +4565,7 @@ const ContactRestaurant = () => {
                       type: "mail",
                       name: "email",
                       placeholder: "Votre adresse mail",
-                      value: data.email,
+                      value: data2.email,
                       className: "mt-1 block w-full py-3 border",
                       onChange: (e) => setData(
                         "email",
@@ -4426,7 +4588,7 @@ const ContactRestaurant = () => {
                       type: "text",
                       name: "phone",
                       placeholder: "Votre numéro de téléphone",
-                      value: data.phone,
+                      value: data2.phone,
                       className: "mt-1 block w-full py-3 border",
                       onChange: (e) => setData(
                         "phone",
@@ -4450,7 +4612,7 @@ const ContactRestaurant = () => {
                     type: "text",
                     name: "subject",
                     placeholder: "Sujet de votre message",
-                    value: data.subject,
+                    value: data2.subject,
                     className: "mt-1 block w-full py-3 border",
                     onChange: (e) => setData(
                       "subject",
@@ -4621,14 +4783,14 @@ const ContactCard = (props) => {
     }
   );
 };
-const __vite_glob_0_58 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_61 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: ContactCard
 }, Symbol.toStringTag, { value: "Module" }));
 const NewsletterCard = (props) => {
   const { restaurant } = props;
   const {
-    data,
+    data: data2,
     setData,
     post,
     processing,
@@ -4672,7 +4834,7 @@ const NewsletterCard = (props) => {
                 {
                   type: "email",
                   className: "w-full h-11 rounded-3xl",
-                  value: data.email,
+                  value: data2.email,
                   onChange: (e) => setData("email", e.target.value)
                 }
               ),
@@ -4693,7 +4855,7 @@ const NewsletterCard = (props) => {
     }
   );
 };
-const __vite_glob_0_62 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_65 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: NewsletterCard
 }, Symbol.toStringTag, { value: "Module" }));
@@ -4714,7 +4876,7 @@ const DescriptionCard = (props) => {
     }
   );
 };
-const __vite_glob_0_59 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_62 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: DescriptionCard
 }, Symbol.toStringTag, { value: "Module" }));
@@ -4764,7 +4926,7 @@ const Avis$1 = (props) => {
     /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 font-medium", children: [
       formatRating(avis2.average),
       " ",
-      /* @__PURE__ */ jsx(Star, { className: "w-4 h-4 fill-neutral-900" })
+      /* @__PURE__ */ jsx(Star$1, { className: "w-4 h-4 fill-neutral-900" })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
       /* @__PURE__ */ jsx("p", { className: "text-[14px]", children: avis2.comment }),
@@ -4773,7 +4935,7 @@ const Avis$1 = (props) => {
     /* @__PURE__ */ jsx(Separator, { className: "my-2" })
   ] }, avis2.id)) });
 };
-const __vite_glob_0_64 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_67 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Avis$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -4800,7 +4962,7 @@ const Note$1 = (props) => {
             /* @__PURE__ */ jsx("span", { className: "tracking-tighter", children: itemName }),
             /* @__PURE__ */ jsxs("span", { className: "flex items-center gap-1", children: [
               /* @__PURE__ */ jsx("span", { className: "inline-block align-text-bottom", children: formatRating(ratingData.average) }),
-              /* @__PURE__ */ jsx("span", { className: "mb-0.5", children: /* @__PURE__ */ jsx(Star, { className: "w-3 h-3 fill-neutral-900" }) })
+              /* @__PURE__ */ jsx("span", { className: "mb-0.5", children: /* @__PURE__ */ jsx(Star$1, { className: "w-3 h-3 fill-neutral-900" }) })
             ] })
           ]
         },
@@ -4815,7 +4977,7 @@ const Note$1 = (props) => {
     ] })
   ] }) });
 };
-const __vite_glob_0_65 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_68 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Note$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -4848,7 +5010,7 @@ const RatingCard$1 = (props) => {
     }
   );
 };
-const __vite_glob_0_66 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_69 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: RatingCard$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -4900,7 +5062,7 @@ const HoursCard = (props) => {
     }
   );
 };
-const __vite_glob_0_60 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_63 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: HoursCard
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5080,7 +5242,7 @@ const Avatar = ({ can, restaurant }) => {
   const databaseAvatar = restaurant.avatar ? restaurant.avatar : null;
   async function handleAvatarChange(event) {
     if (event.target.files) {
-      data.avatar = event.target.files[0];
+      data2.avatar = event.target.files[0];
       const myFile = event.target.files[0];
       setAvatarSrc(await readFile(myFile));
       setValidateButton(true);
@@ -5088,7 +5250,7 @@ const Avatar = ({ can, restaurant }) => {
     event.target.value = "";
   }
   const {
-    data,
+    data: data2,
     processing,
     errors,
     post,
@@ -5097,7 +5259,7 @@ const Avatar = ({ can, restaurant }) => {
     avatar: null
   });
   const resetAvatar = () => {
-    data.avatar = null;
+    data2.avatar = null;
     setAvatarSrc(null);
     setValidateButton(false);
   };
@@ -5133,7 +5295,7 @@ const Avatar = ({ can, restaurant }) => {
     post(
       route("dashboard.avatar.update", {
         restaurant: restaurant.id,
-        data
+        data: data2
       }),
       {
         preserveScroll: true,
@@ -5208,7 +5370,7 @@ const Avatar = ({ can, restaurant }) => {
 };
 const Banner = ({ can, restaurant }) => {
   const {
-    data,
+    data: data2,
     post,
     delete: deleteForm,
     processing
@@ -5220,14 +5382,14 @@ const Banner = ({ can, restaurant }) => {
   const handleBanner = async (event) => {
     if (event.target.files) {
       const myFile = event.target.files[0];
-      data.banner = event.target.files[0];
+      data2.banner = event.target.files[0];
       setBannerSrc(await readFile(myFile));
       setDisplayFormButton(true);
     }
     event.target.value = "";
   };
   const resetBanner = () => {
-    data.banner = null;
+    data2.banner = null;
     setBannerSrc(null);
     setDisplayFormButton(false);
   };
@@ -5264,7 +5426,7 @@ const Banner = ({ can, restaurant }) => {
     post(
       route("dashboard.banner.update", {
         restaurant: restaurant.id,
-        data
+        data: data2
       }),
       {
         preserveScroll: true,
@@ -5341,7 +5503,7 @@ const Media = ({ can, restaurant }) => {
   const [files, setFiles] = useState([]);
   const [displayButton, setDisplayButton] = useState(false);
   const {
-    data,
+    data: data2,
     post,
     delete: deleteMediaForm,
     processing,
@@ -5392,7 +5554,7 @@ const Media = ({ can, restaurant }) => {
     setDisplayButton(false);
   };
   const saveMedia = () => {
-    data.attachments = files.map((file) => file.file);
+    data2.attachments = files.map((file) => file.file);
     if (!(can == null ? void 0 : can.updateMedia)) {
       toast.error(
         "Vous n'avez pas les droits pour effectuer cette action"
@@ -5402,7 +5564,7 @@ const Media = ({ can, restaurant }) => {
     post(
       route("dashboard.media.update", {
         restaurant: restaurant.id,
-        data
+        data: data2
       }),
       {
         preserveScroll: true,
@@ -5537,7 +5699,7 @@ const UploadFileInput = ({
     /* @__PURE__ */ jsx("p", { className: "text-xs flex-wrap text-center leading-5 text-muted-foreground", children: "PNG, JPG, WEBP jusqu'à 1Go" })
   ] }) }) });
 };
-const __vite_glob_0_63 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_66 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: PageContent
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5639,7 +5801,7 @@ const EnablePage = (props) => {
     ] })
   ] });
 };
-const __vite_glob_0_21 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_24 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: EnablePage
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5656,7 +5818,7 @@ const Page = (props) => {
 Page.layout = (page) => {
   return /* @__PURE__ */ jsx(DashboardLayout, { children: page });
 };
-const __vite_glob_0_20 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_23 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Page
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5666,7 +5828,7 @@ const Avis = (props) => {
     /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-1.5 font-medium", children: [
       formatRating(rating.average),
       " ",
-      /* @__PURE__ */ jsx(Star, { className: "w-4 h-4 fill-primary" })
+      /* @__PURE__ */ jsx(Star$1, { className: "w-4 h-4 fill-primary" })
     ] }),
     /* @__PURE__ */ jsxs("div", { children: [
       /* @__PURE__ */ jsx("p", { className: "text-[14px]", children: rating.comment }),
@@ -5674,7 +5836,7 @@ const Avis = (props) => {
     ] })
   ] }) });
 };
-const __vite_glob_0_24 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_27 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Avis
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5700,7 +5862,7 @@ const Note = (props) => {
             /* @__PURE__ */ jsx("span", { className: "tracking-tighter", children: item.item.name }),
             /* @__PURE__ */ jsxs("span", { className: "flex items-center gap-1", children: [
               /* @__PURE__ */ jsx("span", { className: "inline-block align-text-bottom", children: formatRating(item.note) }),
-              /* @__PURE__ */ jsx("span", { className: "mb-0.5", children: /* @__PURE__ */ jsx(Star, { className: "w-3 h-3 fill-primary" }) })
+              /* @__PURE__ */ jsx("span", { className: "mb-0.5", children: /* @__PURE__ */ jsx(Star$1, { className: "w-3 h-3 fill-primary" }) })
             ] })
           ]
         },
@@ -5709,7 +5871,7 @@ const Note = (props) => {
     }) }) })
   ] }) });
 };
-const __vite_glob_0_25 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_28 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Note
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5742,7 +5904,7 @@ const RatingCard = (props) => {
     }
   );
 };
-const __vite_glob_0_26 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_29 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: RatingCard
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5864,7 +6026,7 @@ const AcceptRating = (props) => {
     }
   );
 };
-const __vite_glob_0_23 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_26 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: AcceptRating
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5899,14 +6061,14 @@ const Ratings = (props) => {
 Ratings.layout = (page) => {
   return /* @__PURE__ */ jsx(DashboardLayout, { children: page });
 };
-const __vite_glob_0_22 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_25 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Ratings
 }, Symbol.toStringTag, { value: "Module" }));
-function classNames(...classes) {
+function classNames$1(...classes) {
   return classes.filter(Boolean).join(" ");
 }
-const CalendarReservation = ({ today, selectedDay, setSelectedDay }) => {
+const CalendarReservation = ({ today, selectedDay, setSelectedDay, containerClassNames, todaySelectedClassNames = "bg-primaryBlue text-white" }) => {
   let [currentMonth, setCurrentMonth] = useState(
     format(today, "MMMM-yyyy", { locale: fr })
   );
@@ -5925,7 +6087,7 @@ const CalendarReservation = ({ today, selectedDay, setSelectedDay }) => {
     let firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 });
     setCurrentMonth(format(firstDayNextMonth, "MMMM-yyyy", { locale: fr }));
   }
-  return /* @__PURE__ */ jsxs("div", { className: "md:pr-14", children: [
+  return /* @__PURE__ */ jsxs("div", { className: cn("md:pr-14", containerClassNames), children: [
     /* @__PURE__ */ jsxs("div", { className: "flex items-center", children: [
       /* @__PURE__ */ jsx("h2", { className: "flex-auto text-sm font-semibold text-muted-foreground capitalize", children: format(firstDayCurrentMonth, "MMMM yyyy", { locale: fr }) }),
       /* @__PURE__ */ jsxs(
@@ -5969,9 +6131,9 @@ const CalendarReservation = ({ today, selectedDay, setSelectedDay }) => {
     /* @__PURE__ */ jsx("div", { className: "grid grid-cols-7 text-sm", children: newDays.map((day, dayIdx) => /* @__PURE__ */ jsx(
       "div",
       {
-        className: classNames(
+        className: classNames$1(
           dayIdx > 6 && "",
-          dayIdx === 0 && colStartClasses[getDay(day)],
+          dayIdx === 0 && colStartClasses$1[getDay(day)],
           "py-2"
         ),
         children: /* @__PURE__ */ jsx(
@@ -5979,12 +6141,12 @@ const CalendarReservation = ({ today, selectedDay, setSelectedDay }) => {
           {
             type: "button",
             onClick: () => setSelectedDay(day),
-            className: classNames(
+            className: classNames$1(
               isEqual(day, selectedDay) && "text-secondary-foreground/80",
               !isEqual(day, selectedDay) && isToday(day) && "text-primaryBlue/80",
               !isEqual(day, selectedDay) && !isToday(day) && isSameMonth(day, firstDayCurrentMonth) && "text-foreground",
               !isEqual(day, selectedDay) && !isToday(day) && !isSameMonth(day, firstDayCurrentMonth) && "text-muted-foreground/60",
-              isEqual(day, selectedDay) && isToday(day) && "bg-primaryBlue text-white",
+              isEqual(day, selectedDay) && isToday(day) && todaySelectedClassNames,
               isEqual(day, selectedDay) && !isToday(day) && "bg-secondary",
               !isEqual(day, selectedDay) && "hover:bg-secondary",
               (isEqual(day, selectedDay) || isToday(day)) && "font-semibold",
@@ -6004,7 +6166,7 @@ const CalendarReservation = ({ today, selectedDay, setSelectedDay }) => {
     )) })
   ] });
 };
-let colStartClasses = [
+let colStartClasses$1 = [
   "col-start-7",
   "col-start-1",
   "col-start-2",
@@ -6013,11 +6175,11 @@ let colStartClasses = [
   "col-start-5",
   "col-start-6"
 ];
-const __vite_glob_0_28 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_31 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: CalendarReservation
 }, Symbol.toStringTag, { value: "Module" }));
-const createSelectors$3 = (_store) => {
+const createSelectors$7 = (_store) => {
   let store = _store;
   store.use = {};
   for (let k of Object.keys(store.getState())) {
@@ -6025,7 +6187,7 @@ const createSelectors$3 = (_store) => {
   }
   return store;
 };
-const useShowReservationModal = createSelectors$3(create(
+const useShowReservationModal = createSelectors$7(create(
   (set) => ({
     isOpen: false,
     onOpen: () => {
@@ -6073,7 +6235,7 @@ const SeeReservation = ({ restaurant }) => {
       setData("reservation_id", reservation.id);
     }
   }, [reservation]);
-  const { data, setData, post, processing, errors, reset } = useForm({
+  const { data: data2, setData, post, processing, errors, reset } = useForm({
     reservation_id: (reservation == null ? void 0 : reservation.id) ?? null,
     status: (reservation == null ? void 0 : reservation.status) ?? null,
     reason: ""
@@ -6208,7 +6370,7 @@ const SeeReservation = ({ restaurant }) => {
     }
   );
 };
-const createSelectors$2 = (_store) => {
+const createSelectors$6 = (_store) => {
   let store = _store;
   store.use = {};
   for (let k of Object.keys(store.getState())) {
@@ -6216,7 +6378,7 @@ const createSelectors$2 = (_store) => {
   }
   return store;
 };
-const useAddAdminReservationModal = createSelectors$2(create((set) => ({
+const useAddAdminReservationModal = createSelectors$6(create((set) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false, restaurantId: null, serviceId: null, date: null, time: null }),
@@ -6265,7 +6427,7 @@ function formatDateToIsoMidDay({ date }) {
   date2.setHours(12);
   return date2.toISOString();
 }
-const createSelectors$1 = (_store) => {
+const createSelectors$5 = (_store) => {
   let store = _store;
   store.use = {};
   for (let k of Object.keys(store.getState())) {
@@ -6273,7 +6435,7 @@ const createSelectors$1 = (_store) => {
   }
   return store;
 };
-const useReservationAndResetAfterAdding = createSelectors$1(
+const useReservationAndResetAfterAdding = createSelectors$5(
   create((set) => ({
     reset: false,
     setReset: (reset) => set({ reset })
@@ -6288,7 +6450,7 @@ const AddAdminReservation = ({}) => {
   const selectedTime = useAddAdminReservationModal.use.time();
   const serviceId = useAddAdminReservationModal.use.serviceId();
   const setResetTheReservation = useReservationAndResetAfterAdding.use.setReset();
-  const { data, setData, post, processing, errors, reset } = useForm({
+  const { data: data2, setData, post, processing, errors, reset } = useForm({
     guests: void 0,
     time: "",
     table_id: void 0,
@@ -6312,18 +6474,18 @@ const AddAdminReservation = ({}) => {
     next,
     goTo
   } = useMultistepForm([
-    /* @__PURE__ */ jsx(Guest, { data, setData, error }),
+    /* @__PURE__ */ jsx(Guest, { data: data2, setData, error }),
     /* @__PURE__ */ jsx(
       TableAndTimeStep,
       {
-        data,
+        data: data2,
         setData,
         tables,
         error,
         timeState
       }
     ),
-    /* @__PURE__ */ jsx(UserStep, { data, setData, error })
+    /* @__PURE__ */ jsx(UserStep, { data: data2, setData, error })
   ]);
   useEffect(() => {
     if (!reservationModalIsOpen) {
@@ -6336,7 +6498,7 @@ const AddAdminReservation = ({}) => {
   useEffect(() => {
     if (serviceId) {
       setData({
-        ...data,
+        ...data2,
         "service_id": serviceId,
         "services": [serviceId]
       });
@@ -6349,7 +6511,7 @@ const AddAdminReservation = ({}) => {
     if (currentStepIndex + 1 === 1) {
       setData("reservation_date", formatDateToIsoMidDay({ date }));
       axios.post(`/${restaurantId}/reservation/create/stepOne`, {
-        guests: data.guests,
+        guests: data2.guests,
         reservation_date: formatDateToIsoMidDay({ date }),
         service_id: serviceId
       }).then((response) => {
@@ -6362,9 +6524,9 @@ const AddAdminReservation = ({}) => {
     }
     if (currentStepIndex + 1 === 2) {
       axios.post(`/${restaurantId}/reservation/create/stepTwo`, {
-        guests: data.guests,
-        time: data.time,
-        table_id: data.table_id,
+        guests: data2.guests,
+        time: data2.time,
+        table_id: data2.table_id,
         reservation_date: formatDateToIsoMidDay({ date }),
         services: [serviceId]
       }).then((response) => {
@@ -6439,7 +6601,7 @@ const AddAdminReservation = ({}) => {
   );
 };
 const Guest = ({
-  data,
+  data: data2,
   setData,
   error
 }) => {
@@ -6457,7 +6619,7 @@ const Guest = ({
           step: 1,
           min: 1,
           name: "guests",
-          value: data.guests ?? "",
+          value: data2.guests ?? "",
           className: "mt-1 block w-full py-3 border",
           onChange: (e) => setData("guests", e.target.value)
         }
@@ -6466,7 +6628,7 @@ const Guest = ({
   ) });
 };
 const TableAndTimeStep = ({
-  data,
+  data: data2,
   setData,
   tables,
   error,
@@ -6512,7 +6674,7 @@ const TableAndTimeStep = ({
               /* @__PURE__ */ jsx(SelectTrigger, { children: /* @__PURE__ */ jsx(
                 SelectValue,
                 {
-                  defaultValue: (_a = data.table_id) == null ? void 0 : _a.toString(),
+                  defaultValue: (_a = data2.table_id) == null ? void 0 : _a.toString(),
                   placeholder: "Choisir une table"
                 }
               ) }),
@@ -6540,7 +6702,7 @@ const TableAndTimeStep = ({
   ] });
 };
 const UserStep = ({
-  data,
+  data: data2,
   setData,
   error
 }) => {
@@ -6555,7 +6717,7 @@ const UserStep = ({
             Input,
             {
               id: "first-name",
-              value: data.first_name ?? "",
+              value: data2.first_name ?? "",
               onChange: (e) => setData("first_name", e.target.value),
               placeholder: "Max"
             }
@@ -6571,7 +6733,7 @@ const UserStep = ({
             Input,
             {
               id: "last-name",
-              value: data.last_name ?? "",
+              value: data2.last_name ?? "",
               onChange: (e) => setData("last_name", e.target.value),
               placeholder: "Robinson"
             }
@@ -6588,7 +6750,7 @@ const UserStep = ({
           children: /* @__PURE__ */ jsx(
             Input,
             {
-              value: data.email ?? "",
+              value: data2.email ?? "",
               onChange: (e) => setData("email", e.target.value),
               id: "email",
               type: "email",
@@ -6605,7 +6767,7 @@ const UserStep = ({
           children: /* @__PURE__ */ jsx(
             Input,
             {
-              value: data.phone ?? "",
+              value: data2.phone ?? "",
               onChange: (e) => setData("phone", e.target.value),
               id: "phone",
               type: "text",
@@ -6793,7 +6955,7 @@ const ReservationItem = ({ reservation }) => {
     reservation.id
   );
 };
-const __vite_glob_0_29 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_32 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: ListOfReservation
 }, Symbol.toStringTag, { value: "Module" }));
@@ -6842,7 +7004,7 @@ const findServicesByDayId = (dayId, restaurant) => {
   const services = restaurant.services.filter((service) => service.day_id === dayId);
   return services.length > 0 ? services : null;
 };
-const Index$3 = ({ auth, restaurant }) => {
+const Index$4 = ({ auth, restaurant }) => {
   const today = startOfToday();
   const [selectedDay, setSelectedDay] = useState(today);
   const selectedDayIndex = getSelectedDayIndex(selectedDay);
@@ -6872,19 +7034,19 @@ const Index$3 = ({ auth, restaurant }) => {
     ] })
   ] });
 };
-Index$3.layout = (page) => {
+Index$4.layout = (page) => {
   return /* @__PURE__ */ jsx(DashboardLayout, { children: page });
 };
-const __vite_glob_0_27 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_30 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Index$3
+  default: Index$4
 }, Symbol.toStringTag, { value: "Module" }));
 const Settings = (props) => {
   const { restaurant, can, isMissingInfo } = props;
   const [showButtons, setShowButtons] = useState(false);
   const [isActive, setIsActive] = useState(restaurant.data.active);
   const [loading, setLoading] = useState(false);
-  const { data, setData, put, processing, errors, reset } = useForm({
+  const { data: data2, setData, put, processing, errors, reset } = useForm({
     name: restaurant.data.name ?? "",
     phone: restaurant.data.phone ?? "",
     email: restaurant.data.email ?? "",
@@ -7018,7 +7180,7 @@ const Settings = (props) => {
                         id: "name",
                         type: "name",
                         name: "name",
-                        value: data.name,
+                        value: data2.name,
                         placeholder: "Nom du restaurant",
                         className: "mt-1 block w-full py-3 border",
                         autoComplete: "username",
@@ -7043,7 +7205,7 @@ const Settings = (props) => {
                         type: "email",
                         name: "email",
                         placeholder: "Adresse mail du restaurant",
-                        value: data.email,
+                        value: data2.email,
                         className: "mt-1 block w-full py-3 border",
                         onChange: (e) => {
                           setData("email", e.target.value);
@@ -7066,7 +7228,7 @@ const Settings = (props) => {
                         type: "phone",
                         name: "phone",
                         placeholder: "Téléphone du restaurant",
-                        value: data.phone,
+                        value: data2.phone,
                         className: "mt-1 block w-full py-3 border",
                         onChange: (e) => {
                           setData("phone", e.target.value);
@@ -7101,7 +7263,7 @@ const Settings = (props) => {
                         type: "address",
                         name: "address",
                         placeholder: "3 rue du Port",
-                        value: data.address,
+                        value: data2.address,
                         className: "mt-1 block w-full py-3 border",
                         autoComplete: "address",
                         onChange: (e) => {
@@ -7125,7 +7287,7 @@ const Settings = (props) => {
                         type: "zip",
                         name: "zip",
                         placeholder: "72000",
-                        value: data.zip,
+                        value: data2.zip,
                         className: "mt-1 block w-full py-3 border",
                         autoComplete: "zip",
                         onChange: (e) => {
@@ -7149,7 +7311,7 @@ const Settings = (props) => {
                         type: "city",
                         name: "city",
                         placeholder: "Le Mans",
-                        value: data.city,
+                        value: data2.city,
                         className: "mt-1 block w-full py-3 border",
                         autoComplete: "city",
                         onChange: (e) => {
@@ -7171,7 +7333,7 @@ const Settings = (props) => {
 Settings.layout = (page) => {
   return /* @__PURE__ */ jsx(DashboardLayout, { children: page });
 };
-const __vite_glob_0_30 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_33 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Settings
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7218,7 +7380,7 @@ const CanNotUseBooking = ({ restaurant }) => {
     ] })
   ] });
 };
-const __vite_glob_0_32 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_35 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: CanNotUseBooking
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7248,7 +7410,7 @@ const CanNotUseMessages = ({ restaurant }) => {
     /* @__PURE__ */ jsx("div", { className: "pl-0.5", children: /* @__PURE__ */ jsx(Error$1, { message: "Votre niveau d'abonnement ne le permet pas." }) })
   ] }) }) });
 };
-const __vite_glob_0_33 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_36 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: CanNotUseMessages
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7313,7 +7475,7 @@ const AdminNotificationBooking = (props) => {
     )
   ] });
 };
-const __vite_glob_0_34 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_37 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: AdminNotificationBooking
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7453,7 +7615,7 @@ const ClientNotificationBooking = (props) => {
     )
   ] });
 };
-const __vite_glob_0_36 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_39 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: ClientNotificationBooking
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7518,7 +7680,7 @@ const AdminNotificationMessages = (props) => {
     )
   ] });
 };
-const __vite_glob_0_35 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_38 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: AdminNotificationMessages
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7592,18 +7754,18 @@ const Notifications = (props) => {
 Notifications.layout = (page) => {
   return /* @__PURE__ */ jsx(DashboardLayout, { children: page });
 };
-const __vite_glob_0_31 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_34 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Notifications
 }, Symbol.toStringTag, { value: "Module" }));
 function DataTableTables({
   columns,
-  data
+  data: data2
 }) {
   var _a;
   const [sorting, setSorting] = React__default.useState([]);
   const table = useReactTable({
-    data,
+    data: data2,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -7664,11 +7826,11 @@ function DataTableTables({
     ] })
   ] });
 }
-const __vite_glob_0_40 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_43 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   DataTableTables
 }, Symbol.toStringTag, { value: "Module" }));
-const createSelectors = (_store) => {
+const createSelectors$4 = (_store) => {
   let store = _store;
   store.use = {};
   for (let k of Object.keys(store.getState())) {
@@ -7676,7 +7838,7 @@ const createSelectors = (_store) => {
   }
   return store;
 };
-const useUpdateTable = createSelectors(
+const useUpdateTable = createSelectors$4(
   create((set) => ({
     openForm: false,
     setOpenForm: (openForm) => set({ openForm }),
@@ -7686,7 +7848,7 @@ const useUpdateTable = createSelectors(
     setRestaurant: (restaurant) => set({ restaurant })
   }))
 );
-const CellAction = ({ data }) => {
+const CellAction = ({ data: data2 }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const setTable = useUpdateTable.use.setTable();
@@ -7697,7 +7859,7 @@ const CellAction = ({ data }) => {
       return;
     try {
       setLoading(true);
-      await axios.delete(`/dashboard/${restaurant.id}/tables/${data.id}`);
+      await axios.delete(`/dashboard/${restaurant.id}/tables/${data2.id}`);
       toast.success("Table supprimée");
       router.reload();
     } catch (error) {
@@ -7734,7 +7896,7 @@ const CellAction = ({ data }) => {
             className: "flex items-center gap-1 cursor-pointer",
             onClick: () => {
               setOpenForm(true);
-              setTable(data);
+              setTable(data2);
             },
             children: [
               /* @__PURE__ */ jsx(Edit$1, { className: "w-4 h-4" }),
@@ -7757,7 +7919,7 @@ const CellAction = ({ data }) => {
     ] })
   ] });
 };
-const __vite_glob_0_38 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_41 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   CellAction
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7832,7 +7994,7 @@ const getTableColumns = () => {
   ];
   return tablesColumns;
 };
-const __vite_glob_0_39 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_42 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   getTableColumns
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7846,7 +8008,7 @@ const Tables = ({ auth, tables, status, restaurant }) => {
   const setTable = useUpdateTable.use.setTable();
   const setRestaurant = useUpdateTable.use.setRestaurant();
   const tableColumns = getTableColumns();
-  const { data, setData, post, processing, errors, reset } = useForm({
+  const { data: data2, setData, post, processing, errors, reset } = useForm({
     id: void 0,
     name: "",
     seats: void 0,
@@ -7923,7 +8085,7 @@ const Tables = ({ auth, tables, status, restaurant }) => {
                     id: "name",
                     type: "text",
                     name: "name",
-                    value: data.name,
+                    value: data2.name,
                     className: "mt-1 block w-full py-3 border",
                     onChange: (e) => setData("name", e.target.value)
                   }
@@ -7945,7 +8107,7 @@ const Tables = ({ auth, tables, status, restaurant }) => {
                     min: 1,
                     step: 1,
                     name: "seats",
-                    value: data.seats ?? "",
+                    value: data2.seats ?? "",
                     className: "mt-1 block w-full py-3 border",
                     onChange: (e) => (
                       //@ts-ignore
@@ -7968,7 +8130,7 @@ const Tables = ({ auth, tables, status, restaurant }) => {
                     onValueChange: (e) => {
                       setData("status", e);
                     },
-                    defaultValue: data.status,
+                    defaultValue: data2.status,
                     children: [
                       /* @__PURE__ */ jsx(SelectTrigger, { children: /* @__PURE__ */ jsx(SelectValue, { placeholder: "Choisir un status" }) }),
                       /* @__PURE__ */ jsx(SelectContent, { id: "status", children: Object.keys(status).map((key) => /* @__PURE__ */ jsx(SelectItem, { value: key, children: status[key] }, key)) })
@@ -8005,14 +8167,14 @@ Tables.layout = (page) => {
     }
   );
 };
-const __vite_glob_0_37 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_40 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Tables
 }, Symbol.toStringTag, { value: "Module" }));
 const Error403 = () => {
   return /* @__PURE__ */ jsx("div", { children: "Error403" });
 };
-const __vite_glob_0_41 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_44 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Error403
 }, Symbol.toStringTag, { value: "Module" }));
@@ -8020,7 +8182,7 @@ const Error404 = () => /* @__PURE__ */ jsxs("div", { children: [
   /* @__PURE__ */ jsx("h1", { children: "Error 404" }),
   /* @__PURE__ */ jsx("p", { children: "Restaurant not found" })
 ] });
-const __vite_glob_0_42 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_45 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Error404
 }, Symbol.toStringTag, { value: "Module" }));
@@ -8361,7 +8523,7 @@ function DeleteUserForm({
   const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
   const passwordInput = useRef(null);
   const {
-    data,
+    data: data2,
     setData,
     delete: destroy,
     processing,
@@ -8416,7 +8578,7 @@ function DeleteUserForm({
                     id: "password",
                     placeholder: "Mot de passe",
                     name: "password",
-                    value: data.password,
+                    value: data2.password,
                     onChange: (e) => setData("password", e.target.value)
                   }
                 )
@@ -8446,7 +8608,7 @@ function DeleteUserForm({
     )
   ] });
 }
-const __vite_glob_0_45 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_48 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: DeleteUserForm
 }, Symbol.toStringTag, { value: "Module" }));
@@ -8456,7 +8618,7 @@ function UpdatePasswordForm({
   const passwordInput = useRef(null);
   const currentPasswordInput = useRef(null);
   const {
-    data,
+    data: data2,
     setData,
     errors,
     put,
@@ -8503,7 +8665,7 @@ function UpdatePasswordForm({
             {
               id: "current_password",
               ref: currentPasswordInput,
-              value: data.current_password,
+              value: data2.current_password,
               onChange: (e) => setData("current_password", e.target.value),
               type: "password",
               autoComplete: "current-password"
@@ -8522,7 +8684,7 @@ function UpdatePasswordForm({
             {
               id: "password",
               ref: passwordInput,
-              value: data.password,
+              value: data2.password,
               onChange: (e) => setData("password", e.target.value),
               type: "password",
               autoComplete: "new-password"
@@ -8540,7 +8702,7 @@ function UpdatePasswordForm({
             Input,
             {
               id: "password_confirmation",
-              value: data.password_confirmation,
+              value: data2.password_confirmation,
               onChange: (e) => setData("password_confirmation", e.target.value),
               type: "password",
               autoComplete: "new-password"
@@ -8565,7 +8727,7 @@ function UpdatePasswordForm({
     ] })
   ] });
 }
-const __vite_glob_0_47 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_50 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: UpdatePasswordForm
 }, Symbol.toStringTag, { value: "Module" }));
@@ -8575,7 +8737,7 @@ function UpdateProfileInformation({
   className = ""
 }) {
   const user = usePage().props.auth.user;
-  const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
+  const { data: data2, setData, patch, errors, processing, recentlySuccessful } = useForm({
     name: user.name,
     email: user.email
   });
@@ -8599,7 +8761,7 @@ function UpdateProfileInformation({
             Input,
             {
               id: "name",
-              value: data.name,
+              value: data2.name,
               onChange: (e) => setData("name", e.target.value),
               required: true,
               autoComplete: "name"
@@ -8618,7 +8780,7 @@ function UpdateProfileInformation({
             {
               id: "email",
               type: "email",
-              value: data.email,
+              value: data2.email,
               onChange: (e) => setData("email", e.target.value),
               required: true,
               autoComplete: "username"
@@ -8660,7 +8822,7 @@ function UpdateProfileInformation({
     ] })
   ] });
 }
-const __vite_glob_0_48 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_51 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: UpdateProfileInformation
 }, Symbol.toStringTag, { value: "Module" }));
@@ -8750,7 +8912,7 @@ function CancelSubscription({
     )
   ] });
 }
-const __vite_glob_0_44 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_47 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: CancelSubscription
 }, Symbol.toStringTag, { value: "Module" }));
@@ -8776,7 +8938,7 @@ const Invoices = ({ invoices }) => {
     ] }, invoice.id))
   ] });
 };
-const __vite_glob_0_46 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_49 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Invoices
 }, Symbol.toStringTag, { value: "Module" }));
@@ -8819,11 +8981,11 @@ function Edit({
     }
   );
 }
-const __vite_glob_0_43 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_46 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Edit
 }, Symbol.toStringTag, { value: "Module" }));
-const Index$2 = (props) => {
+const Index$3 = (props) => {
   const { restaurant } = props;
   const contactModalOnOpen = useContactRestaurantModal.use.onOpen();
   const contactModalSetRestaurant = useContactRestaurantModal.use.setRestaurant();
@@ -8843,9 +9005,9 @@ const Index$2 = (props) => {
     /* @__PURE__ */ jsx(ContactRestaurant, {})
   ] });
 };
-const __vite_glob_0_49 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_52 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Index$2
+  default: Index$3
 }, Symbol.toStringTag, { value: "Module" }));
 const RatingForm = (props) => {
   const { items, ratings, setRatings, setComment } = props;
@@ -8893,7 +9055,7 @@ const RatingForm = (props) => {
                 onClick: () => handleClick(index, item.id),
                 className: "p-2 cursor-pointer",
                 children: /* @__PURE__ */ jsx(
-                  Star,
+                  Star$1,
                   {
                     color: "#FFD700",
                     className: cn(
@@ -8938,7 +9100,7 @@ const RatingForm = (props) => {
     ] })
   ] });
 };
-const __vite_glob_0_51 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_54 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: RatingForm
 }, Symbol.toStringTag, { value: "Module" }));
@@ -9067,7 +9229,7 @@ const StarButton = ({
     }
   ) }) });
 };
-const Index$1 = (props) => {
+const Index$2 = (props) => {
   const { errorMessage, items, token, successMessage } = props;
   const [ratings, setRatings] = useState({});
   const [comment, setComment] = useState(null);
@@ -9079,8 +9241,8 @@ const Index$1 = (props) => {
       // convertir item_id en nombre
       rate
     }));
-    data.notes = ratingsArray;
-    data.comment = comment;
+    data2.notes = ratingsArray;
+    data2.comment = comment;
     post(route("rating.store"), {
       preserveScroll: true,
       onSuccess: () => {
@@ -9093,7 +9255,7 @@ const Index$1 = (props) => {
       }
     });
   };
-  const { data, post, processing, errors } = useForm({
+  const { data: data2, post, processing, errors } = useForm({
     comment: null,
     token,
     notes: [
@@ -9138,11 +9300,11 @@ const Index$1 = (props) => {
     )
   ] }) }) }) });
 };
-const __vite_glob_0_50 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_53 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Index$1
+  default: Index$2
 }, Symbol.toStringTag, { value: "Module" }));
-function Calendar({
+function Calendar$1({
   className,
   classNames: classNames2,
   showOutsideDays = true,
@@ -9191,9 +9353,9 @@ function Calendar({
     }
   );
 }
-Calendar.displayName = "Calendar";
+Calendar$1.displayName = "Calendar";
 const DateInput = ({
-  data,
+  data: data2,
   setData,
   errors,
   before_today,
@@ -9213,12 +9375,12 @@ const DateInput = ({
           className: "w-full mx-auto flex items-center flex-col",
           ref: reservation_date,
           children: /* @__PURE__ */ jsx(
-            Calendar,
+            Calendar$1,
             {
               locale: fr,
               className: " rounded-lg border",
               mode: "single",
-              selected: data.reservation_date,
+              selected: data2.reservation_date,
               onSelect: (e) => {
                 setData("reservation_date", e);
                 setGoNext(true);
@@ -9237,7 +9399,7 @@ const DateInput = ({
     }
   );
 };
-const __vite_glob_0_52 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_55 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: DateInput
 }, Symbol.toStringTag, { value: "Module" }));
@@ -9258,7 +9420,7 @@ function ResaLayout({
   ] });
 }
 const TimeAndGuestSelector = ({
-  data,
+  data: data2,
   setData,
   errors,
   services,
@@ -9328,19 +9490,19 @@ const TimeAndGuestSelector = ({
             onChange: (e) => {
               setData(`guests`, e.target.value);
             },
-            value: data.guests
+            value: data2.guests
           }
         )
       }
     )
   ] }) : /* @__PURE__ */ jsx("small", { children: "Aucun service disponible pour le jour sélectionné" }) }) : /* @__PURE__ */ jsx("div", { children: "Loading" }) });
 };
-const __vite_glob_0_55 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_58 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: TimeAndGuestSelector
 }, Symbol.toStringTag, { value: "Module" }));
 const TableInput = ({
-  data,
+  data: data2,
   setData,
   errors,
   tables,
@@ -9366,7 +9528,7 @@ const TableInput = ({
             /* @__PURE__ */ jsx(SelectTrigger, { children: /* @__PURE__ */ jsx(
               SelectValue,
               {
-                defaultValue: (_a = data.table_id) == null ? void 0 : _a.toString(),
+                defaultValue: (_a = data2.table_id) == null ? void 0 : _a.toString(),
                 placeholder: "Choisir une table"
               }
             ) }),
@@ -9392,11 +9554,11 @@ const TableInput = ({
     }
   ) : /* @__PURE__ */ jsx("small", { children: "Aucune table disponible." }) });
 };
-const __vite_glob_0_54 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_57 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: TableInput
 }, Symbol.toStringTag, { value: "Module" }));
-const Index = ({
+const Index$1 = ({
   before_today,
   disabledDays,
   id,
@@ -9407,7 +9569,7 @@ const Index = ({
   const [services, setServices] = useState([]);
   const [transformedServices, setTransformedServices] = useState([]);
   const [tables, setTables] = useState([]);
-  const { data, setData, reset, post, processing, errors, setError } = useForm({
+  const { data: data2, setData, reset, post, processing, errors, setError } = useForm({
     first_name: "",
     last_name: "",
     email: "",
@@ -9432,7 +9594,7 @@ const Index = ({
     /* @__PURE__ */ jsx(
       DateInput,
       {
-        data,
+        data: data2,
         setData,
         errors,
         setGoNext,
@@ -9446,7 +9608,7 @@ const Index = ({
       {
         timeState,
         loading,
-        data,
+        data: data2,
         setData,
         errors,
         services,
@@ -9456,29 +9618,29 @@ const Index = ({
     /* @__PURE__ */ jsx(
       TableInput,
       {
-        data,
+        data: data2,
         setData,
         errors,
         tables,
         setGoNext
       }
     ),
-    /* @__PURE__ */ jsx(UserInputs, { data, setData, errors }),
+    /* @__PURE__ */ jsx(UserInputs, { data: data2, setData, errors }),
     /* @__PURE__ */ jsx(Success, {})
   ]);
   function onSubmit(e) {
     if (e)
       e.preventDefault();
     let isoDate = null;
-    if (data.reservation_date) {
-      isoDate = formatDateToIsoMidDay({ date: data.reservation_date });
+    if (data2.reservation_date) {
+      isoDate = formatDateToIsoMidDay({ date: data2.reservation_date });
     }
     if (currentStepIndex + 1 === 1) {
       setLoading(true);
       setError("reservation_date", "");
       axios.post(route("reservation.step-one"), {
         reservation_date: isoDate,
-        id: data.id
+        id: data2.id
       }).then((response) => {
         setServices(response.data.data.services);
         setTransformedServices(
@@ -9503,10 +9665,10 @@ const Index = ({
       setError("time", "");
       const servicesIds = services.map((service) => service.id);
       axios.post(route("reservation.step-two", { restaurant: restaurant.id }), {
-        time: data.time,
-        id: data.id,
+        time: data2.time,
+        id: data2.id,
         services: servicesIds,
-        guests: data.guests,
+        guests: data2.guests,
         reservation_date: isoDate
       }).then((response) => {
         setTables(response.data.data.tables);
@@ -9526,7 +9688,7 @@ const Index = ({
     }
     if (currentStepIndex + 1 === 3) {
       axios.post(route("reservation.step-three", { restaurant: restaurant.id }), {
-        table_id: data.table_id
+        table_id: data2.table_id
       }).then((response) => {
         next();
       }).catch((error) => {
@@ -9541,14 +9703,14 @@ const Index = ({
     if (currentStepIndex + 1 === 4) {
       setLoading(true);
       axios.post(route("reservation.step-four", { restaurant: restaurant.id }), {
-        table_id: data.table_id,
+        table_id: data2.table_id,
         reservation_date: isoDate,
-        first_name: data.first_name,
-        last_name: data.last_name,
-        email: data.email,
-        time: data.time,
-        guests: data.guests,
-        service_id: data.service_id
+        first_name: data2.first_name,
+        last_name: data2.last_name,
+        email: data2.email,
+        time: data2.time,
+        guests: data2.guests,
+        service_id: data2.service_id
       }).then((response) => {
         next();
       }).catch((error) => {
@@ -9635,7 +9797,7 @@ const Index = ({
   );
 };
 const UserInputs = ({
-  data,
+  data: data2,
   setData,
   errors
 }) => {
@@ -9651,7 +9813,7 @@ const UserInputs = ({
             Input,
             {
               id: "first-name",
-              value: data.first_name,
+              value: data2.first_name,
               onChange: (e) => setData("first_name", e.target.value),
               placeholder: "Max"
             }
@@ -9668,7 +9830,7 @@ const UserInputs = ({
             Input,
             {
               id: "last-name",
-              value: data.last_name,
+              value: data2.last_name,
               onChange: (e) => setData("last_name", e.target.value),
               placeholder: "Robinson"
             }
@@ -9685,7 +9847,7 @@ const UserInputs = ({
         children: /* @__PURE__ */ jsx(
           Input,
           {
-            value: data.email,
+            value: data2.email,
             onChange: (e) => setData("email", e.target.value),
             id: "email",
             type: "email",
@@ -9699,9 +9861,9 @@ const UserInputs = ({
 const Success = () => {
   return /* @__PURE__ */ jsx("div", { className: "space-y-4" });
 };
-const __vite_glob_0_53 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_56 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: Index
+  default: Index$1
 }, Symbol.toStringTag, { value: "Module" }));
 const RestaurantCanNotAcceptReservation = (props) => {
   const { restaurant } = props;
@@ -9738,7 +9900,7 @@ const RestaurantCanNotAcceptReservation = (props) => {
     }
   );
 };
-const __vite_glob_0_56 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_59 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: RestaurantCanNotAcceptReservation
 }, Symbol.toStringTag, { value: "Module" }));
@@ -9749,7 +9911,7 @@ function Example() {
     /* @__PURE__ */ jsx("p", { className: "mt-6 text-base leading-7 text-muted-foreground", children: "Désolé, le restaurant que vous cherchez n'est pas disponible ou n'existe pas. Veuillez réessayer plus tard." })
   ] }) }) });
 }
-const __vite_glob_0_57 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_60 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Example
 }, Symbol.toStringTag, { value: "Module" }));
@@ -9776,7 +9938,7 @@ const RestaurantPage = (props) => {
 RestaurantPage.layout = (page) => {
   return /* @__PURE__ */ jsx(RestaurantPageLayout, { children: page });
 };
-const __vite_glob_0_67 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_70 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: RestaurantPage
 }, Symbol.toStringTag, { value: "Module" }));
@@ -9790,28 +9952,28 @@ const CreateRestaurant = () => {
   }, [isOpen]);
   return /* @__PURE__ */ jsx(Fragment, { children: /* @__PURE__ */ jsx(ThemeProvider, { children: /* @__PURE__ */ jsx(ModalProvider, {}) }) });
 };
-const __vite_glob_0_68 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_71 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: CreateRestaurant
 }, Symbol.toStringTag, { value: "Module" }));
 const Create = ({
   stripeKey,
   intent,
-  user,
-  products,
   product,
   recurrence
 }) => {
   const [stripe, setStripe] = useState(null);
   const [elements, setElements] = useState(null);
   useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const stripeInstance = window.Stripe(stripeKey);
     setStripe(stripeInstance);
+    setLoading(false);
   }, [stripeKey]);
   useEffect(() => {
     if (stripe) {
+      setLoading(true);
       const clientSecret = intent.client_secret;
       const elementsInstance = stripe.elements({ clientSecret });
       setElements(elementsInstance);
@@ -9823,6 +9985,9 @@ const Create = ({
         paymentElementOptions
       );
       paymentElement.mount("#payment-element");
+      setTimeout(() => {
+        setLoading(false);
+      }, 1500);
     }
   }, [stripe]);
   const onSubmit = async (e) => {
@@ -9864,36 +10029,50 @@ const Create = ({
       }
     }
   };
-  return /* @__PURE__ */ jsxs("div", { className: "w-full", children: [
-    /* @__PURE__ */ jsxs("div", { className: "mb-6", children: [
-      /* @__PURE__ */ jsx("h2", { className: "font-bold text-xl mb-3", children: "Paiement de votre abonnement" }),
-      /* @__PURE__ */ jsxs("div", { className: "bg-primary/15 p-3 rounded-lg text-sm", children: [
-        /* @__PURE__ */ jsx("p", { children: "⭐ 1 mois d'essai gratuit" }),
-        /* @__PURE__ */ jsx("p", { children: "⭐ 1 mois d'essai gratuit" }),
-        /* @__PURE__ */ jsx("p", { children: "⭐ Vous annulez quand vous voulez" })
-      ] })
-    ] }),
-    /* @__PURE__ */ jsxs("form", { id: "payment-form", onSubmit, children: [
-      /* @__PURE__ */ jsx("div", { id: "payment-element" }),
-      /* @__PURE__ */ jsx(
-        Button,
-        {
-          disabled: loading,
-          className: "w-full my-6",
-          id: "card-button",
-          children: loading ? /* @__PURE__ */ jsx(LoaderCircle, { className: "w-6 h-6 animate animate-spin" }) : /* @__PURE__ */ jsx("span", { id: "button-text", children: "Je m'abonne" })
-        }
-      ),
-      /* @__PURE__ */ jsx("div", { id: "payment-message", className: "hidden" })
-    ] })
-  ] });
+  return /* @__PURE__ */ jsx("div", { className: "w-full", children: /* @__PURE__ */ jsxs("form", { id: "payment-form", onSubmit, children: [
+    /* @__PURE__ */ jsx("div", { id: "payment-element" }),
+    /* @__PURE__ */ jsx(
+      Button,
+      {
+        disabled: loading,
+        className: "w-full my-6",
+        id: "card-button",
+        children: loading ? /* @__PURE__ */ jsx(LoaderCircle, { className: "w-6 h-6 animate animate-spin" }) : /* @__PURE__ */ jsx("span", { id: "button-text", children: "Je m'abonne" })
+      }
+    ),
+    /* @__PURE__ */ jsx("div", { id: "payment-message", className: "hidden" })
+  ] }) });
+};
+const StripeLoader = () => {
+  useEffect(() => {
+    if (document.querySelector(`script[src="https://js.stripe.com/v3/"]`)) {
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://js.stripe.com/v3/";
+    script.async = true;
+    script.onload = () => {
+      console.log("Stripe script loaded successfully.");
+    };
+    script.onerror = (error) => {
+      console.error("Failed to load the Stripe script.", error);
+    };
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+  return null;
 };
 function PaiementLayout({
   user,
   header,
   children
 }) {
-  return /* @__PURE__ */ jsx(ToastProvider, { children: /* @__PURE__ */ jsx("div", { className: "min-h-screen bg-gray-100", children: /* @__PURE__ */ jsx("main", { children }) }) });
+  return /* @__PURE__ */ jsx(ToastProvider, { children: /* @__PURE__ */ jsxs("div", { className: "min-h-screen bg-gray-100", children: [
+    /* @__PURE__ */ jsx(StripeLoader, {}),
+    /* @__PURE__ */ jsx("main", { children })
+  ] }) });
 }
 const Subscribe = (props) => {
   const { product, recurrence, price, products } = props;
@@ -9919,10 +10098,8 @@ const Subscribe = (props) => {
           /* @__PURE__ */ jsx("div", { className: "md:w-[55%] rounded-xl min-h-[280px] md:min-h-[320px] bg-background/60 shadow w-full border px-6 py-4  flex  justify-center items-center", children: /* @__PURE__ */ jsx(
             Create,
             {
-              user: props.auth.user,
               stripeKey: props.stripeKey,
               intent: props.intent,
-              products,
               product,
               recurrence
             }
@@ -9932,43 +10109,378 @@ const Subscribe = (props) => {
     ) })
   ] });
 };
-const __vite_glob_0_69 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_72 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Subscribe
 }, Symbol.toStringTag, { value: "Module" }));
-function Welcome({ auth, restaurant }) {
-  const [hidden, setHidden] = useState(false);
+const createSelectors$3 = (_store) => {
+  let store = _store;
+  store.use = {};
+  for (let k of Object.keys(store.getState())) {
+    store.use[k] = () => store((s) => s[k]);
+  }
+  return store;
+};
+const useAuthModal = createSelectors$3(create((set) => ({
+  isOpen: false,
+  onOpen: () => set({ isOpen: true }),
+  onClose: () => set({ isOpen: false }),
+  tab: "login",
+  setTab: (tab) => set({ tab })
+})));
+const RegisterButton = (props) => {
+  const { className } = props;
+  const authModalSetTab = useAuthModal.use.setTab();
+  const authModalOnOpen = useAuthModal.use.onOpen();
+  return /* @__PURE__ */ jsxs(
+    Button,
+    {
+      onClick: () => {
+        authModalSetTab("register");
+        authModalOnOpen();
+      },
+      variant: "default",
+      className: cn("px-5 rounded-full text-muted/90 bg-neutral-800", className),
+      type: "button",
+      children: [
+        /* @__PURE__ */ jsx("span", { children: "Inscription" }),
+        /* @__PURE__ */ jsx(ArrowRight, { className: "w-4 h-4 ml-2" })
+      ]
+    }
+  );
+};
+const createSelectors$2 = (_store) => {
+  let store = _store;
+  store.use = {};
+  for (let k of Object.keys(store.getState())) {
+    store.use[k] = () => store((s) => s[k]);
+  }
+  return store;
+};
+const useUser = createSelectors$2(create((set) => ({
+  user: null,
+  setUser: (user) => set({ user })
+})));
+const GoProfileButton = (props) => {
+  const { className } = props;
+  return /* @__PURE__ */ jsxs(
+    Button,
+    {
+      onClick: () => {
+        router.visit(route("profile.edit"));
+      },
+      variant: "default",
+      className: cn("px-5 rounded-full text-muted/90 bg-neutral-800", className),
+      type: "button",
+      children: [
+        /* @__PURE__ */ jsx("span", { children: "Mon profil" }),
+        /* @__PURE__ */ jsx(ArrowRight, { className: "w-4 h-4 ml-2" })
+      ]
+    }
+  );
+};
+const MobileNav = (props) => {
+  const { tabs, sectionRefs, setActiveTab, activeTab, handleTabClick } = props;
+  const user = useUser.use.user();
+  const [mobileNav, toggleMobileNav] = useCycle(false, true);
+  const buttonTransitionDuration = 0.5;
+  useEffect(() => {
+    if (mobileNav) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [mobileNav]);
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx("div", { className: "md:hidden z-[500] absolute top-2 w-full", children: /* @__PURE__ */ jsx("div", { className: "flex justify-end pr-4", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-2", children: [
+      /* @__PURE__ */ jsx(AnimatePresence, { children: !mobileNav && /* @__PURE__ */ jsx(
+        motion.div,
+        {
+          initial: { opacity: 0 },
+          animate: { opacity: 1 },
+          exit: { opacity: 0 },
+          transition: {
+            duration: buttonTransitionDuration
+          },
+          children: !user ? /* @__PURE__ */ jsx(RegisterButton, {}) : /* @__PURE__ */ jsx(GoProfileButton, {})
+        }
+      ) }),
+      /* @__PURE__ */ jsx(
+        "div",
+        {
+          className: cn(
+            "rounded-full h-14 w-full transition-colors duration-1000",
+            mobileNav ? "bg-welcomePrimary" : "bg-welcomeBackground/50"
+          ),
+          children: /* @__PURE__ */ jsxs(
+            motion.button,
+            {
+              type: "button",
+              animate: mobileNav ? "open" : "closed",
+              onClick: () => toggleMobileNav(),
+              className: "flex flex-col space-y-1 px-4 w-full h-full justify-center rounded-full",
+              children: [
+                /* @__PURE__ */ jsx(
+                  motion.span,
+                  {
+                    variants: {
+                      closed: { rotate: 0, y: 0 },
+                      open: { rotate: 45, y: 5 }
+                    },
+                    className: cn(
+                      "w-6 h-[1px]  block",
+                      !mobileNav ? "bg-black" : "bg-green-200"
+                    )
+                  }
+                ),
+                /* @__PURE__ */ jsx(
+                  motion.span,
+                  {
+                    variants: {
+                      closed: { opacity: 1 },
+                      open: { opacity: 0 }
+                    },
+                    className: cn(
+                      "w-6 h-[1px]  block",
+                      !mobileNav ? "bg-black" : "bg-green-200"
+                    )
+                  }
+                ),
+                /* @__PURE__ */ jsx(
+                  motion.span,
+                  {
+                    variants: {
+                      closed: { rotate: 0, y: 0 },
+                      open: { rotate: -45, y: -5 }
+                    },
+                    className: cn(
+                      "w-6 h-[1px]  block",
+                      !mobileNav ? "bg-black" : "bg-green-200"
+                    )
+                  }
+                )
+              ]
+            }
+          )
+        }
+      )
+    ] }) }) }),
+    /* @__PURE__ */ jsx(AnimatePresence, { children: mobileNav && /* @__PURE__ */ jsx(
+      MotionConfig,
+      {
+        transition: {
+          type: "spring",
+          bounce: 0.1
+        },
+        children: /* @__PURE__ */ jsxs(
+          motion.div,
+          {
+            variants: {
+              hide: {
+                x: "-100%",
+                transition: {
+                  type: "spring",
+                  bounce: 0.1,
+                  when: "afterChildren",
+                  staggerChildren: 0.25
+                }
+              },
+              show: {
+                x: "0%",
+                transition: {
+                  type: "spring",
+                  bounce: 0.1,
+                  when: "beforeChildren",
+                  staggerChildren: 0.25
+                }
+              }
+            },
+            initial: "hide",
+            animate: "show",
+            exit: "hide",
+            className: "z-[51] fixed inset-0 bg-welcomeBackground p-6 flex flex-col justify-center space-y-10 lg:hidden",
+            children: [
+              /* @__PURE__ */ jsxs(
+                motion.ul,
+                {
+                  variants: {
+                    hide: {
+                      y: "25%",
+                      opacity: 0
+                    },
+                    show: {
+                      y: "0%",
+                      opacity: 1
+                    }
+                  },
+                  className: "list-none space-y-6",
+                  children: [
+                    tabs.map((tab, index) => /* @__PURE__ */ jsx("li", { className: "relative", children: /* @__PURE__ */ jsxs(
+                      "p",
+                      {
+                        onClick: () => {
+                          handleTabClick(tab.id);
+                          toggleMobileNav();
+                        },
+                        className: "text-5xl rounded-full transition px-3 py-2 font-normal text-green-850/40 outline-2 outline-welcomeBackground focus-visible:outline",
+                        children: [
+                          activeTab === tab.id && /* @__PURE__ */ jsx(
+                            motion.span,
+                            {
+                              layoutId: "active-pill-mobile",
+                              style: {
+                                borderRadius: 9999
+                              },
+                              className: "bg-welcomePrimary/70 absolute inset-0"
+                            }
+                          ),
+                          /* @__PURE__ */ jsx("span", { className: "relative z-10 mix-blend-darken", children: tab.label })
+                        ]
+                      }
+                    ) }, index)),
+                    /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx(
+                      "a",
+                      {
+                        href: "#",
+                        className: "text-5xl font-semibold text-white",
+                        children: "Link #2"
+                      }
+                    ) }),
+                    /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx(
+                      "a",
+                      {
+                        href: "#",
+                        className: "text-5xl font-semibold text-white",
+                        children: "Link #3"
+                      }
+                    ) })
+                  ]
+                }
+              ),
+              /* @__PURE__ */ jsx(
+                motion.div,
+                {
+                  variants: {
+                    hide: {
+                      y: "25%",
+                      opacity: 0
+                    },
+                    show: {
+                      y: "0%",
+                      opacity: 1
+                    }
+                  },
+                  className: "w-full h-px bg-white/30"
+                }
+              ),
+              /* @__PURE__ */ jsxs(
+                motion.ul,
+                {
+                  variants: {
+                    hide: {
+                      y: "25%",
+                      opacity: 0
+                    },
+                    show: {
+                      y: "0%",
+                      opacity: 1
+                    }
+                  },
+                  className: "list-none flex justify-center gap-x-4",
+                  children: [
+                    /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx("div", { className: "bg-white rounded-lg w-8 h-8" }) }),
+                    /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx("div", { className: "bg-white rounded-lg w-8 h-8" }) }),
+                    /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx("div", { className: "bg-white rounded-lg w-8 h-8" }) })
+                  ]
+                }
+              )
+            ]
+          },
+          "mobile-nav"
+        )
+      }
+    ) })
+  ] });
+};
+const DesktopNav = (props) => {
+  const { tabs, handleTabClick, activeTab, setActiveTab } = props;
   const { scrollY } = useScroll();
-  const sectionRefs = useRef([]);
-  const [activeTab, setActiveTab] = useState("Home");
+  const [hidden, setHidden] = useState(false);
+  const user = useUser.use.user();
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious();
-    if (latest > previous && latest > 150) {
+    if (previous && latest > previous && latest > 150) {
       setHidden(true);
     } else {
       setHidden(false);
     }
   });
-  const tabs = [
-    { id: "Home", label: "Home" },
-    { id: "About", label: "About" },
-    { id: "Services", label: "Services" },
-    { id: "Contact", label: "Contact" }
-  ];
+  return /* @__PURE__ */ jsx(
+    motion.nav,
+    {
+      variants: {
+        visible: { y: 0 },
+        hidden: { y: "-115%" }
+      },
+      animate: hidden ? "hidden" : "visible",
+      transition: {
+        duration: 0.35,
+        ease: "easeInOut"
+      },
+      className: "z-50 fixed top-2 w-full",
+      children: /* @__PURE__ */ jsxs("div", { className: "hidden md:flex items-center justify-between bg-welcomeBackground/30 border border-welcomePrimary/70 backdrop-blur-md h-14 md:w-[700px] md:mx-auto w-full md:px-6 rounded-full", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center md:gap-6", children: [
+          /* @__PURE__ */ jsx("p", { children: "Logo" }),
+          /* @__PURE__ */ jsx("div", { className: "flex items-center md:gap-4", children: tabs.map((tab) => /* @__PURE__ */ jsxs(
+            "p",
+            {
+              onClick: () => handleTabClick(tab.id),
+              className: cn(
+                activeTab === tab.id ? "" : " hover:text-green-900/50",
+                "relative rounded-full transition px-3 py-2 text-sm font-normal text-neutral-800 outline-2 outline-welcomeBackground focus-visible:outline"
+              ),
+              children: [
+                activeTab === tab.id && /* @__PURE__ */ jsx(
+                  m.span,
+                  {
+                    layoutId: "active-pill",
+                    style: { borderRadius: 9999 },
+                    className: "bg-welcomePrimary/70 absolute inset-0"
+                  }
+                ),
+                /* @__PURE__ */ jsx("span", { className: "relative z-10 mix-blend-darken", children: tab.label })
+              ]
+            },
+            tab.id
+          )) })
+        ] }),
+        !user ? /* @__PURE__ */ jsx(RegisterButton, {}) : /* @__PURE__ */ jsx(GoProfileButton, {})
+      ] })
+    }
+  );
+};
+const Index = (props) => {
+  const { tabs, sectionRefs } = props;
+  const [activeTab, setActiveTab] = useState(tabs[0].id);
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const tabId = tabs[sectionRefs.current.indexOf(entry.target)].id;
-          setActiveTab(tabId);
-        }
-      });
-    }, {
-      root: null,
-      rootMargin: "0px",
-      threshold: [0.1, 0.9]
-      // Trigger when 10% of the section is visible
-    });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const tabId = tabs[sectionRefs.current.indexOf(
+              entry.target
+            )].id;
+            setActiveTab(tabId);
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: [0.1, 0.9]
+        // Trigger when 10% of the section is visible
+      }
+    );
     sectionRefs.current.forEach((section) => {
       if (section) {
         observer.observe(section);
@@ -9981,7 +10493,7 @@ function Welcome({ auth, restaurant }) {
         }
       });
     };
-  }, []);
+  }, [sectionRefs, tabs]);
   const handleTabClick = (tabId) => {
     setActiveTab(tabId);
     const section = sectionRefs.current[tabs.findIndex((tab) => tab.id === tabId)];
@@ -9994,50 +10506,1715 @@ function Welcome({ auth, restaurant }) {
       });
     }
   };
-  return /* @__PURE__ */ jsxs("div", { className: "min-h-[300vh] bg-background", children: [
-    /* @__PURE__ */ jsx(Head, { title: "Welcome" }),
-    /* @__PURE__ */ jsx(
-      motion.nav,
-      {
-        className: "z-50 sticky top-2 w-full",
-        children: /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between \n               bg-green-300/50 backdrop-blur-md\n               h-14 md:w-[700px] md:mx-auto w-full md:px-6 rounded-full", children: [
-          /* @__PURE__ */ jsxs("div", { className: "flex items-center md:gap-6", children: [
-            /* @__PURE__ */ jsx("p", { children: "Logo" }),
-            /* @__PURE__ */ jsx("div", { className: "flex items-center md:gap-4", children: tabs.map((tab) => /* @__PURE__ */ jsxs(
-              "p",
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx(DesktopNav, { tabs, sectionRefs, handleTabClick, activeTab, setActiveTab }),
+    /* @__PURE__ */ jsx(MobileNav, { tabs, sectionRefs, handleTabClick, activeTab, setActiveTab })
+  ] });
+};
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
+const LandingCalendar = ({
+  today,
+  selectedDay,
+  setSelectedDay,
+  containerClassNames,
+  todaySelectedClassNames = "bg-primaryBlue text-white"
+}) => {
+  let [currentMonth, setCurrentMonth] = useState(
+    format(today, "MMMM-yyyy", { locale: fr })
+  );
+  let firstDayCurrentMonth = parse(currentMonth, "MMMM-yyyy", /* @__PURE__ */ new Date(), {
+    locale: fr
+  });
+  let newDays = eachDayOfInterval({
+    start: startOfWeek(firstDayCurrentMonth, {
+      weekStartsOn: 1,
+      locale: fr
+    }),
+    end: endOfWeek(endOfMonth(firstDayCurrentMonth), {
+      weekStartsOn: 1,
+      locale: fr
+    })
+  });
+  function nextMonth() {
+    let firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 });
+    setCurrentMonth(format(firstDayNextMonth, "MMMM-yyyy", { locale: fr }));
+  }
+  function previousMonth() {
+    let firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 });
+    setCurrentMonth(format(firstDayNextMonth, "MMMM-yyyy", { locale: fr }));
+  }
+  return /* @__PURE__ */ jsxs("div", { className: cn("md:pr-14", containerClassNames), children: [
+    /* @__PURE__ */ jsxs("div", { className: "flex items-center", children: [
+      /* @__PURE__ */ jsx("h2", { className: "flex-auto text-sm font-semibold text-welcomePrimaryText capitalize", children: format(firstDayCurrentMonth, "MMMM yyyy", { locale: fr }) }),
+      /* @__PURE__ */ jsxs(
+        Button,
+        {
+          onClick: previousMonth,
+          type: "button",
+          size: "sm",
+          variant: "ghost",
+          className: "-my-1.5 flex flex-none items-center justify-center py-0.5 px-1.5 ",
+          children: [
+            /* @__PURE__ */ jsx("span", { className: "sr-only", children: "Previous month" }),
+            /* @__PURE__ */ jsx(
+              ChevronLeftIcon,
               {
-                onClick: () => {
-                  handleTabClick(tab.id);
-                },
-                className: cn(activeTab === tab.id ? "" : " hover:text-green-900/50", "relative rounded-full transition px-3 py-2 text-sm font-normal text-green-850/40 outline-2 outline-green-400 focus-visible:outline"),
-                children: [
-                  activeTab === tab.id && /* @__PURE__ */ jsx(motion.span, { layoutId: "active-pill", style: { borderRadius: 9999 }, className: "bg-green-600/70 absolute inset-0" }),
-                  /* @__PURE__ */ jsx("span", { className: "relative z-10 mix-blend-darken", children: tab.label })
-                ]
-              },
-              tab.id
-            )) })
-          ] }),
-          /* @__PURE__ */ jsx(
-            Button,
+                className: "h-5 w-5 text-muted-foreground",
+                "aria-hidden": "true"
+              }
+            )
+          ]
+        }
+      ),
+      /* @__PURE__ */ jsxs(
+        Button,
+        {
+          onClick: nextMonth,
+          type: "button",
+          size: "sm",
+          variant: "ghost",
+          className: "-my-1.5 flex flex-none items-center justify-center py-0.5 px-1.5",
+          children: [
+            /* @__PURE__ */ jsx("span", { className: "sr-only", children: "Next month" }),
+            /* @__PURE__ */ jsx(
+              ChevronRightIcon$1,
+              {
+                className: "text-muted-foreground h-5 w-5",
+                "aria-hidden": "true"
+              }
+            )
+          ]
+        }
+      )
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "border mt-10 rounded-lg border-welcomePrimary overflow-hidden", children: [
+      /* @__PURE__ */ jsxs("div", { className: "bg-welcomeBackground/60 py-1   grid grid-cols-7 text-center text-xs leading-6 text-secondary-foreground", children: [
+        /* @__PURE__ */ jsx("div", { children: "L" }),
+        /* @__PURE__ */ jsx("div", { children: "Ma" }),
+        /* @__PURE__ */ jsx("div", { children: "Mer" }),
+        /* @__PURE__ */ jsx("div", { children: "J" }),
+        /* @__PURE__ */ jsx("div", { children: "V" }),
+        /* @__PURE__ */ jsx("div", { children: "S" }),
+        /* @__PURE__ */ jsx("div", { children: "D" })
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: "grid grid-cols-7 text-sm bg-white", children: newDays.map((day, dayIdx) => /* @__PURE__ */ jsx(
+        "div",
+        {
+          className: classNames(
+            dayIdx > 6 && "",
+            dayIdx === 0 && colStartClasses[getDay(day)],
+            "py-2"
+          ),
+          children: /* @__PURE__ */ jsx(
+            "button",
             {
-              variant: "default",
-              className: "px-5 rounded-full text-muted/90",
-              children: "Inscription"
+              type: "button",
+              className: classNames(
+                isEqual(day, selectedDay) && "text-secondary-foreground/80",
+                !isEqual(day, selectedDay) && isToday(day) && "text-primaryBlue/80",
+                !isEqual(day, selectedDay) && !isToday(day) && isSameMonth(
+                  day,
+                  firstDayCurrentMonth
+                ) && "text-foreground",
+                !isEqual(day, selectedDay) && !isToday(day) && !isSameMonth(
+                  day,
+                  firstDayCurrentMonth
+                ) && "text-muted-foreground/60",
+                isEqual(day, selectedDay) && isToday(day) && todaySelectedClassNames,
+                isEqual(day, selectedDay) && !isToday(day) && "bg-secondary",
+                !isEqual(day, selectedDay) && "hover:bg-secondary",
+                "mx-auto flex h-9 w-9 items-center justify-center rounded-full relative"
+              ),
+              children: /* @__PURE__ */ jsx("time", { dateTime: format(day, "dd-MM-yyyy"), children: format(day, "d", { locale: fr }) })
+            }
+          )
+        },
+        day.toString()
+      )) })
+    ] })
+  ] });
+};
+let colStartClasses = [
+  "col-start-7",
+  "col-start-1",
+  "col-start-2",
+  "col-start-3",
+  "col-start-4",
+  "col-start-5",
+  "col-start-6"
+];
+const HeroHighlight = ({
+  children,
+  className,
+  containerClassName
+}) => {
+  let mouseX = useMotionValue(0);
+  let mouseY = useMotionValue(0);
+  function handleMouseMove({
+    currentTarget,
+    clientX,
+    clientY
+  }) {
+    if (!currentTarget)
+      return;
+    let { left, top } = currentTarget.getBoundingClientRect();
+    mouseX.set(clientX - left);
+    mouseY.set(clientY - top);
+  }
+  return /* @__PURE__ */ jsxs(
+    "div",
+    {
+      className: cn(
+        "relative h-[40rem] flex  items-center justify-center w-full group",
+        containerClassName
+      ),
+      onMouseMove: handleMouseMove,
+      children: [
+        /* @__PURE__ */ jsx("div", { className: "absolute inset-0 bg-dot-thick-neutral-300 dark:bg-dot-thick-neutral-800  pointer-events-none" }),
+        /* @__PURE__ */ jsx(
+          motion.div,
+          {
+            className: "pointer-events-none bg-dot-thick-green-500 dark:bg-dot-thick-indigo-500   absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100",
+            style: {
+              WebkitMaskImage: useMotionTemplate`
+            radial-gradient(
+              200px circle at ${mouseX}px ${mouseY}px,
+              black 0%,
+              transparent 100%
+            )
+          `,
+              maskImage: useMotionTemplate`
+            radial-gradient(
+              200px circle at ${mouseX}px ${mouseY}px,
+              black 0%,
+              transparent 100%
+            )
+          `
+            }
+          }
+        ),
+        /* @__PURE__ */ jsx("div", { className: cn("relative z-20", className), children })
+      ]
+    }
+  );
+};
+const CalendarCard = () => {
+  const today = startOfToday();
+  const [selectedDay, setSelectedDay] = useState(today);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+  const handleMouseMove = (event) => {
+    const { clientX, clientY } = event;
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = (clientX - (rect.left + rect.width / 2)) / 20;
+    const y = (clientY - (rect.top + rect.height / 2)) / 20;
+    setMousePosition({ x, y });
+  };
+  return /* @__PURE__ */ jsx(
+    m.div,
+    {
+      initial: {
+        opacity: 0,
+        x: -20
+      },
+      animate: {
+        opacity: 1,
+        x: [-20, 5, 0]
+      },
+      transition: {
+        duration: 0.5,
+        delay: 0.2,
+        ease: [0.4, 0, 0.2, 1]
+      },
+      className: "w-full",
+      onMouseMove: handleMouseMove,
+      onMouseEnter: () => setIsHovering(true),
+      onMouseLeave: () => {
+        setIsHovering(false);
+        setMousePosition({ x: 0, y: 0 });
+      },
+      style: {
+        transform: isHovering ? `translate3d(${mousePosition.x}px, ${mousePosition.y}px, 0) scale3d(1, 1, 1)` : "translate3d(0px, 0px, 0) scale3d(1, 1, 1)",
+        transition: "transform 0.1s ease-out"
+      },
+      children: /* @__PURE__ */ jsx(
+        m.div,
+        {
+          style: {
+            transform: isHovering ? `translate3d(${-mousePosition.x}px, ${-mousePosition.y}px, 0) scale3d(1.03, 1.03, 1)` : "translate3d(0px, 0px, 0) scale3d(1, 1, 1)",
+            transition: "transform 0.1s ease-out"
+          },
+          className: " border-welcomePrimary/20 w-full p-1 border-2 rounded-2xl",
+          children: /* @__PURE__ */ jsx("div", { className: " border border-welcomePrimary p-4 rounded-xl bg-welcomeBackground/5", children: /* @__PURE__ */ jsx(HeroHighlight, { containerClassName: "h-fit block", children: /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-5 gap-3", children: [
+            /* @__PURE__ */ jsxs("div", { className: "col-span-2", children: [
+              /* @__PURE__ */ jsx("h3", { className: "font-semibold  text-lg mt-10", children: "Réserver votre table" }),
+              /* @__PURE__ */ jsx("small", { className: "py-3 inline-block italic", children: "Restaurant Le Superbe" }),
+              /* @__PURE__ */ jsxs("p", { className: "flex items-center gap-3 text-sm pb-3", children: [
+                /* @__PURE__ */ jsx("span", { children: /* @__PURE__ */ jsx(Calendar$2, { className: "w-5 h-5 fill-welcomeBackground/80" }) }),
+                /* @__PURE__ */ jsx("span", { children: format(selectedDay, "dd MMMM yyyy", {
+                  locale: fr
+                }) })
+              ] }),
+              /* @__PURE__ */ jsxs("p", { className: "flex items-center gap-3 text-sm pb-3", children: [
+                /* @__PURE__ */ jsx("span", { children: /* @__PURE__ */ jsx(Clock, { className: "w-5 h-5 fill-welcomeBackground/80" }) }),
+                /* @__PURE__ */ jsx("span", { children: format(/* @__PURE__ */ new Date(), "HH:mm", {
+                  locale: fr
+                }) })
+              ] }),
+              /* @__PURE__ */ jsxs("p", { className: "flex items-center gap-3 text-sm", children: [
+                /* @__PURE__ */ jsx("span", { children: /* @__PURE__ */ jsx(User2, { className: "w-5 h-5 fill-welcomeBackground/80" }) }),
+                /* @__PURE__ */ jsx("span", { children: "3 personnes" })
+              ] })
+            ] }),
+            /* @__PURE__ */ jsx("div", { className: "col-span-3", children: /* @__PURE__ */ jsx(
+              LandingCalendar,
+              {
+                today,
+                selectedDay,
+                setSelectedDay,
+                containerClassNames: "md:pr-0",
+                todaySelectedClassNames: "bg-welcomePrimary/60 text-gray-100 font-normal"
+              }
+            ) })
+          ] }) }) })
+        }
+      )
+    }
+  );
+};
+const Text = () => {
+  const user = useUser.use.user();
+  return /* @__PURE__ */ jsxs("div", { className: "px-4 max-w-2xl space-y-5 md:mt-0 mt-24", children: [
+    /* @__PURE__ */ jsx(
+      m.div,
+      {
+        initial: {
+          opacity: 0,
+          y: 20
+        },
+        animate: {
+          opacity: 1,
+          y: [20, -5, 0]
+        },
+        transition: {
+          duration: 0.5,
+          ease: [0.4, 0, 0.2, 1]
+        },
+        className: "max-w-fit",
+        children: /* @__PURE__ */ jsxs("div", { className: "relative rounded-full px-1 py-1 text-sm leading-2 text-foreground ring-[1px] ring-muted hover:ring-neutral-500 transition-all flex items-center gap-1", children: [
+          /* @__PURE__ */ jsx("span", { className: "uppercase text-white bg-neutral-900 py-1 rounded-full px-2 mr-1 text-xs", children: "NEW" }),
+          /* @__PURE__ */ jsxs(
+            Link,
+            {
+              href: "/changelog",
+              className: "flex items-center gap-1",
+              children: [
+                /* @__PURE__ */ jsx("span", { children: "Lancement de la v1 " }),
+                /* @__PURE__ */ jsx(ChevronRight, { className: "w-4 h-4" })
+              ]
             }
           )
         ] })
       }
     ),
-    /* @__PURE__ */ jsx("div", { className: "min-h-screen  flex items-center justify-center", children: /* @__PURE__ */ jsxs("div", { className: "min-h-screen", children: [
-      /* @__PURE__ */ jsx("div", { id: "Home", ref: (el) => sectionRefs.current[0] = el, className: "min-h-screen", children: "HOME" }),
-      /* @__PURE__ */ jsx("div", { id: "About", ref: (el) => sectionRefs.current[1] = el, className: "min-h-screen", children: "About" }),
-      /* @__PURE__ */ jsx("div", { id: "Services", ref: (el) => sectionRefs.current[2] = el, className: "min-h-screen", children: "Services" }),
-      /* @__PURE__ */ jsx("div", { id: "Contact", ref: (el) => sectionRefs.current[3] = el, className: "min-h-screen", children: "Contact" })
+    /* @__PURE__ */ jsxs(
+      m.h1,
+      {
+        initial: {
+          opacity: 0,
+          y: 20
+        },
+        animate: {
+          opacity: 1,
+          y: [20, -5, 0]
+        },
+        transition: {
+          duration: 0.5,
+          ease: [0.4, 0, 0.2, 1]
+        },
+        className: "header-welcome",
+        children: [
+          /* @__PURE__ */ jsxs("span", { className: "text-shadow shadow-gray-400", children: [
+            " ",
+            "Modernisez votre restaurant avec notre outil innovant et",
+            " "
+          ] }),
+          /* @__PURE__ */ jsxs("span", { className: "relative w-fit inline-block", children: [
+            /* @__PURE__ */ jsx("span", { className: "z-1 absolute  md:translate-x-[-2px] md:translate-y-[3px] translate-x-[-1px] translate-y-[2px] text-neutral-800", children: "complet !" }),
+            /* @__PURE__ */ jsx("span", { className: "z-2 relative font-outline-2 text-white", children: "complet !" })
+          ] })
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsx(
+      m.div,
+      {
+        initial: {
+          opacity: 0,
+          y: -60
+        },
+        animate: {
+          opacity: 1,
+          y: [-60, 10, 0]
+        },
+        transition: {
+          duration: 0.5,
+          delay: 0.5,
+          ease: [0.4, 0, 0.2, 1]
+        },
+        className: "w-full flex-wrap",
+        children: "Découvrez TrouveTaTable.fr notre plateforme pour restaurateurs. Concentrez-vous sur vos clients, pas sur la gestion."
+      }
+    ),
+    /* @__PURE__ */ jsx(
+      m.div,
+      {
+        initial: {
+          opacity: 0,
+          x: -30
+        },
+        animate: {
+          opacity: 1,
+          x: [-30, 10, -5, 0]
+        },
+        transition: {
+          duration: 0.5,
+          delay: 0.6,
+          ease: [0.4, 0, 0.2, 1]
+        },
+        children: !user ? /* @__PURE__ */ jsx(RegisterButton, { className: " w-[210px] py-7" }) : /* @__PURE__ */ jsx(GoProfileButton, { className: " w-[210px] py-7" })
+      }
+    )
+  ] });
+};
+const LandingHeader = forwardRef((props, ref) => {
+  return /* @__PURE__ */ jsxs(
+    "div",
+    {
+      id: "Home",
+      ref,
+      ...props,
+      className: "max-w-[1480px] lg:max-h-[600px] mx-auto min-h-screen px-2 flex lg:flex-row flex-col space-y-10 md:space-y-0 items-center md:justify-between justify-center  md:px-8 lg:px-16 md:w-full",
+      children: [
+        /* @__PURE__ */ jsx(Text, {}),
+        /* @__PURE__ */ jsx(CalendarCard, {})
+      ]
+    }
+  );
+});
+const Calendar = ({ cursor2, cardRef2, mouseOnCard2, color }) => {
+  const [gradientCenter2, setGradientCenter2] = useState({
+    cx: "50%",
+    cy: "50%"
+  });
+  useEffect(() => {
+    if (cardRef2.current && cursor2.x !== null && cursor2.y !== null) {
+      const cardRect = cardRef2.current.getBoundingClientRect();
+      const cxPercentage2 = cursor2.x / cardRect.width * 100 - 24;
+      const cyPercentage2 = cursor2.y / cardRect.height * 100;
+      setGradientCenter2({
+        cx: `${cxPercentage2}%`,
+        cy: `${cyPercentage2}%`
+      });
+    }
+  }, [cursor2, cardRef2]);
+  useEffect(() => {
+  }, [gradientCenter2]);
+  return /* @__PURE__ */ jsxs(
+    "svg",
+    {
+      xmlns: "http://www.w3.org/2000/svg",
+      className: "md:w-56 md:h-56 w-44 h-44 duration-200 transition-all",
+      strokeWidth: "0.2",
+      viewBox: "0 0 24 24",
+      children: [
+        /* @__PURE__ */ jsx("defs", { children: /* @__PURE__ */ jsxs(
+          "radialGradient",
+          {
+            id: "emeraldGradient2",
+            gradientUnits: "userSpaceOnUse",
+            r: "30%",
+            cx: gradientCenter2.cx,
+            cy: gradientCenter2.cy,
+            children: [
+              mouseOnCard2 && /* @__PURE__ */ jsx("stop", { stopColor: `${color}` }),
+              /* @__PURE__ */ jsx("stop", { offset: 1, stopColor: "#404040" })
+            ]
+          }
+        ) }),
+        /* @__PURE__ */ jsx(
+          "path",
+          {
+            stroke: "url(#emeraldGradient2)",
+            className: "fill-neutral-950/70",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            d: "M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
+          }
+        )
+      ]
+    }
+  );
+};
+const CardBook = () => {
+  const boldRef = useRef(null);
+  const [cursor2, setCursor2] = useState({ x: 0, y: 0 });
+  const [mouseOnCard2, setMouseOnCard2] = useState(false);
+  const handleMouseMove2 = (e) => {
+    if (boldRef.current !== null) {
+      const rect2 = boldRef.current.getBoundingClientRect();
+      const x2 = e.clientX - rect2.left;
+      const y2 = e.clientY - rect2.top;
+      setCursor2({ x: x2, y: y2 });
+    }
+  };
+  const color = "#D87093";
+  const list = [
+    {
+      title: "Réservations illimités"
+    },
+    {
+      title: "Email de notification"
+    },
+    {
+      title: "Gestion des réservations clients"
+    }
+  ];
+  return /* @__PURE__ */ jsxs(
+    "section",
+    {
+      ref: boldRef,
+      onMouseEnter: () => setMouseOnCard2(true),
+      onMouseLeave: () => setMouseOnCard2(false),
+      onMouseMove: (event) => handleMouseMove2(event),
+      className: "md:w-[30rem] w-full h-fit bg-neutral-800 rounded-lg border border-neutral-600\r\n    flex flex-col md:flex-row p-8  stroke-[0.1] hover:stroke-[0.2]\r\n    ",
+      children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex flex-col w-full md:w-3/5 justify-between", children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-5", children: [
+            /* @__PURE__ */ jsx(
+              CalendarCheck,
+              {
+                className: "w-10 h-10 rounded-lg bg-neutral-950/70 p-2 shadow-inner",
+                style: { stroke: color }
+              }
+            ),
+            /* @__PURE__ */ jsx("h1", { className: "text-neutral-200 tracking-wide text-xl", children: "Réservation" }),
+            /* @__PURE__ */ jsx("p", { className: "-mt-2 text-sm md:text-md text-neutral-500 tracking-wide", children: "Bénéficier d'un système de réservation intégré." })
+          ] }),
+          /* @__PURE__ */ jsx("div", { className: "mt-3 flex flex-col text-neutral-200 tracking-wide text-xs md:text-sm", children: list.map((item, index) => /* @__PURE__ */ jsxs("span", { className: "flex flex-row gap-2", children: [
+            /* @__PURE__ */ jsx(Check, { className: "w-5", style: { color } }),
+            /* @__PURE__ */ jsx("p", { children: item.title })
+          ] }, index)) })
+        ] }),
+        /* @__PURE__ */ jsx("div", { className: "w-full md:w-2/5 flex flex-col place-items-center", children: /* @__PURE__ */ jsx(
+          Calendar,
+          {
+            mouseOnCard2,
+            cursor2,
+            cardRef2: boldRef,
+            color
+          }
+        ) })
+      ]
+    }
+  );
+};
+const Star = ({ cursor2, cardRef2, mouseOnCard2, color }) => {
+  const [gradientCenter2, setGradientCenter2] = useState({
+    cx: "50%",
+    cy: "50%"
+  });
+  useEffect(() => {
+    if (cardRef2.current && cursor2.x !== null && cursor2.y !== null) {
+      const cardRect = cardRef2.current.getBoundingClientRect();
+      const cxPercentage2 = cursor2.x / cardRect.width * 100 - 24;
+      const cyPercentage2 = cursor2.y / cardRect.height * 100;
+      setGradientCenter2({
+        cx: `${cxPercentage2}%`,
+        cy: `${cyPercentage2}%`
+      });
+    }
+  }, [cursor2, cardRef2]);
+  useEffect(() => {
+  }, [gradientCenter2]);
+  return /* @__PURE__ */ jsxs(
+    "svg",
+    {
+      xmlns: "http://www.w3.org/2000/svg",
+      className: "md:w-56 md:h-56 w-44 h-44 duration-200 transition-all",
+      strokeWidth: "0.2",
+      viewBox: "0 0 24 24",
+      children: [
+        /* @__PURE__ */ jsx("defs", { children: /* @__PURE__ */ jsxs(
+          "radialGradient",
+          {
+            id: "emeraldGradient1",
+            gradientUnits: "userSpaceOnUse",
+            r: "30%",
+            cx: gradientCenter2.cx,
+            cy: gradientCenter2.cy,
+            children: [
+              mouseOnCard2 && /* @__PURE__ */ jsx("stop", { stopColor: color }),
+              /* @__PURE__ */ jsx("stop", { offset: 1, stopColor: "#404040" })
+            ]
+          }
+        ) }),
+        /* @__PURE__ */ jsx(
+          "path",
+          {
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            stroke: "url(#emeraldGradient1)",
+            className: "fill-neutral-950/70",
+            d: "M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.562.562 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+          }
+        )
+      ]
+    }
+  );
+};
+const CardRating = () => {
+  const boldRef = useRef(null);
+  const [cursor2, setCursor2] = useState({ x: 0, y: 0 });
+  const [mouseOnCard2, setMouseOnCard2] = useState(false);
+  const handleMouseMove2 = (e) => {
+    if (boldRef.current !== null) {
+      const rect2 = boldRef.current.getBoundingClientRect();
+      const x2 = e.clientX - rect2.left;
+      const y2 = e.clientY - rect2.top;
+      setCursor2({ x: x2, y: y2 });
+    }
+  };
+  const color = "#f9a825";
+  const list = [
+    {
+      title: "Notations et avis clients"
+    },
+    {
+      title: "Modération et contrôle sur les avis clients"
+    },
+    {
+      title: "Avis vérifiés"
+    }
+  ];
+  return /* @__PURE__ */ jsxs(
+    "section",
+    {
+      ref: boldRef,
+      onMouseEnter: () => setMouseOnCard2(true),
+      onMouseLeave: () => setMouseOnCard2(false),
+      onMouseMove: (event) => handleMouseMove2(event),
+      className: "md:w-[30rem] w-full h-fit bg-neutral-800 rounded-lg border border-neutral-600\r\n    flex flex-col md:flex-row p-8  stroke-[0.1] hover:stroke-[0.2]\r\n    ",
+      children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex flex-col w-full md:w-3/5 justify-between", children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-5", children: [
+            /* @__PURE__ */ jsx(
+              StarIcon,
+              {
+                className: "w-10 h-10 rounded-lg bg-neutral-950/70  p-2 shadow-inner",
+                style: { stroke: color }
+              }
+            ),
+            /* @__PURE__ */ jsx("h1", { className: "text-neutral-200 tracking-wide text-xl", children: "Avis client" }),
+            /* @__PURE__ */ jsx("p", { className: "-mt-2 text-sm md:text-md text-neutral-500 tracking-wide", children: "Système d'avis et de notation client. Tous les avis sont vérifiés." })
+          ] }),
+          /* @__PURE__ */ jsx("div", { className: "mt-3 flex flex-col text-neutral-200 tracking-wide text-xs md:text-sm", children: list.map((item, index) => /* @__PURE__ */ jsxs("span", { className: "flex flex-row gap-2", children: [
+            /* @__PURE__ */ jsx(Check, { className: "w-5", style: { color } }),
+            /* @__PURE__ */ jsx("p", { children: item.title })
+          ] }, index)) })
+        ] }),
+        /* @__PURE__ */ jsx("div", { className: "w-full md:w-2/5 flex flex-col place-items-center", children: /* @__PURE__ */ jsx(
+          Star,
+          {
+            mouseOnCard2,
+            cursor2,
+            cardRef2: boldRef,
+            color
+          }
+        ) })
+      ]
+    }
+  );
+};
+const StoreFront = ({ cursor2, cardRef2, mouseOnCard2, color }) => {
+  const [gradientCenter2, setGradientCenter2] = useState({
+    cx: "50%",
+    cy: "50%"
+  });
+  useEffect(() => {
+    if (cardRef2.current && cursor2.x !== null && cursor2.y !== null) {
+      const cardRect = cardRef2.current.getBoundingClientRect();
+      const cxPercentage2 = cursor2.x / cardRect.width * 100 - 24;
+      const cyPercentage2 = cursor2.y / cardRect.height * 100;
+      setGradientCenter2({
+        cx: `${cxPercentage2}%`,
+        cy: `${cyPercentage2}%`
+      });
+    }
+  }, [cursor2, cardRef2]);
+  useEffect(() => {
+  }, [gradientCenter2]);
+  return /* @__PURE__ */ jsxs(
+    "svg",
+    {
+      xmlns: "http://www.w3.org/2000/svg",
+      className: "md:w-56 md:h-56 w-44 h-44 duration-200 transition-all",
+      strokeWidth: "0.2",
+      viewBox: "0 0 24 24",
+      children: [
+        /* @__PURE__ */ jsx("defs", { children: /* @__PURE__ */ jsxs(
+          "radialGradient",
+          {
+            id: "emeraldGradient3",
+            gradientUnits: "userSpaceOnUse",
+            r: "30%",
+            cx: gradientCenter2.cx,
+            cy: gradientCenter2.cy,
+            children: [
+              mouseOnCard2 && /* @__PURE__ */ jsx("stop", { stopColor: color }),
+              /* @__PURE__ */ jsx("stop", { offset: 1, stopColor: "#404040" })
+            ]
+          }
+        ) }),
+        /* @__PURE__ */ jsx(
+          "path",
+          {
+            stroke: "url(#emeraldGradient3)",
+            className: "fill-neutral-950/70",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            d: "M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72l1.189-1.19A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72M6.75 18h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .414.336.75.75.75z"
+          }
+        )
+      ]
+    }
+  );
+};
+const CardStoreFront = () => {
+  const boldRef = useRef(null);
+  const [cursor2, setCursor2] = useState({ x: 0, y: 0 });
+  const [mouseOnCard2, setMouseOnCard2] = useState(false);
+  const handleMouseMove2 = (e) => {
+    if (boldRef.current !== null) {
+      const rect2 = boldRef.current.getBoundingClientRect();
+      const x2 = e.clientX - rect2.left;
+      const y2 = e.clientY - rect2.top;
+      setCursor2({ x: x2, y: y2 });
+    }
+  };
+  const color = "#4682B4";
+  const list = [
+    {
+      title: "URL unique pouvant être partagée"
+    },
+    {
+      title: "Optimisation SEO"
+    },
+    {
+      title: "Intégration de Google Analytic"
+    }
+  ];
+  return /* @__PURE__ */ jsxs(
+    "section",
+    {
+      ref: boldRef,
+      onMouseEnter: () => setMouseOnCard2(true),
+      onMouseLeave: () => setMouseOnCard2(false),
+      onMouseMove: (event) => handleMouseMove2(event),
+      className: "md:w-[30rem] w-full h-fit bg-neutral-800 rounded-lg border border-neutral-600\r\n    flex md:flex-row flex-col p-8  stroke-[0.1] hover:stroke-[0.2]\r\n    ",
+      children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex flex-col w-full md:w-3/5 justify-between", children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-5", children: [
+            /* @__PURE__ */ jsx(
+              ChartBarIcon,
+              {
+                className: "w-10 h-10 rounded-lg bg-neutral-950/70  p-2 shadow-inner",
+                style: { stroke: color }
+              }
+            ),
+            /* @__PURE__ */ jsx("h1", { className: "text-neutral-200 tracking-wide text-xl", children: "Vitrine" }),
+            /* @__PURE__ */ jsx("p", { className: "-mt-2 text-sm md:text-md text-neutral-500 tracking-wide", children: "Boostez votre présence en ligne grâce à une page vitrine dediée à votre établissement." })
+          ] }),
+          /* @__PURE__ */ jsx("div", { className: "mt-3 flex flex-col text-neutral-200 tracking-wide text-xs md:text-sm", children: list.map((item, index) => /* @__PURE__ */ jsxs("span", { className: "flex flex-row gap-2", children: [
+            /* @__PURE__ */ jsx(Check, { className: "w-5", style: { color } }),
+            /* @__PURE__ */ jsx("p", { children: item.title })
+          ] }, index)) })
+        ] }),
+        /* @__PURE__ */ jsx("div", { className: "w-full md:w-2/5 flex flex-col place-items-center", children: /* @__PURE__ */ jsx(
+          StoreFront,
+          {
+            mouseOnCard2,
+            cursor2,
+            cardRef2: boldRef,
+            color
+          }
+        ) })
+      ]
+    }
+  );
+};
+const Features = forwardRef((props, ref) => {
+  return /* @__PURE__ */ jsxs(
+    "div",
+    {
+      className: "w-full",
+      id: "Features",
+      ref,
+      ...props,
+      children: [
+        /* @__PURE__ */ jsx(
+          "div",
+          {
+            className: " bg-neutral-900 lg:h-fit py-10 px-4 md:px-0 min-h-screen",
+            children: /* @__PURE__ */ jsxs("div", { className: "space-y-4 max-w-7xl px-4 mx-auto flex flex-col justify-center", children: [
+              /* @__PURE__ */ jsx("h2", { className: "header-welcome text-welcomeBackground/90 md:text-5xl text-2xl font-bold  mb-5", children: "Nos avantages" }),
+              /* @__PURE__ */ jsxs("div", { className: "space-y-4", children: [
+                /* @__PURE__ */ jsxs("div", { className: "md:flex items-center justify-center gap-4 space-y-4 md:space-y-0", children: [
+                  /* @__PURE__ */ jsx(CardBook, {}),
+                  /* @__PURE__ */ jsx(CardRating, {})
+                ] }),
+                /* @__PURE__ */ jsx("div", { className: "md:flex items-center justify-center", children: /* @__PURE__ */ jsx(CardStoreFront, {}) })
+              ] })
+            ] })
+          }
+        ),
+        /* @__PURE__ */ jsxs("div", { className: " min-h-screen lg:max-h-[600px] md:px-0 max-w-7xl mx-auto px-4 flex flex-col flex-1 justify-center", children: [
+          /* @__PURE__ */ jsx("h3", { className: "mb-10 header-welcome mt-6 md:mt-0 text-neutral-800  md:w-2/3 font-bold md:text-5xl text-2xl", children: "Est-ce que ce service est fait pour moi ?" }),
+          /* @__PURE__ */ jsx("div", { className: "p-4  items-center justify-center", children: /* @__PURE__ */ jsxs("div", { className: "md:flex items-center justify-between", children: [
+            /* @__PURE__ */ jsxs("div", { className: "md:grid md:grid-cols-2 md:w-2/3 gap-5 space-y-5 md:space-y-0", children: [
+              /* @__PURE__ */ jsx(Card, { className: "bg-[#D87093]/5 py-5", children: /* @__PURE__ */ jsxs(CardContent, { children: [
+                /* @__PURE__ */ jsx("span", { className: "font-semibold text-[#D87093]", children: "Vous dirigez un restaurant" }),
+                " ",
+                "et cherchez à automatiser la confirmation des réservations et les rappels par email pour éviter les no-shows."
+              ] }) }),
+              /* @__PURE__ */ jsx(Card, { className: "bg-welcomeBackground/40 py-5", children: /* @__PURE__ */ jsxs(CardContent, { children: [
+                /* @__PURE__ */ jsx("span", { className: "font-semibold text-green-950", children: "Vous êtes restaurateur / gérant d'un restaurant" }),
+                " ",
+                "avez besoin d'une présence en ligne plus forte pour attirer plus de visiteurs."
+              ] }) }),
+              /* @__PURE__ */ jsx(Card, { className: "bg-[#4682B4]/20 py-5", children: /* @__PURE__ */ jsxs(CardContent, { children: [
+                /* @__PURE__ */ jsxs("span", { className: "font-semibold text-[#4682B4]", children: [
+                  "Vous avez un restaurant",
+                  " "
+                ] }),
+                " ",
+                "et vous avez besoin d'un système de réservation performant et intuitif."
+              ] }) }),
+              /* @__PURE__ */ jsx(Card, { children: /* @__PURE__ */ jsxs(CardContent, { className: "bg-[#f9a825]/15 py-5", children: [
+                /* @__PURE__ */ jsxs("span", { className: "font-semibold text-[#f9a825]", children: [
+                  "Votre restaurant",
+                  " "
+                ] }),
+                " ",
+                "veut optimiser les réservations et faciliter la communication avec les clients grâce à un formulaire de contact."
+              ] }) })
+            ] }),
+            /* @__PURE__ */ jsx("div", { className: "md:w-1/3", children: "IMAGE ICI MAIS JE SAIS PAS QUOI" })
+          ] }) })
+        ] })
+      ]
+    }
+  );
+});
+const createSelectors$1 = (_store) => {
+  let store = _store;
+  store.use = {};
+  for (let k of Object.keys(store.getState())) {
+    store.use[k] = () => store((s) => s[k]);
+  }
+  return store;
+};
+const useSubscriptionModal = createSelectors$1(
+  create((set) => ({
+    isOpen: false,
+    onOpen: () => set({ isOpen: true }),
+    onClose: () => set({ isOpen: false }),
+    product: {},
+    setProduct: (product) => set({ product }),
+    recurrence: "monthly",
+    setRecurrence: (recurrence) => set({ recurrence })
+  }))
+);
+const formatPriceFromCents = (price, withCents) => {
+  if (withCents) {
+    return Number(price / 100).toFixed(2).replace(".", ",");
+  } else {
+    return Number(price / 100).toFixed(0).replace(".", ",");
+  }
+};
+const formatPrice = (price) => {
+  return Number(price).toFixed(2).replace(".", ",");
+};
+const transformMonthPriceToYearPrice = (price) => {
+  const newPrice = Number(price * 12);
+  return formatPrice(newPrice);
+};
+const SubscriptionModal = () => {
+  const contactModalOnClose = useSubscriptionModal.use.onClose();
+  const contactModalIsOpen = useSubscriptionModal.use.isOpen();
+  const contactModalProduct = useSubscriptionModal.use.product();
+  const contactModalRecurrence = useSubscriptionModal.use.recurrence();
+  const [stripeKey, setStripeKey] = useState("");
+  const [intent, setIntent] = useState();
+  const [product, setProduct] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          route("subscribe.modal.create", {
+            product: contactModalProduct,
+            recurrence: contactModalRecurrence
+          })
+        );
+        setStripeKey(response.data.data.stripeKey);
+        setIntent(response.data.data.intent);
+        setProduct(response.data.data.product);
+      } catch (error) {
+        console.log("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    if (contactModalIsOpen && contactModalProduct && contactModalRecurrence) {
+      fetchData();
+    }
+  }, [contactModalIsOpen, contactModalProduct, contactModalRecurrence]);
+  return /* @__PURE__ */ jsxs(
+    Modal,
+    {
+      dialogTitleClasses: "text-xl text-primary/80",
+      title: (product == null ? void 0 : product.name) ?? "Abonnement",
+      isOpen: contactModalIsOpen,
+      onClose: contactModalOnClose,
+      dialogContentClasses: "bg-secondary md:max-w-md md:px-8",
+      children: [
+        /* @__PURE__ */ jsx(StripeLoader, {}),
+        isLoading ? /* @__PURE__ */ jsx("div", { className: "flex items-center justify-center h-24", children: /* @__PURE__ */ jsxs(
+          "svg",
+          {
+            className: "animate-spin h-8 w-8 text-primary",
+            viewBox: "0 0 24 24",
+            children: [
+              /* @__PURE__ */ jsx(
+                "circle",
+                {
+                  className: "opacity-25",
+                  cx: "12",
+                  cy: "12",
+                  r: "10",
+                  stroke: "currentColor",
+                  strokeWidth: "4"
+                }
+              ),
+              /* @__PURE__ */ jsx(
+                "path",
+                {
+                  className: "opacity-75",
+                  fill: "currentColor",
+                  d: "M4 12a8 8 0 018-8V0c4.418 0 8 3.582 8 8s-3.582 8-8 8v-4a4 4 0 00-4-4 4 4 0 00-4 4v4a8 8 0 00-4 6 1 1 0 11-2 0 10 10 0 012-6zm2 6a2 2 0 114 0 2 2 0 01-4 0z"
+                }
+              )
+            ]
+          }
+        ) }) : /* @__PURE__ */ jsxs("div", { className: "w-full", children: [
+          /* @__PURE__ */ jsxs("p", { children: [
+            (product == null ? void 0 : product.formatPrices[contactModalRecurrence]) && contactModalRecurrence === "annually" ? transformMonthPriceToYearPrice(
+              product == null ? void 0 : product.formatPrices[contactModalRecurrence]
+            ) : product == null ? void 0 : product.formatPrices[contactModalRecurrence],
+            " ",
+            "€"
+          ] }),
+          /* @__PURE__ */ jsx(
+            Create,
+            {
+              stripeKey,
+              intent,
+              product: contactModalProduct,
+              recurrence: contactModalRecurrence
+            }
+          )
+        ] })
+      ]
+    }
+  );
+};
+const SubscriptionModalButton = (props) => {
+  const { product, frequency } = props;
+  const contactModalOnOpen = useSubscriptionModal.use.onOpen();
+  const contactModalSetProduct = useSubscriptionModal.use.setProduct();
+  const contactModalSetRecurrence = useSubscriptionModal.use.setRecurrence();
+  const user = useUser.use.user();
+  const authModalOnOpen = useAuthModal.use.onOpen();
+  const onClick = () => {
+    if (!user) {
+      authModalOnOpen();
+      toast.error("Vous devez être connecté pour continuer");
+      return;
+    }
+    contactModalOnOpen();
+    contactModalSetProduct(product);
+    contactModalSetRecurrence(frequency);
+  };
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsxs(
+      Button,
+      {
+        type: "button",
+        size: "lg",
+        onClick: () => {
+          onClick();
+        },
+        className: "bg-welcomeBackground text-green-900 hover:bg-welcomeBackground/80",
+        children: [
+          /* @__PURE__ */ jsx("span", { children: "J'en profite" }),
+          /* @__PURE__ */ jsx("span", { children: /* @__PURE__ */ jsx(ArrowRight, { className: "w-5 h-5 " }) })
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsx(SubscriptionModal, {})
+  ] });
+};
+const ProductCard = (props) => {
+  const { products, frequency } = props;
+  return /* @__PURE__ */ jsx(
+    "div",
+    {
+      className: cn(
+        products.mostPopular ? "z-10 bg-secondary shadow-xl ring-1 ring-green-900/10" : "bg-gray-800/80 ring-1 ring-white/10 lg:bg-transparent lg:pb-14 lg:ring-0",
+        "relative rounded-2xl md:col-start-2 border border-welcomePrimary"
+      ),
+      children: /* @__PURE__ */ jsxs("div", { className: "p-8 lg:pt-12 xl:p-10 xl:pt-14", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
+          /* @__PURE__ */ jsx(
+            "h3",
+            {
+              id: products.id,
+              className: cn(
+                products.mostPopular ? "text-gray-900" : "text-white",
+                "text-sm font-semibold leading-6"
+              ),
+              children: products.name
+            }
+          ),
+          products.mostPopular ? /* @__PURE__ */ jsx("p", { className: "rounded-full bg-welcomeBackground text-green-900 px-3.5 py-2 text-xs font-semibold leading-5", children: "Spécial Lancement" }) : null
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between lg:flex-col lg:items-stretch", children: [
+          /* @__PURE__ */ jsxs("div", { className: "mt-2 flex items-center gap-x-4", children: [
+            /* @__PURE__ */ jsxs(
+              "div",
+              {
+                className: cn(
+                  products.mostPopular ? "text-gray-900" : "text-white",
+                  "text-4xl font-bold tracking-tight"
+                ),
+                children: [
+                  /* @__PURE__ */ jsx(
+                    PricingContent,
+                    {
+                      tier: products,
+                      frequency
+                    }
+                  ),
+                  " "
+                ]
+              }
+            ),
+            /* @__PURE__ */ jsxs("div", { className: "text-sm leading-5", children: [
+              /* @__PURE__ */ jsx(
+                "p",
+                {
+                  className: products.mostPopular ? "text-gray-900" : "text-white",
+                  children: "EUR"
+                }
+              ),
+              /* @__PURE__ */ jsxs(
+                "p",
+                {
+                  className: cn(
+                    products.mostPopular ? "text-gray-500" : "text-gray-400",
+                    "capitalize"
+                  ),
+                  children: [
+                    `Abonnement `,
+                    " ",
+                    /* @__PURE__ */ jsx("span", { className: "lowercase", children: frequency.label })
+                  ]
+                }
+              )
+            ] })
+          ] }),
+          /* @__PURE__ */ jsx(ButtonLink, { tier: products, frequency })
+        ] }),
+        /* @__PURE__ */ jsx("div", { className: "mt-8 flow-root sm:mt-10", children: /* @__PURE__ */ jsx(
+          "ul",
+          {
+            role: "list",
+            className: cn(
+              products.mostPopular ? "divide-gray-900/5 border-gray-900/5 text-gray-600" : "divide-white/5 border-white/5 text-white",
+              "-my-2 divide-y border-t text-sm leading-6 lg:border-t-0"
+            ),
+            children: JSON.parse(products.feature).map(
+              (f, index) => /* @__PURE__ */ jsxs("li", { className: "flex gap-x-3 py-2", children: [
+                /* @__PURE__ */ jsx(
+                  CheckIcon,
+                  {
+                    className: cn(
+                      products.mostPopular ? "text-welcomePrimary" : "text-gray-500",
+                      "h-6 w-5 flex-none"
+                    ),
+                    "aria-hidden": "true"
+                  }
+                ),
+                f
+              ] }, index)
+            )
+          }
+        ) })
+      ] })
+    }
+  );
+};
+function PricingContent({ tier, frequency }) {
+  var _a;
+  if (!tier || !frequency) {
+    return null;
+  }
+  const price = ((_a = JSON.parse(tier.price)) == null ? void 0 : _a[frequency.value]) ?? 0;
+  const isContactLink = price === -1;
+  const priceText = isContactLink ? null : `${formatPriceFromCents(price, false)} €`;
+  return /* @__PURE__ */ jsx("div", { className: "w-full", children: priceText && /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx("span", { className: "text-4xl font-bold tracking-tight text-gray-900", children: priceText }),
+    /* @__PURE__ */ jsx("span", { className: "text-sm font-semibold leading-6 text-gray-600", children: frequency.priceSuffix })
+  ] }) });
+}
+const ButtonLink = ({ tier, frequency }) => {
+  if (!tier || !frequency) {
+    return null;
+  }
+  `/subscribe/${tier.id}?recurrence=${frequency.value}`;
+  return /* @__PURE__ */ jsx(Fragment, { children: /* @__PURE__ */ jsx(SubscriptionModalButton, { product: tier, frequency: frequency.value }) });
+};
+const SlideTabs = ({ activeFrequency, setActiveFrequency, frequencies: frequencies2 }) => {
+  const [position, setPosition] = useState({
+    left: 0,
+    width: 0,
+    opacity: 0
+  });
+  return /* @__PURE__ */ jsx("ul", { className: "cursor-pointer bg-white/5 rounded-full p-1 text-center text-xs font-semibold leading-5 text-muted", children: /* @__PURE__ */ jsxs("div", { className: "relative grid grid-cols-2 gap-x-1", children: [
+    frequencies2.map((option) => /* @__PURE__ */ jsx(
+      Tab,
+      {
+        setPosition,
+        isActive: activeFrequency.value === option.value,
+        onClick: () => setActiveFrequency(option),
+        children: option.label
+      },
+      option.value
+    )),
+    /* @__PURE__ */ jsx(Cursor, { position })
+  ] }) });
+};
+const Tab = ({ children, setPosition, isActive, onClick }) => {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (isActive && ref.current) {
+      const { width } = ref.current.getBoundingClientRect();
+      setPosition({
+        left: ref.current.offsetLeft,
+        width,
+        opacity: 1
+      });
+    }
+  }, [isActive, setPosition]);
+  return /* @__PURE__ */ jsx(
+    "li",
+    {
+      ref,
+      onClick,
+      className: `relative cursor-pointer rounded-full px-2.5 py-1 text-white`,
+      children: /* @__PURE__ */ jsx("span", { className: "relative mix-blend-exclusion", children })
+    }
+  );
+};
+const Cursor = ({ position }) => {
+  return /* @__PURE__ */ jsx(
+    m.li,
+    {
+      animate: {
+        ...position
+      },
+      style: { borderRadius: 9999 },
+      transition: {
+        ease: "easeInOut"
+      },
+      className: "bg-welcomeBackground z-[-1] absolute inset-0"
+    }
+  );
+};
+const frequencies = [
+  { value: "monthly", label: "Mensuel", priceSuffix: "/mois" },
+  { value: "annually", label: "Annuel", priceSuffix: "/mois" }
+];
+const StarterPrice = forwardRef(
+  ({ products, ...props }, ref) => {
+    const [frequency, setFrequency] = useState(frequencies[0]);
+    return /* @__PURE__ */ jsxs(
+      "div",
+      {
+        ref,
+        ...props,
+        id: "Price",
+        className: "isolate overflow-hidden",
+        children: [
+          /* @__PURE__ */ jsx("div", { className: "flow-root bg-neutral-900 pb-16 pt-24 sm:pt-32 lg:pb-0", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-7xl px-6 lg:px-8", children: [
+            /* @__PURE__ */ jsxs("div", { className: "relative z-10", children: [
+              /* @__PURE__ */ jsx("h2", { className: "mx-auto max-w-4xl text-center text-5xl font-bold tracking-tight text-white", children: "Prix spécial de lancement." }),
+              /* @__PURE__ */ jsx("p", { className: "mx-auto mt-4 max-w-2xl text-center text-lg leading-8 text-white/60", children: "Un prix unique, tout inclus, tout illimité. Pas de frais cachés. Pas de surprises. Vous avez accès à toutes les fonctionnalités actuelles et à futures de notre plateforme." }),
+              /* @__PURE__ */ jsx("div", { className: "mt-16 flex justify-center", children: /* @__PURE__ */ jsx("fieldset", { "aria-label": "Payment frequency", children: /* @__PURE__ */ jsx(
+                SlideTabs,
+                {
+                  frequencies,
+                  activeFrequency: frequency,
+                  setActiveFrequency: setFrequency
+                }
+              ) }) })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "relative mx-auto mt-10 grid max-w-md grid-cols-1 gap-y-8 lg:mx-0 lg:-mb-14 lg:max-w-none lg:grid-cols-3", children: [
+              /* @__PURE__ */ jsxs(
+                "svg",
+                {
+                  viewBox: "0 0 1208 1024",
+                  "aria-hidden": "true",
+                  className: "absolute -bottom-48 left-1/2 h-[64rem] -translate-x-1/2 translate-y-1/2 [mask-image:radial-gradient(closest-side,white,transparent)] lg:-top-48 lg:bottom-auto lg:translate-y-0",
+                  children: [
+                    /* @__PURE__ */ jsx(
+                      "ellipse",
+                      {
+                        cx: 604,
+                        cy: 512,
+                        fill: "url(#d25c25d4-6d43-4bf9-b9ac-1842a30a4867)",
+                        rx: 604,
+                        ry: 512
+                      }
+                    ),
+                    /* @__PURE__ */ jsx("defs", { children: /* @__PURE__ */ jsxs("radialGradient", { id: "d25c25d4-6d43-4bf9-b9ac-1842a30a4867", children: [
+                      /* @__PURE__ */ jsx("stop", { stopColor: "#D87093" }),
+                      /* @__PURE__ */ jsx("stop", { offset: 1, stopColor: "green" })
+                    ] }) })
+                  ]
+                }
+              ),
+              /* @__PURE__ */ jsx(
+                "div",
+                {
+                  className: "hidden lg:absolute lg:inset-x-px lg:bottom-0 lg:top-4 lg:block lg:rounded-t-2xl lg:bg-welcomePrimary-40 lg:ring-1 lg:ring-white/10",
+                  "aria-hidden": "true"
+                }
+              ),
+              /* @__PURE__ */ jsx(
+                ProductCard,
+                {
+                  products,
+                  frequency
+                }
+              )
+            ] })
+          ] }) }),
+          /* @__PURE__ */ jsx("div", { className: "relative bg-background  md:pt-24" })
+        ]
+      }
+    );
+  }
+);
+const NewsletterSection = () => {
+  return /* @__PURE__ */ jsx("div", { className: " h-[20rem] md:h-[32rem] w-full rounded-md bg-neutral-900 relative flex flex-col items-center justify-center antialiased", children: /* @__PURE__ */ jsxs("div", { className: "max-w-2xl mx-auto p-4", children: [
+    /* @__PURE__ */ jsx("h3", { className: "relative z-10 text-lg md:text-7xl  bg-clip-text text-transparent bg-gradient-to-b from-neutral-400 to-neutral-100  text-center font-sans font-bold", children: "Newsletter" }),
+    /* @__PURE__ */ jsx("p", { className: "text-neutral-300 max-w-lg mx-auto my-2 text-sm text-center relative z-10", children: "Inscrivez-vous à notre newsletter pour recevoir les dernières mises à jour et offres exclusives." }),
+    /* @__PURE__ */ jsx(NewsletterForm, {})
+  ] }) });
+};
+const data = [
+  {
+    date: "Juillet 2024",
+    goal: "Google Analytics",
+    content: "Intégration de votre propre Google Analytics pour suivre les performances de votre page hebergée et de votre formulaire de réservation"
+  },
+  {
+    date: "Aout 2024",
+    goal: "File d'attente",
+    content: "En cas de restaurant complet sur un service. Vos clients pourront s'ajouter à une file d'attente, ainsi en cas d'annulation d'un autre client, ils seront automatiquement prévenus et pourront réserver la table libérée."
+  },
+  {
+    date: "Aout 2024",
+    goal: "Emprunte bancaire",
+    content: "Mise en place d'un enregistrement d'emprunte bancaire pour limiter les no-shows et les annulations de dernière minute. Vos clients, si l'activez, devront payer un montant fixe pour réserver leur table. Ce montant sera déduit de leur addition finale."
+  },
+  {
+    date: "Automne 2024",
+    goal: "Click and Collect",
+    content: "Intégration d'un système de click and collect pour permettre à vos clients de commander et de venir récupérer leur commande en restaurant. Vous pourrez, en supplément, activer le paiement en ligne de leur commande pour limiter les contacts en restaurant."
+  }
+];
+const Roadmap = () => {
+  return /* @__PURE__ */ jsx("div", { className: " overflow-hidden", children: /* @__PURE__ */ jsxs("div", { className: "relative py-24 px-4 w-full max-w-4xl mx-auto", children: [
+    /* @__PURE__ */ jsx("h3", { className: "text-center mb-10 header-welcome text-neutral-700  font-bold md:text-5xl text-2xl", children: "Roadmap" }),
+    /* @__PURE__ */ jsx("div", { className: " px-4 max-w-4xl mx-auto", children: data.map((item, index) => /* @__PURE__ */ jsxs(
+      "div",
+      {
+        className: "relative pl-8 sm:pl-32 py-6 group",
+        children: [
+          /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row items-start mb-1 group-last:before:hidden before:absolute before:left-2 sm:before:left-0 before:h-full before:px-px before:bg-welcomePrimary sm:before:ml-[6.5rem] before:self-start before:-translate-x-1/2 before:translate-y-3 after:absolute after:left-2 sm:after:left-0 after:w-2 after:h-2 after:bg-green-900 after:border-4 after:box-content after:border-welcomeBackground/90 after:rounded-full sm:after:ml-[6.5rem] after:-translate-x-1/2 after:translate-y-1.5", children: [
+            /* @__PURE__ */ jsx("time", { className: "sm:absolute left-1 -translate-x-3 translate-y-0.5 inline-flex items-center justify-center text-xs font-semibold uppercase w-fit min-w-20 h-fit px-1.5 min-h-6 mb-3 sm:mb-0 text-green-900 bg-welcomeBackground rounded-full", children: item.date }),
+            /* @__PURE__ */ jsx("div", { className: "text-neutral-800 text-xl font-bold ", children: item.goal })
+          ] }),
+          /* @__PURE__ */ jsx("div", { className: "text-green-900/80", children: item.content })
+        ]
+      },
+      index
+    )) })
+  ] }) });
+};
+const createSelectors = (_store) => {
+  let store = _store;
+  store.use = {};
+  for (let k of Object.keys(store.getState())) {
+    store.use[k] = () => store((s) => s[k]);
+  }
+  return store;
+};
+const useAppContactModal = createSelectors(create((set) => ({
+  isOpen: false,
+  onOpen: () => set({ isOpen: true }),
+  onClose: () => set({ isOpen: false })
+})));
+const AppContatModal = () => {
+  const contactModalOnClose = useAppContactModal.use.onClose();
+  const contactModalIsOpen = useAppContactModal.use.isOpen();
+  const [loading, setLoading] = useState(false);
+  const { data: data2, setData, post, processing, errors, reset } = useForm({
+    last_name: "",
+    first_name: "",
+    email: "",
+    phone: "",
+    subject: "",
+    content: ""
+  });
+  const onSubmit = (e) => {
+    e.preventDefault();
+    console.log(data2);
+    post(route("contact.create"), {
+      onStart: () => {
+        setLoading(true);
+      },
+      onSuccess: () => {
+        setLoading(false);
+        contactModalOnClose();
+        reset();
+        toast.success("Message envoyé avec succès.");
+      },
+      onError: (e2) => {
+        setLoading(false);
+        console.log(errors, e2);
+      }
+    });
+  };
+  return /* @__PURE__ */ jsx(
+    Modal,
+    {
+      dialogTitleClasses: "text-xl text-primary/80",
+      title: `Contactez-nous`,
+      description: "En cas de besoin contactez-nous. Nous vous répondrons dans les plus brefs délais.",
+      isOpen: contactModalIsOpen,
+      onClose: contactModalOnClose,
+      dialogContentClasses: "bg-green-100",
+      children: /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx("div", { className: "space-y-4 py-2 pb-4", children: /* @__PURE__ */ jsx("form", { onSubmit, children: loading ? /* @__PURE__ */ jsx("div", { className: "flex justify-center", children: /* @__PURE__ */ jsx(Loader, {}) }) : /* @__PURE__ */ jsxs("div", { children: [
+        /* @__PURE__ */ jsxs("div", { className: "space-y-1.5", children: [
+          /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 gap-1", children: [
+            /* @__PURE__ */ jsx(
+              FormFieldLayout,
+              {
+                label: "Nom",
+                fieldName: "last_name",
+                error: errors.last_name,
+                children: /* @__PURE__ */ jsx(
+                  Input,
+                  {
+                    id: "last_name",
+                    type: "text",
+                    name: "last_name",
+                    placeholder: "Votre nom",
+                    value: data2.last_name,
+                    className: "mt-1 block w-full py-3 border",
+                    onChange: (e) => setData(
+                      "last_name",
+                      e.target.value
+                    )
+                  }
+                )
+              }
+            ),
+            /* @__PURE__ */ jsx(
+              FormFieldLayout,
+              {
+                label: "Prénom",
+                fieldName: "first_name",
+                error: errors.first_name,
+                children: /* @__PURE__ */ jsx(
+                  Input,
+                  {
+                    id: "first_name",
+                    type: "text",
+                    name: "first_name",
+                    placeholder: "Votre prénom",
+                    value: data2.first_name,
+                    className: "mt-1 block w-full py-3 border",
+                    onChange: (e) => setData(
+                      "first_name",
+                      e.target.value
+                    )
+                  }
+                )
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-2 gap-1", children: [
+            /* @__PURE__ */ jsx(
+              FormFieldLayout,
+              {
+                label: "Mail",
+                fieldName: "email",
+                error: errors.email,
+                children: /* @__PURE__ */ jsx(
+                  Input,
+                  {
+                    id: "email",
+                    type: "mail",
+                    name: "email",
+                    placeholder: "Votre adresse mail",
+                    value: data2.email,
+                    className: "mt-1 block w-full py-3 border",
+                    onChange: (e) => setData(
+                      "email",
+                      e.target.value
+                    )
+                  }
+                )
+              }
+            ),
+            /* @__PURE__ */ jsx(
+              FormFieldLayout,
+              {
+                label: "Téléphone",
+                fieldName: "phone",
+                error: errors.phone,
+                children: /* @__PURE__ */ jsx(
+                  Input,
+                  {
+                    id: "phone",
+                    type: "text",
+                    name: "phone",
+                    placeholder: "Votre numéro de téléphone",
+                    value: data2.phone,
+                    className: "mt-1 block w-full py-3 border",
+                    onChange: (e) => setData(
+                      "phone",
+                      e.target.value
+                    )
+                  }
+                )
+              }
+            )
+          ] }),
+          /* @__PURE__ */ jsx(
+            FormFieldLayout,
+            {
+              label: "Sujet",
+              fieldName: "subject",
+              error: errors.subject,
+              children: /* @__PURE__ */ jsx(
+                Input,
+                {
+                  id: "subject",
+                  type: "text",
+                  name: "subject",
+                  placeholder: "Sujet de votre message",
+                  value: data2.subject,
+                  className: "mt-1 block w-full py-3 border",
+                  onChange: (e) => setData(
+                    "subject",
+                    e.target.value
+                  )
+                }
+              )
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            FormFieldLayout,
+            {
+              label: "Message",
+              fieldName: "content",
+              error: errors.content,
+              children: /* @__PURE__ */ jsx(
+                Textarea,
+                {
+                  placeholder: "Contenu de votre message",
+                  className: "resize-none",
+                  onChange: (e) => {
+                    setData(
+                      "content",
+                      e.target.value
+                    );
+                  }
+                }
+              )
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "pt-6 space-x-2 flex items-center justify-center w-full", children: [
+          /* @__PURE__ */ jsx(
+            Button,
+            {
+              type: "button",
+              className: "w-full",
+              disabled: loading,
+              variant: "default",
+              onClick: contactModalOnClose,
+              children: "Annuler"
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            SubmitButton,
+            {
+              disabled: loading || processing,
+              className: "w-full  text-green-900 bg-welcomeBackground hover:bg-welcomeBackground/80",
+              type: "submit",
+              children: "Envoyer"
+            }
+          )
+        ] })
+      ] }) }) }) })
+    }
+  );
+};
+const AppContactButton = () => {
+  const contactModalOnOpen = useAppContactModal.use.onOpen();
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsxs(
+      Button,
+      {
+        type: "button",
+        size: "lg",
+        onClick: () => contactModalOnOpen(),
+        className: "bg-welcomeBackground text-green-900 hover:bg-welcomeBackground/80",
+        children: [
+          /* @__PURE__ */ jsxs("span", { children: [
+            " ",
+            /* @__PURE__ */ jsx(
+              ChatBubbleLeftRightIcon,
+              {
+                className: "h-6 w-6 mr-2",
+                "aria-hidden": "true"
+              }
+            )
+          ] }),
+          " ",
+          "Contacter nous"
+        ]
+      }
+    ),
+    /* @__PURE__ */ jsx(AppContatModal, {})
+  ] });
+};
+const Contact = () => {
+  return /* @__PURE__ */ jsxs("div", { className: "md:-mt-20 md:mb-20 h-fit md:h-[32rem] md:bg-transparent isolate bg-white px-6 py-24 sm:py-32 lg:px-8", children: [
+    /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-2xl sm:text-center", children: [
+      /* @__PURE__ */ jsx("h3", { className: "header-welcome  text-neutral-800  font-bold md:text-5xl text-2xl", children: "Nous contacter" }),
+      /* @__PURE__ */ jsx("p", { className: "mt-2 text-lg leading-8 text-gray-600", children: "Pour toutes questions, suggestions ou demandes de support, n'hésitez pas à nous contacter." })
+    ] }),
+    /* @__PURE__ */ jsxs("div", { className: "mx-auto mt-20 max-w-lg space-y-4 md:flex items-center justify-between", children: [
+      /* @__PURE__ */ jsxs("div", { className: "space-y-4 ", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex gap-x-6 items-center", children: [
+          /* @__PURE__ */ jsx("div", { className: "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-welcomeBackground", children: /* @__PURE__ */ jsx(
+            ChatBubbleLeftRightIcon,
+            {
+              className: "h-6 w-6 text-green-900",
+              "aria-hidden": "true"
+            }
+          ) }),
+          /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx("h3", { className: "text-base font-semibold leading-7 text-gray-900", children: "Conseil commercial" }) })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex gap-x-6 items-center", children: [
+          /* @__PURE__ */ jsx("div", { className: "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-welcomeBackground", children: /* @__PURE__ */ jsx(
+            BugAntIcon,
+            {
+              className: "h-6 w-6 text-green-900",
+              "aria-hidden": "true"
+            }
+          ) }),
+          /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx("h3", { className: "text-base font-semibold leading-7 text-gray-900", children: "Rapporter un bug" }) })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex gap-x-6 items-center", children: [
+          /* @__PURE__ */ jsx("div", { className: "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-welcomeBackground", children: /* @__PURE__ */ jsx(
+            ComputerDesktopIcon,
+            {
+              className: "h-6 w-6 text-green-900",
+              "aria-hidden": "true"
+            }
+          ) }),
+          /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx("h3", { className: "text-base font-semibold leading-7 text-gray-900", children: "Support technique" }) })
+        ] }),
+        /* @__PURE__ */ jsxs("div", { className: "flex gap-x-6 items-center", children: [
+          /* @__PURE__ */ jsx("div", { className: "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-welcomeBackground", children: /* @__PURE__ */ jsx(
+            QuestionMarkCircleIcon,
+            {
+              className: "h-6 w-6 text-green-900",
+              "aria-hidden": "true"
+            }
+          ) }),
+          /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx("h3", { className: "text-base font-semibold leading-7 text-gray-900", children: "Autre" }) })
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-center justify-center gap-5", children: [
+        /* @__PURE__ */ jsx(AppContactButton, {}),
+        /* @__PURE__ */ jsx("p", { children: "OU" }),
+        /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-center gap-3", children: [
+          /* @__PURE__ */ jsx(Phone, { className: "h-6 w-6 text-green-900" }),
+          /* @__PURE__ */ jsx("p", { children: /* @__PURE__ */ jsx("a", { href: "tel:+33612345678", children: "06 79 29 68 89" }) })
+        ] })
+      ] })
+    ] })
+  ] });
+};
+const Footer = () => {
+  return /* @__PURE__ */ jsxs("div", { children: [
+    /* @__PURE__ */ jsxs("div", { className: "h-24 flex flex-col items-center justify-center w-full gap-3", children: [
+      /* @__PURE__ */ jsx("div", { children: "LOGO" }),
+      /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsxs("ul", { className: "flex items-center justify-center gap-3 leading-4 text-sm text-green-800 tracking-tight", children: [
+        /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx(
+          Button,
+          {
+            onClick: () => {
+              router.visit(route("home"));
+            },
+            className: "text-green-800",
+            variant: "link",
+            children: "Mentions légales"
+          }
+        ) }),
+        /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx(
+          Button,
+          {
+            onClick: () => {
+              router.visit(route("changelog"));
+            },
+            className: "text-green-800",
+            variant: "link",
+            children: "Changelog"
+          }
+        ) }),
+        /* @__PURE__ */ jsx("li", { children: /* @__PURE__ */ jsx(
+          Button,
+          {
+            onClick: () => {
+              router.visit(route("login"));
+            },
+            className: "text-green-800",
+            variant: "link",
+            children: "Connexion"
+          }
+        ) })
+      ] }) })
+    ] }),
+    /* @__PURE__ */ jsx("div", { className: "border-t h-12 flex items-center justify-center", children: /* @__PURE__ */ jsxs("small", { children: [
+      "© ",
+      (/* @__PURE__ */ new Date()).getFullYear(),
+      " TrouveTaTable.fr - Tous droits réservés"
+    ] }) })
+  ] });
+};
+const AuthModal = () => {
+  const contactModalOnClose = useAuthModal.use.onClose();
+  const contactModalIsOpen = useAuthModal.use.isOpen();
+  const contactModalTab = useAuthModal.use.tab();
+  const [activeTab, setActiveTab] = useState(contactModalTab);
+  function selectTab(tab) {
+    setActiveTab(tab);
+  }
+  useEffect(() => {
+    setActiveTab(contactModalTab);
+  }, [contactModalTab]);
+  return /* @__PURE__ */ jsx(
+    Modal,
+    {
+      title: activeTab === "login" ? "Connexion" : "Inscription",
+      isOpen: contactModalIsOpen,
+      onClose: contactModalOnClose,
+      dialogContentClasses: "md:max-w-md md:px-8",
+      dialogTitleClasses: "text-xl ",
+      description: activeTab === "login" ? "Connectez-vous à votre compte" : "Créez un compte pour continuer",
+      children: /* @__PURE__ */ jsxs("div", { className: "mt-3", children: [
+        activeTab === "login" && /* @__PURE__ */ jsx(
+          LoginForm,
+          {
+            mode: "modal",
+            onAlreadyHaveAnAccountClick: selectTab
+          }
+        ),
+        activeTab === "register" && /* @__PURE__ */ jsx(
+          RegisterForm,
+          {
+            mode: "modal",
+            onAlreadyHaveAnAccountClick: selectTab
+          }
+        )
+      ] })
+    }
+  );
+};
+function Welcome({ auth, products }) {
+  const sectionRefs = useRef([]);
+  const setUser = useUser.use.setUser();
+  useEffect(() => {
+    setUser(auth.user);
+  });
+  const tabs = [
+    { id: "Home", label: "Accueil" },
+    { id: "Features", label: "Nos avantages" },
+    { id: "Price", label: "Prix" },
+    { id: "Contact", label: "Contact" }
+  ];
+  usePage().props;
+  return /* @__PURE__ */ jsxs(ToastProvider, { children: [
+    /* @__PURE__ */ jsx(AuthModal, {}),
+    /* @__PURE__ */ jsx(LazyMotion, { features: domAnimation, children: /* @__PURE__ */ jsxs("div", { className: "min-h-[300vh] bg-background", children: [
+      /* @__PURE__ */ jsx(Head, { title: "Welcome" }),
+      /* @__PURE__ */ jsx(Index, { tabs, sectionRefs }),
+      /* @__PURE__ */ jsx(
+        LandingHeader,
+        {
+          ref: (el) => sectionRefs.current[0] = el
+        }
+      ),
+      /* @__PURE__ */ jsx(Features, { ref: (el) => sectionRefs.current[1] = el }),
+      /* @__PURE__ */ jsx(
+        StarterPrice,
+        {
+          ref: (el) => sectionRefs.current[2] = el,
+          products: products.data
+        }
+      ),
+      /* @__PURE__ */ jsx(Contact, {}),
+      /* @__PURE__ */ jsx(NewsletterSection, {}),
+      /* @__PURE__ */ jsx(Roadmap, {}),
+      "ANIMATIONS CASHIER",
+      /* @__PURE__ */ jsx(Footer, {})
     ] }) })
   ] });
 }
-const __vite_glob_0_70 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_73 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Welcome
 }, Symbol.toStringTag, { value: "Module" }));
@@ -10047,7 +12224,7 @@ createServer(
     page,
     render: ReactDOMServer.renderToString,
     resolve: (name) => {
-      const pages = /* @__PURE__ */ Object.assign({ "./Pages/Auth/ConfirmPassword.tsx": __vite_glob_0_0, "./Pages/Auth/ForgotPassword.tsx": __vite_glob_0_1, "./Pages/Auth/Login.tsx": __vite_glob_0_2, "./Pages/Auth/Register.tsx": __vite_glob_0_3, "./Pages/Auth/ResetPassword.tsx": __vite_glob_0_4, "./Pages/Auth/VerifyEmail.tsx": __vite_glob_0_5, "./Pages/Bye.tsx": __vite_glob_0_6, "./Pages/Dashboard.tsx": __vite_glob_0_7, "./Pages/Dashboard/Hours/Index.tsx": __vite_glob_0_8, "./Pages/Dashboard/Hours/Partials/AcceptReservation.tsx": __vite_glob_0_9, "./Pages/Dashboard/Hours/Partials/OpeningHours.tsx": __vite_glob_0_10, "./Pages/Dashboard/Hours/Partials/SelectTamponService.tsx": __vite_glob_0_11, "./Pages/Dashboard/Hours/Partials/StopReservation.tsx": __vite_glob_0_12, "./Pages/Dashboard/Messages/Index.tsx": __vite_glob_0_13, "./Pages/Dashboard/Messages/Partials/EnableDisableContactMessage.tsx": __vite_glob_0_14, "./Pages/Dashboard/Messages/Partials/SelectedMessage.tsx": __vite_glob_0_15, "./Pages/Dashboard/Newsletter/Partials/cell-action.tsx": __vite_glob_0_16, "./Pages/Dashboard/Newsletter/Partials/columns.tsx": __vite_glob_0_17, "./Pages/Dashboard/Newsletter/Partials/data-table.tsx": __vite_glob_0_18, "./Pages/Dashboard/Newsletter/Users.tsx": __vite_glob_0_19, "./Pages/Dashboard/Page/Index.tsx": __vite_glob_0_20, "./Pages/Dashboard/Page/Partials/EnablePage.tsx": __vite_glob_0_21, "./Pages/Dashboard/Ratings/Index.tsx": __vite_glob_0_22, "./Pages/Dashboard/Ratings/Partials/AcceptRating.tsx": __vite_glob_0_23, "./Pages/Dashboard/Ratings/Rating/Avis.tsx": __vite_glob_0_24, "./Pages/Dashboard/Ratings/Rating/Note.tsx": __vite_glob_0_25, "./Pages/Dashboard/Ratings/Rating/RatingCard.tsx": __vite_glob_0_26, "./Pages/Dashboard/Reservation/Index.tsx": __vite_glob_0_27, "./Pages/Dashboard/Reservation/Partials/CalendarReservation.tsx": __vite_glob_0_28, "./Pages/Dashboard/Reservation/Partials/ListOfReservation.tsx": __vite_glob_0_29, "./Pages/Dashboard/Settings/Index.tsx": __vite_glob_0_30, "./Pages/Dashboard/Settings/Notifications/Index.tsx": __vite_glob_0_31, "./Pages/Dashboard/Settings/Notifications/Partials/CanNotUseBooking.tsx": __vite_glob_0_32, "./Pages/Dashboard/Settings/Notifications/Partials/CanNotUseMessages.tsx": __vite_glob_0_33, "./Pages/Dashboard/Settings/Notifications/Partials/Forms/AdminNotificationBooking.tsx": __vite_glob_0_34, "./Pages/Dashboard/Settings/Notifications/Partials/Forms/AdminNotificationMessages.tsx": __vite_glob_0_35, "./Pages/Dashboard/Settings/Notifications/Partials/Forms/ClientNotificationBooking.tsx": __vite_glob_0_36, "./Pages/Dashboard/Tables/Index.tsx": __vite_glob_0_37, "./Pages/Dashboard/Tables/Partials/cell-action.tsx": __vite_glob_0_38, "./Pages/Dashboard/Tables/Partials/columns.tsx": __vite_glob_0_39, "./Pages/Dashboard/Tables/Partials/data-table.tsx": __vite_glob_0_40, "./Pages/Error403.tsx": __vite_glob_0_41, "./Pages/Error404.tsx": __vite_glob_0_42, "./Pages/Profile/Edit.tsx": __vite_glob_0_43, "./Pages/Profile/Partials/CancelSubscription.tsx": __vite_glob_0_44, "./Pages/Profile/Partials/DeleteUserForm.tsx": __vite_glob_0_45, "./Pages/Profile/Partials/Invoices.tsx": __vite_glob_0_46, "./Pages/Profile/Partials/UpdatePasswordForm.tsx": __vite_glob_0_47, "./Pages/Profile/Partials/UpdateProfileInformationForm.tsx": __vite_glob_0_48, "./Pages/Public/Contact/Index.tsx": __vite_glob_0_49, "./Pages/Public/Rating/Index.tsx": __vite_glob_0_50, "./Pages/Public/Rating/Partials/Form.tsx": __vite_glob_0_51, "./Pages/Public/Reservation/Form/DateInput.tsx": __vite_glob_0_52, "./Pages/Public/Reservation/Form/Index.tsx": __vite_glob_0_53, "./Pages/Public/Reservation/Form/TableInput.tsx": __vite_glob_0_54, "./Pages/Public/Reservation/Form/TimeAndGuestSelector.tsx": __vite_glob_0_55, "./Pages/Public/Reservation/RestaurantCanNotAcceptReservation.tsx": __vite_glob_0_56, "./Pages/Public/Restaurant/PageNotAvailable.tsx": __vite_glob_0_57, "./Pages/Public/Restaurant/Partials/ContactCard.tsx": __vite_glob_0_58, "./Pages/Public/Restaurant/Partials/DescriptionCard.tsx": __vite_glob_0_59, "./Pages/Public/Restaurant/Partials/HoursCard.tsx": __vite_glob_0_60, "./Pages/Public/Restaurant/Partials/MenuCard.tsx": __vite_glob_0_61, "./Pages/Public/Restaurant/Partials/NewsletterCard.tsx": __vite_glob_0_62, "./Pages/Public/Restaurant/Partials/PageContent.tsx": __vite_glob_0_63, "./Pages/Public/Restaurant/Partials/Rating/Avis.tsx": __vite_glob_0_64, "./Pages/Public/Restaurant/Partials/Rating/Note.tsx": __vite_glob_0_65, "./Pages/Public/Restaurant/Partials/Rating/RatingCard.tsx": __vite_glob_0_66, "./Pages/Public/Restaurant/RestaurantPage.tsx": __vite_glob_0_67, "./Pages/Restaurant/Create/CreateRestaurant.tsx": __vite_glob_0_68, "./Pages/Subscribe/Index.tsx": __vite_glob_0_69, "./Pages/Welcome.tsx": __vite_glob_0_70 });
+      const pages = /* @__PURE__ */ Object.assign({ "./Pages/Auth/ConfirmPassword.tsx": __vite_glob_0_0, "./Pages/Auth/ForgotPassword.tsx": __vite_glob_0_1, "./Pages/Auth/Login.tsx": __vite_glob_0_2, "./Pages/Auth/Partials/Login/LoginForm.tsx": __vite_glob_0_3, "./Pages/Auth/Partials/Register/RegisterForm.tsx": __vite_glob_0_4, "./Pages/Auth/Register.tsx": __vite_glob_0_5, "./Pages/Auth/ResetPassword.tsx": __vite_glob_0_6, "./Pages/Auth/VerifyEmail.tsx": __vite_glob_0_7, "./Pages/Bye.tsx": __vite_glob_0_8, "./Pages/Changelog/Index.tsx": __vite_glob_0_9, "./Pages/Dashboard.tsx": __vite_glob_0_10, "./Pages/Dashboard/Hours/Index.tsx": __vite_glob_0_11, "./Pages/Dashboard/Hours/Partials/AcceptReservation.tsx": __vite_glob_0_12, "./Pages/Dashboard/Hours/Partials/OpeningHours.tsx": __vite_glob_0_13, "./Pages/Dashboard/Hours/Partials/SelectTamponService.tsx": __vite_glob_0_14, "./Pages/Dashboard/Hours/Partials/StopReservation.tsx": __vite_glob_0_15, "./Pages/Dashboard/Messages/Index.tsx": __vite_glob_0_16, "./Pages/Dashboard/Messages/Partials/EnableDisableContactMessage.tsx": __vite_glob_0_17, "./Pages/Dashboard/Messages/Partials/SelectedMessage.tsx": __vite_glob_0_18, "./Pages/Dashboard/Newsletter/Partials/cell-action.tsx": __vite_glob_0_19, "./Pages/Dashboard/Newsletter/Partials/columns.tsx": __vite_glob_0_20, "./Pages/Dashboard/Newsletter/Partials/data-table.tsx": __vite_glob_0_21, "./Pages/Dashboard/Newsletter/Users.tsx": __vite_glob_0_22, "./Pages/Dashboard/Page/Index.tsx": __vite_glob_0_23, "./Pages/Dashboard/Page/Partials/EnablePage.tsx": __vite_glob_0_24, "./Pages/Dashboard/Ratings/Index.tsx": __vite_glob_0_25, "./Pages/Dashboard/Ratings/Partials/AcceptRating.tsx": __vite_glob_0_26, "./Pages/Dashboard/Ratings/Rating/Avis.tsx": __vite_glob_0_27, "./Pages/Dashboard/Ratings/Rating/Note.tsx": __vite_glob_0_28, "./Pages/Dashboard/Ratings/Rating/RatingCard.tsx": __vite_glob_0_29, "./Pages/Dashboard/Reservation/Index.tsx": __vite_glob_0_30, "./Pages/Dashboard/Reservation/Partials/CalendarReservation.tsx": __vite_glob_0_31, "./Pages/Dashboard/Reservation/Partials/ListOfReservation.tsx": __vite_glob_0_32, "./Pages/Dashboard/Settings/Index.tsx": __vite_glob_0_33, "./Pages/Dashboard/Settings/Notifications/Index.tsx": __vite_glob_0_34, "./Pages/Dashboard/Settings/Notifications/Partials/CanNotUseBooking.tsx": __vite_glob_0_35, "./Pages/Dashboard/Settings/Notifications/Partials/CanNotUseMessages.tsx": __vite_glob_0_36, "./Pages/Dashboard/Settings/Notifications/Partials/Forms/AdminNotificationBooking.tsx": __vite_glob_0_37, "./Pages/Dashboard/Settings/Notifications/Partials/Forms/AdminNotificationMessages.tsx": __vite_glob_0_38, "./Pages/Dashboard/Settings/Notifications/Partials/Forms/ClientNotificationBooking.tsx": __vite_glob_0_39, "./Pages/Dashboard/Tables/Index.tsx": __vite_glob_0_40, "./Pages/Dashboard/Tables/Partials/cell-action.tsx": __vite_glob_0_41, "./Pages/Dashboard/Tables/Partials/columns.tsx": __vite_glob_0_42, "./Pages/Dashboard/Tables/Partials/data-table.tsx": __vite_glob_0_43, "./Pages/Error403.tsx": __vite_glob_0_44, "./Pages/Error404.tsx": __vite_glob_0_45, "./Pages/Profile/Edit.tsx": __vite_glob_0_46, "./Pages/Profile/Partials/CancelSubscription.tsx": __vite_glob_0_47, "./Pages/Profile/Partials/DeleteUserForm.tsx": __vite_glob_0_48, "./Pages/Profile/Partials/Invoices.tsx": __vite_glob_0_49, "./Pages/Profile/Partials/UpdatePasswordForm.tsx": __vite_glob_0_50, "./Pages/Profile/Partials/UpdateProfileInformationForm.tsx": __vite_glob_0_51, "./Pages/Public/Contact/Index.tsx": __vite_glob_0_52, "./Pages/Public/Rating/Index.tsx": __vite_glob_0_53, "./Pages/Public/Rating/Partials/Form.tsx": __vite_glob_0_54, "./Pages/Public/Reservation/Form/DateInput.tsx": __vite_glob_0_55, "./Pages/Public/Reservation/Form/Index.tsx": __vite_glob_0_56, "./Pages/Public/Reservation/Form/TableInput.tsx": __vite_glob_0_57, "./Pages/Public/Reservation/Form/TimeAndGuestSelector.tsx": __vite_glob_0_58, "./Pages/Public/Reservation/RestaurantCanNotAcceptReservation.tsx": __vite_glob_0_59, "./Pages/Public/Restaurant/PageNotAvailable.tsx": __vite_glob_0_60, "./Pages/Public/Restaurant/Partials/ContactCard.tsx": __vite_glob_0_61, "./Pages/Public/Restaurant/Partials/DescriptionCard.tsx": __vite_glob_0_62, "./Pages/Public/Restaurant/Partials/HoursCard.tsx": __vite_glob_0_63, "./Pages/Public/Restaurant/Partials/MenuCard.tsx": __vite_glob_0_64, "./Pages/Public/Restaurant/Partials/NewsletterCard.tsx": __vite_glob_0_65, "./Pages/Public/Restaurant/Partials/PageContent.tsx": __vite_glob_0_66, "./Pages/Public/Restaurant/Partials/Rating/Avis.tsx": __vite_glob_0_67, "./Pages/Public/Restaurant/Partials/Rating/Note.tsx": __vite_glob_0_68, "./Pages/Public/Restaurant/Partials/Rating/RatingCard.tsx": __vite_glob_0_69, "./Pages/Public/Restaurant/RestaurantPage.tsx": __vite_glob_0_70, "./Pages/Restaurant/Create/CreateRestaurant.tsx": __vite_glob_0_71, "./Pages/Subscribe/Index.tsx": __vite_glob_0_72, "./Pages/Welcome.tsx": __vite_glob_0_73 });
       return pages[`./Pages/${name}.tsx`];
     },
     setup: ({ App, props }) => /* @__PURE__ */ jsx(App, { ...props })

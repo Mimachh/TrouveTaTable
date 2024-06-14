@@ -5,13 +5,10 @@ namespace App\Http\Controllers\Subscribe;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
+
 
 class StoreController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
     public function __invoke(Request $request)
     {
        

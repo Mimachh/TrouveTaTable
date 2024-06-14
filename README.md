@@ -3,7 +3,7 @@
 3. php artisan cashier:webhook
 4. Refaire les products, en sachant que je vais afficher le prix / m pour l'annuel mais sur stripe je dois mettre le prix annuel en 1 fois. 
 
-
+nl2br comme validation pour avoir les sauts de ligne en br
 
 - Faire les tests pour : créer des horaires / créer une résa / update une résa / ajouter en tant qu'admin une résa / créer , updater et supprimer des tables
 

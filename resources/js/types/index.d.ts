@@ -44,6 +44,12 @@ export interface Product {
     price: {key: number}[];
     recurrence: [string[]];
     stripe_product_id: {key: string}[];
+    mostPopular: boolean;
+    feature: string;
+    formatPrices: {
+        monthly: number;
+        annually: number;
+    }
 }
 
 export type FlashMessage = PageProps & {

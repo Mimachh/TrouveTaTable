@@ -19,7 +19,7 @@ class ProductFactory extends Factory
         return [
             "name" => $this->faker->name,
 
-            "description" => json_encode([
+            "feature" => json_encode([
                 $this->faker->randomElement(['5 products', '10 products', '15 products']),
                 'Up to ' . $this->faker->numberBetween(100, 1000) . ' subscribers',
                 $this->faker->randomElement(['Basic analytics', 'Advanced analytics']),
@@ -36,7 +36,8 @@ class ProductFactory extends Factory
                 "annually" => $this->faker->randomFloat(2, 1, 100)
             ]),
 
-            "basic_daily_email_limit_devis" => $this->faker->numberBetween(1, 50)
+           "mostPopular" => $this->faker->boolean,
+           "description" => $this->faker->sentence,
         ];
     }
 }

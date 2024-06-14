@@ -34,4 +34,16 @@ class Product extends Model
     protected $casts = [
         'stripe_product_id' => 'array',
     ];
+
+
+
+    public function getFormattedPrices(): array
+    {
+        $prices = json_decode($this->price, true);
+
+        return [
+            'monthly' => $prices['monthly'] / 100, // Prix mensuel en euros
+            'annually' => $prices['annually'] / 100, // Prix annuel en euros
+        ];
+    }
 }

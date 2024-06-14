@@ -19,9 +19,9 @@ class ProductResource extends JsonResource
             'name' => $this->name,
             'price' => $this->price,
             'description' => $this->description,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'basic_daily_email_limit_devis' => $this->basic_daily_email_limit_devis,
+            'feature' => $this->feature,
+            'mostPopular' => $this->mostPopular,
+            'formatPrices' => $this->getFormattedPrices()
         ];
     }
 }

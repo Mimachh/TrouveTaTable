@@ -1,4 +1,4 @@
-import { Check, Database } from "lucide-react";
+import { Check, Database, StarIcon } from "lucide-react";
 import React, { useRef, useState } from "react";
 import Star from "./Star";
 
@@ -18,13 +18,13 @@ const CardRating = () => {
     const color = "#f9a825";
     const list = [
         {
-            title: "Réservations illimités",
+            title: "Notations et avis clients",
         },
         {
-            title: "Email de notification",
+            title: "Modération et contrôle sur les avis clients",
         },
         {
-            title: "Gestion des réservations clients",
+            title: "Avis vérifiés",
         },
     ];
     return (
@@ -33,24 +33,24 @@ const CardRating = () => {
             onMouseEnter={() => setMouseOnCard2(true)}
             onMouseLeave={() => setMouseOnCard2(false)}
             onMouseMove={(event) => handleMouseMove2(event)}
-            className="md:w-[30rem] w-full h-[21rem] bg-neutral-800 rounded-lg border border-neutral-600
-    flex flex-row p-8  stroke-[0.1] hover:stroke-[0.2]
+            className="md:w-[30rem] w-full h-fit bg-neutral-800 rounded-lg border border-neutral-600
+    flex flex-col md:flex-row p-8  stroke-[0.1] hover:stroke-[0.2]
     "
         >
-            <div className="flex flex-col w-3/5 justify-between">
+            <div className="flex flex-col w-full md:w-3/5 justify-between">
                 <div className="flex flex-col gap-5">
-                    <Database
+                    <StarIcon
                         className="w-10 h-10 rounded-lg bg-neutral-950/70  p-2 shadow-inner"
                         style={{ stroke: color }}
                     />
                     <h1 className="text-neutral-200 tracking-wide text-xl">
-                        Réservation
+                        Avis client
                     </h1>
                     <p className="-mt-2 text-sm md:text-md text-neutral-500 tracking-wide">
-                        Bénéficier d'un système de réservation intégré.
+                        Système d'avis et de notation client. Tous les avis sont vérifiés.
                     </p>
                 </div>
-                <div className="flex flex-col text-neutral-200 tracking-wide text-xs md:text-sm">
+                <div className="mt-3 flex flex-col text-neutral-200 tracking-wide text-xs md:text-sm">
                     {list.map((item, index) => (
                         <span key={index} className="flex flex-row gap-2">
                             <Check className="w-5" style={{ color: color }} />
@@ -59,7 +59,7 @@ const CardRating = () => {
                     ))}
                 </div>
             </div>
-            <div className="w-2/5 flex flex-col place-items-center">
+            <div className="w-full md:w-2/5 flex flex-col place-items-center">
                 <Star
                     mouseOnCard2={mouseOnCard2}
                     cursor2={cursor2}

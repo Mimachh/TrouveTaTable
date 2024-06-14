@@ -75,7 +75,7 @@
     }
 
     .header-welcome {
-        @apply text-3xl  md:text-4xl lg:text-[3.25rem] font-bold text-neutral-800  leading-relaxed lg:leading-snug
+        @apply text-3xl  md:text-4xl lg:text-[3.25rem] font-bold text-neutral-800 tracking-tight leading-relaxed lg:leading-snug
     }
 }
 

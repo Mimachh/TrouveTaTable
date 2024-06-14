@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AppNewsletter;
 use App\Models\Day;
 use App\Models\Feature;
 use App\Models\Message;
@@ -175,64 +176,69 @@ class DatabaseSeeder extends Seeder
             "note" => 3
         ]);
 
+        // Product::factory()->create([
+        //     "name" => "Pack Fondateur",
+        //     "order" => 1,
+        //     "price" => null,
+        //     "description" => json_encode([
+        //         '5 products',
+        //         'Up to 1,000 subscribers',
+        //         'Basic analytics',
+        //         '48-hour support response time'
+        //     ]),
+        //     "stripe_product_id" => null,
+
+        //     "basic_daily_email_limit_devis" => 5
+
+        // ]);
         Product::factory()->create([
-            "name" => "Basique",
+            "name" => "Pack Fondateur",
             "order" => 1,
-            "price" => null,
-            "description" => json_encode([
-                '5 products',
-                'Up to 1,000 subscribers',
-                'Basic analytics',
-                '48-hour support response time'
-            ]),
-            "stripe_product_id" => null,
-
-            "basic_daily_email_limit_devis" => 5
-
-        ]);
-        Product::factory()->create([
-            "name" => "Pro",
-            "order" => 2,
             "price" => json_encode([
-                "monthly" => 29.90,
-                "annually" => 25.90
+                "monthly" => 2500,
+                "annually" => 2000
             ]),
             "stripe_product_id" => [
-                "monthly" => config('stripe.status') === "test" ? "price_1P3Lj9E5Smsl5TIMCzfsUIXQ" : "",
-                "annually" => config('stripe.status') === "test" ? "price_1P3MPvE5Smsl5TIMpVY1pCw4" : ""
+                "monthly" => config('stripe.status') === "test" ? "price_1PQwQSF8f3TP4aCxMmi7q7YK" : "",
+                "annually" => config('stripe.status') === "test" ? "price_1PQwQ8F8f3TP4aCx20ggpfLf" : ""
             ],
-            "description" => json_encode([
-                '5 products',
-                'Up to 1,000 subscribers',
-                'Basic analytics',
-                '48-hour support response time'
+            "description" => "",
+            "mostPopular" => true,
+            "feature" => json_encode([
+                "Page vitrine hébergée",
+                "Sytème de notation vérifiée",
+                "Système de réservation en ligne",
+                "Email de notifications",
+                "Email de rappel aux clients",
+                "Formulaire de contact intégré",
+                "Accès illimité à toutes les fonctionnalités actuelles et futures"
             ]),
-
-            "basic_daily_email_limit_devis" => 50
         ]);
-        Product::factory()->create([
-            "name" => "Entreprise",
-            "order" => 3,
-            "price" => json_encode([
-                "monthly" => -1,
-                "annually" => -1
-            ]),
-            "stripe_product_id" => [
-                "monthly" => "price_1P3Lj9E5Smsl5TIMKkg2LPX1",
-                "annually" => "price_1P3MPvE5Smsl5TIMwRCNs61j"
-            ],
-            "description" => json_encode([
-                '5 products',
-                'Up to 1,000 subscribers',
-                'Basic analytics',
-                '48-hour support response time'
-            ]),
+        // Product::factory()->create([
+        //     "name" => "Entreprise",
+        //     "order" => 3,
+        //     "price" => json_encode([
+        //         "monthly" => -1,
+        //         "annually" => -1
+        //     ]),
+        //     "stripe_product_id" => [
+        //         "monthly" => "price_1P3Lj9E5Smsl5TIMKkg2LPX1",
+        //         "annually" => "price_1P3MPvE5Smsl5TIMwRCNs61j"
+        //     ],
+        //     "description" => json_encode([
+        //         '5 products',
+        //         'Up to 1,000 subscribers',
+        //         'Basic analytics',
+        //         '48-hour support response time'
+        //     ]),
 
-            "basic_daily_email_limit_devis" => -1
-        ]);
+        //     "basic_daily_email_limit_devis" => -1
+        // ]);
 
 
+        AppNewsletter::factory(50)->create();
 
+        
         Feature::create([
             'image' => "",
             'route_name' => "devis.index",

@@ -5,6 +5,7 @@ use App\Actions\DecodeJWT;
 use App\Http\Controllers\Api\Reservation\ShowByServiceAndDateController;
 use App\Http\Controllers\Api\Reservation\ShowReservationController;
 use App\Http\Controllers\Api\Restaurant\GetAllMyRestaurants;
+use App\Http\Controllers\Changelog\IndexChangelogController;
 use App\Http\Controllers\Dashboard\Hours\CreateHoursController;
 use App\Http\Controllers\Dashboard\Hours\IndexHoursController;
 use App\Http\Controllers\Dashboard\Messages\EnableOrDisableRestaurantContactController;
@@ -51,10 +52,15 @@ use App\Http\Controllers\Restaurant\CreateRestaurantController;
 use App\Http\Controllers\SendMessageToRestaurantController;
 use App\Http\Controllers\Subscribe\CancelSubscriptionController;
 use App\Http\Controllers\Subscribe\CreateController;
+use App\Http\Controllers\Subscribe\Modal\CreateController as ModalCreateController;
 use App\Http\Controllers\Subscribe\StoreController;
+use App\Http\Controllers\Welcome\AppNewsletterController;
+use App\Http\Controllers\Welcome\CreateContactController;
+use App\Http\Controllers\WelcomeController;
 use App\Http\Resources\RatingRestaurantResource;
 use App\Http\Resources\ReservationResource;
 use App\Http\Resources\RestaurantResource;
+use App\Models\Product;
 use App\Models\RatingRestaurant;
 use App\Models\Reservation;
 use App\Models\Restaurant;
@@ -71,21 +77,10 @@ Route::middleware('guest')->get('/compte-supprime', function () {
 
 
 
-Route::get('/', function () {
-
-    $restaurant = Restaurant::first();
-    // $jwt = (new CreateRestaurantJWT)->handle($restaurant);
-    // $decode = (new DecodeJWT)->handle($jwt['jwt']);
-    // return [$jwt, $decode];
-
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-        'restaurant' => $restaurant,
-    ]);
-})->name('home');
+Route::get('/', WelcomeController::class)->name('home');
+Route::get('/changelog', IndexChangelogController::class)->name('changelog');
+Route::post('/newsletter', AppNewsletterController::class)->name('newsletter.app.subscribe');
+Route::post('/contact', CreateContactController::class)->name('contact.create');
 
 
 Route::get('/user/invoice/{invoice}', function (string $invoiceId) {
@@ -124,7 +119,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
                     // API
                     Route::get('getReservationsByDate/{date}', ShowByServiceAndDateController::class)->name('get.by.date');
-                    Route::put('/status', EnableOrDisableRestaurantReservationController::class)->name('status'); 
+                    Route::put('/status', EnableOrDisableRestaurantReservationController::class)->name('status');
                 });
 
                 Route::prefix('tables')->as('tables.')->group(function () {
@@ -137,7 +132,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
                     Route::get('/', IndexMessagesController::class)->name('index');
 
                     Route::put('/status', EnableOrDisableRestaurantContactController::class)->name('status');
-                  
                 });
 
                 Route::prefix('page')->as('page.')->group(function () {
@@ -189,28 +183,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
                     Route::post('/', UpdateBannerRestaurantController::class)->name('update');
                     Route::delete('/', DeleteBannerRestaurantController::class)->name('delete');
                 });
-              
             });
         });
 
 
         // API LIKE USED BY AXIOS
         // Every route here must have policy to check if the restaurant is owned by the user
-            Route::get('/getAllMyRestaurants', GetAllMyRestaurants::class)->name('get.my.restaurants');
-            
+        Route::get('/getAllMyRestaurants', GetAllMyRestaurants::class)->name('get.my.restaurants');
 
-            Route::middleware('abort.not.my.restaurant')->group(function () {
-                Route::get('/{restaurant}/getHoursByDayId/{day}', [CreateHoursController::class, 'getHoursByDayId'])->name('get.hours.by.day');
-                Route::get('/{restaurant}/reservation/{reservation}', ShowReservationController::class)->name('show');
-                Route::post('/{restaurant}/reservation/changeStatus/{reservation}', ChangeReservationStatusController::class)->name('reservation.change.status');
-                Route::post('/{restaurant}/reservation/create/stepOne', [CreateReservationController::class, "getTables"])->name('reservation.create.stepOne');
-                Route::post('/{restaurant}/reservation/create/stepTwo', [CreateReservationController::class, "steptwo"])->name('reservation.create.stepTwo');
-                Route::post('/{restaurant}/reservation/create/stepThree', [CreateReservationController::class, "stepthree"])->name('reservation.create.stepThree');
 
-                Route::get('/{restaurant}/message/{message}', ShowMessageController::class)->name('message.show');
+        Route::middleware('abort.not.my.restaurant')->group(function () {
+            Route::get('/{restaurant}/getHoursByDayId/{day}', [CreateHoursController::class, 'getHoursByDayId'])->name('get.hours.by.day');
+            Route::get('/{restaurant}/reservation/{reservation}', ShowReservationController::class)->name('show');
+            Route::post('/{restaurant}/reservation/changeStatus/{reservation}', ChangeReservationStatusController::class)->name('reservation.change.status');
+            Route::post('/{restaurant}/reservation/create/stepOne', [CreateReservationController::class, "getTables"])->name('reservation.create.stepOne');
+            Route::post('/{restaurant}/reservation/create/stepTwo', [CreateReservationController::class, "steptwo"])->name('reservation.create.stepTwo');
+            Route::post('/{restaurant}/reservation/create/stepThree', [CreateReservationController::class, "stepthree"])->name('reservation.create.stepThree');
 
-               
-            });
+            Route::get('/{restaurant}/message/{message}', ShowMessageController::class)->name('message.show');
+        });
     });
 
 
@@ -225,18 +216,32 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 
-    Route::middleware('redirect.subscribed')->group(function () {
-        Route::prefix('subscribe')->as('subscribe.')->group(function () {
-            Route::get('/{product}', CreateController::class)->name('create');
-            Route::post('store', StoreController::class)->name('store');
-            Route::delete('cancel', CancelSubscriptionController::class)->name('cancel')->withoutMiddleware('redirect.subscribed');
-        });
-    });
+
+    // Route::middleware(['redirect.subscribed'])->group(function () {
+    //     Route::prefix('subscribe')->as('subscribe.')->group(function () {
+    //         Route::get('/{product}', CreateController::class)->name('create');
+    //         Route::post('store', StoreController::class)->name('store');
+    //         Route::delete('cancel', CancelSubscriptionController::class)->name('cancel')->withoutMiddleware('redirect.subscribed');
+    
+    //         Route::get('modal/{product}', ModalCreateController::class)->name('modal.create');
+    //     });
+    // });
 
     Route::middleware('redirect.notsubscribed')->group(function () {
     });
 });
 
+Route::middleware(["auth"])->group(function () {
+    Route::prefix('subscribe')->as('subscribe.')->group(function () {
+        Route::get('/{product}', CreateController::class)->name('create');
+        Route::post('store', StoreController::class)->name('store');
+        Route::delete('cancel', CancelSubscriptionController::class)->name('cancel')
+        // ->withoutMiddleware('redirect.subscribed')
+        ;
+
+        Route::get('modal/{product}', ModalCreateController::class)->name('modal.create');
+    });
+});
 
 Route::prefix('book')->group(function () {
     Route::get('{id}', ReservationCreateController::class)->name('reservation');
@@ -264,8 +269,6 @@ Route::get('/restaurant/{slug}/contact', IndexRestaurantContactController::class
 
 Route::post('/send-message-to-restaurant', SendMessageToRestaurantController::class)->name('message.send');
 Route::post('/subscribe-to-newsletter-restaurant/{restaurant}', SubscribeToNewsletterController::class)->name('newsletter.subscribe');
-
-
 
 
 
@@ -309,6 +312,34 @@ Route::get('/rating-mail', function () {
     );
 });
 
+
+Route::post('/buy', function () {
+    $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
+    $product = Product::first();
+       
+       
+        // $stripeProductIds = json_decode($product->stripe_product_id, true);
+
+      
+        $price = json_decode($product->price, true);
+
+        // $stripeProductId = $stripeProductIds['monthly'];
+
+      
+
+    $checkout_session = $stripe->checkout->sessions->create([
+        'line_items' => [
+            [
+                'price' => $product->stripe_product_id['monthly'],
+                'quantity' => 1,
+            ],
+        ],
+        'mode' => 'subscription',
+        'success_url' => route('home', [], true),
+        'cancel_url' => route('home', [], true),
+    ]);
+    return redirect($checkout_session->url);
+})->name('credit.buy');
 
 
 require __DIR__ . '/auth.php';

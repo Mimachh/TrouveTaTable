@@ -6,17 +6,17 @@ import { Card, CardContent } from "@/Components/ui/card";
 
 const Features = forwardRef<HTMLDivElement>((props, ref) => {
     return (
-        <div className=" w-full"
+        <div className="w-full"
         id="Features"
         ref={ref}
         {...props}
         >
             <div
 
-                className=" bg-neutral-900  py-10 px-4 md:px-0 min-h-screen"
+                className=" bg-neutral-900 lg:h-fit py-10 px-4 md:px-0 min-h-screen"
             >
-                <div className="space-y-4 max-w-7xl mx-auto flex flex-col justify-center">
-                    <h2 className="header-welcome text-welcomeBackground/90 mb-5">
+                <div className="space-y-4 max-w-7xl px-4 mx-auto flex flex-col justify-center">
+                    <h2 className="header-welcome text-welcomeBackground/90 md:text-5xl text-2xl font-bold  mb-5">
                         Nos avantages
                     </h2>
                     <div className="space-y-4">
@@ -31,8 +31,8 @@ const Features = forwardRef<HTMLDivElement>((props, ref) => {
                 </div>
             </div>
 
-            <div className=" min-h-screen md:px-0 max-w-7xl mx-auto px-4 flex flex-col flex-1 justify-center">
-                <h3 className="mb-10 header-welcome  text-neutral-800  md:w-2/3">
+            <div className=" min-h-screen lg:max-h-[600px] md:px-0 max-w-7xl mx-auto px-4 flex flex-col flex-1 justify-center">
+                <h3 className="mb-10 header-welcome mt-6 md:mt-0 text-neutral-800  md:w-2/3 font-bold md:text-5xl text-2xl">
                     Est-ce que ce service est fait pour moi ?
                 </h3>
                 <div className="p-4  items-center justify-center">

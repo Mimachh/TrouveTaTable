@@ -15,9 +15,11 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->integer('order');
             $table->string('name');
-            $table->json('description')->nullable();
-            $table->json('price')->nullable();
+            $table->boolean('mostPopular')->default(false);
 
+            $table->text('description')->nullable();
+            $table->json('price')->nullable();
+            $table->json('feature')->nullable();
             $table->integer('basic_daily_email_limit_devis')->nullable();
             $table->string('recurrence')->default('monthly');
 

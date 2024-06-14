@@ -9,30 +9,28 @@ import { LoaderCircle } from "lucide-react";
 interface Props {
     stripeKey: string;
     intent: any;
-    user: User;
-    products: Product[];
     product: Product;
     recurrence: string;
 }
 const Create = ({
     stripeKey,
     intent,
-    user,
-    products,
     product,
     recurrence,
 }: Props) => {
     const [stripe, setStripe] = useState<any>(null);
     const [elements, setElements] = useState<any>(null);
     const [card, setCard] = useState<any>(null);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
         const stripeInstance = (window as any).Stripe(stripeKey);
         setStripe(stripeInstance);
+        setLoading(false);
     }, [stripeKey]);
 
     useEffect(() => {
         if (stripe) {
+            setLoading(true)
             const clientSecret = intent.client_secret;
             const elementsInstance = stripe.elements({ clientSecret });
             setElements(elementsInstance);
@@ -46,6 +44,11 @@ const Create = ({
                 paymentElementOptions
             );
             paymentElement.mount("#payment-element");
+            
+           
+            setTimeout(() => {
+                setLoading(false);
+            }, 1500);
         }
     }, [stripe]);
 
@@ -153,7 +156,7 @@ const Create = ({
 
     return (
         <div className="w-full">
-            <div className="mb-6">
+            {/* <div className="mb-6">
                 <h2 className="font-bold text-xl mb-3">
                     Paiement de votre abonnement
                 </h2>
@@ -162,7 +165,7 @@ const Create = ({
                     <p>⭐ 1 mois d'essai gratuit</p>
                     <p>⭐ Vous annulez quand vous voulez</p>
                 </div>
-            </div>
+            </div> */}
             {/* <form onSubmit={onSubmit} className="">
                 <div className="space-y-4">
                     <FormFieldLayout

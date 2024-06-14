@@ -3,6 +3,8 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import RegisterButton from "@/Components/ui/register-button";
 import { WelcomeNavProps } from "./Index";
+import { useUser } from "@/hooks/useUser";
+import GoProfileButton from "@/Components/ui/go-profile-button";
 
 export interface ExtendedWelcomeNavProps extends WelcomeNavProps {
     handleTabClick: (tabId: string) => void;
@@ -14,7 +16,7 @@ const DesktopNav = (props: ExtendedWelcomeNavProps) => {
     const { tabs, handleTabClick, activeTab, setActiveTab } = props;
     const { scrollY } = useScroll();
     const [hidden, setHidden] = useState<boolean>(false);
-
+    const user = useUser.use.user()
     useMotionValueEvent(scrollY, "change", (latest) => {
         const previous = scrollY.getPrevious();
         if (previous && latest > previous && latest > 150) {
@@ -68,7 +70,7 @@ const DesktopNav = (props: ExtendedWelcomeNavProps) => {
                         ))}
                     </div>
                 </div>
-                <RegisterButton />
+                {!user ? <RegisterButton /> : <GoProfileButton />}
             </div>
         </motion.nav>
     );

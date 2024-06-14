@@ -3,17 +3,21 @@ import { AnimatePresence, MotionConfig, motion, useCycle } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { ExtendedWelcomeNavProps } from "./DesktopNav";
 import { useEffect } from "react";
+import { useUser } from "@/hooks/useUser";
+import GoProfileButton from "@/Components/ui/go-profile-button";
 
 const MobileNav = (props: ExtendedWelcomeNavProps) => {
-    const { tabs, sectionRefs, setActiveTab, activeTab,  handleTabClick} = props;
+    const { tabs, sectionRefs, setActiveTab, activeTab, handleTabClick } =
+        props;
+    const user = useUser.use.user();
     const [mobileNav, toggleMobileNav] = useCycle(false, true);
     const buttonTransitionDuration = 0.5; // En seconde
-  
+
     useEffect(() => {
         if (mobileNav) {
-            document.body.style.overflow = 'hidden';
+            document.body.style.overflow = "hidden";
         } else {
-            document.body.style.overflow = 'auto';
+            document.body.style.overflow = "auto";
         }
     }, [mobileNav]);
 
@@ -32,7 +36,11 @@ const MobileNav = (props: ExtendedWelcomeNavProps) => {
                                         duration: buttonTransitionDuration,
                                     }}
                                 >
-                                    <RegisterButton />
+                                    {!user ? (
+                                        <RegisterButton />
+                                    ) : (
+                                        <GoProfileButton />
+                                    )}
                                 </motion.div>
                             )}
                         </AnimatePresence>
@@ -136,10 +144,9 @@ const MobileNav = (props: ExtendedWelcomeNavProps) => {
                                 {tabs.map((tab, index) => (
                                     <li className="relative" key={index}>
                                         <p
-                                            
                                             onClick={() => {
-                                                handleTabClick(tab.id)
-                                                toggleMobileNav()
+                                                handleTabClick(tab.id);
+                                                toggleMobileNav();
                                             }}
                                             className="text-5xl rounded-full transition px-3 py-2 font-normal text-green-850/40 outline-2 outline-welcomeBackground focus-visible:outline"
                                         >
