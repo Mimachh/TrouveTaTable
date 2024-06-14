@@ -14,29 +14,29 @@ it('can subscribe', function () {
 
     $user = User::factory()->create();
 
-    $product = Product::factory(1)->sequence(
-        [
-            "name" => "Offre pro",
-            "price" => json_encode([
-                "monthly" => 29.90,
-                "annually" => 25.90
-            ]),
-            "order" => 1,
-            "stripe_product_id" => [
-                "monthly" => "price_1P3Lj9E5Smsl5TIMCzfsUIXQ",
-                "annually" => "price_1P3MPvE5Smsl5TIMpVY1pCw4"
-            ],
-            "description" => json_encode([
-                '5 products',
-                'Up to 1,000 subscribers',
-                'Basic analytics',
-                '48-hour support response time'
-            ]),
-
-            "basic_daily_email_limit_devis" => 50
+    $product =     Product::factory()->create([
+        "name" => "Pack Fondateur",
+        "order" => 1,
+        "price" => json_encode([
+            "monthly" => 2500,
+            "annually" => 2000
+        ]),
+        "stripe_product_id" => [
+            "monthly" => config('stripe.status') === "test" ? "price_1PQwQSF8f3TP4aCxMmi7q7YK" : "",
+            "annually" => config('stripe.status') === "test" ? "price_1PQwQ8F8f3TP4aCx20ggpfLf" : ""
         ],
-
-    )->create();
+        "description" => "",
+        "mostPopular" => true,
+        "feature" => json_encode([
+            "Page vitrine hébergée",
+            "Sytème de notation vérifiée",
+            "Système de réservation en ligne",
+            "Email de notifications",
+            "Email de rappel aux clients",
+            "Formulaire de contact intégré",
+            "Accès illimité à toutes les fonctionnalités actuelles et futures"
+        ]),
+    ]);
 
     $firstProduct = $product->first();
 
