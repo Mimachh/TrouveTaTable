@@ -53,11 +53,11 @@ export default function DeleteUserForm({
     return (
         <section className={`space-y-6 ${className}`}>
             <header>
-                <h2 className="text-lg font-medium text-gray-900">
+                <h2 className="text-lg font-medium text-foreground">
                     Supprimer mon compte
                 </h2>
 
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="mt-1 text-sm text-muted-foreground">
                     Une fois le compte supprimé, toutes les données sont définitivement perdues. Veuillez télécharger toutes les données ou informations que vous souhaitez conserver.
 
                 </p>

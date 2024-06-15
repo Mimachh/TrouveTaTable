@@ -13,10 +13,10 @@ import AuthModal from "../modales/AuthModal";
 
 type Props = {
     product: Product;
-    frequency: RecurrenceType;
+    frequency?: RecurrenceType;
 };
 const SubscriptionModalButton = (props: Props) => {
-    const { product, frequency } = props;
+    const { product, frequency = "monthly" } = props;
     const contactModalOnOpen = useSubscriptionModal.use.onOpen();
     const contactModalSetProduct = useSubscriptionModal.use.setProduct();
     const contactModalSetRecurrence = useSubscriptionModal.use.setRecurrence();

@@ -1,4 +1,4 @@
-import { forwardRef, useState } from "react";
+import { forwardRef, useRef, useState } from "react";
 import { Product } from "@/types";
 import ProductCard from "./product-card";
 import SlideTabs from "./slide-tabs";
@@ -19,6 +19,7 @@ interface StarterPriceProps {
 const StarterPrice = forwardRef<HTMLDivElement, StarterPriceProps>(
     ({ products, ...props }, ref) => {
         const [frequency, setFrequency] = useState(frequencies[0]);
+
         return (
             <div
                 ref={ref}
@@ -40,15 +41,14 @@ const StarterPrice = forwardRef<HTMLDivElement, StarterPriceProps>(
                             </p>
                             <div className="mt-16 flex justify-center">
                                 <fieldset aria-label="Payment frequency">
-                                <SlideTabs
-                                    frequencies={frequencies}
-                                    activeFrequency={frequency}
-                                    setActiveFrequency={setFrequency}
-                                />
-                                  
+                                    <SlideTabs
+                                        frequencies={frequencies}
+                                        activeFrequency={frequency}
+                                        setActiveFrequency={setFrequency}
+                                    />
                                 </fieldset>
                             </div>
-                        </div> 
+                        </div>
                         <div className="relative mx-auto mt-10 grid max-w-md grid-cols-1 gap-y-8 lg:mx-0 lg:-mb-14 lg:max-w-none lg:grid-cols-3">
                             <svg
                                 viewBox="0 0 1208 1024"
@@ -70,7 +70,7 @@ const StarterPrice = forwardRef<HTMLDivElement, StarterPriceProps>(
                                 </defs>
                             </svg>
                             <div
-                                className="hidden lg:absolute lg:inset-x-px lg:bottom-0 lg:top-4 lg:block lg:rounded-t-2xl lg:bg-welcomePrimary-40 lg:ring-1 lg:ring-white/10"
+                                className="lg:bg-welcomePrimary-40 hidden lg:absolute lg:inset-x-px lg:bottom-0 lg:top-4 lg:block lg:rounded-t-2xl lg:ring-1 lg:ring-white/10"
                                 aria-hidden="true"
                             />
                             <ProductCard
@@ -80,15 +80,14 @@ const StarterPrice = forwardRef<HTMLDivElement, StarterPriceProps>(
                         </div>
                     </div>
                 </div>
-                <div className="relative bg-background  md:pt-24">
-                   
+                <div className="relative bg-background md:pt-24">
                     {/* <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
             
                 </div> */}
                 </div>
             </div>
         );
-    }
+    },
 );
 
 export default StarterPrice;

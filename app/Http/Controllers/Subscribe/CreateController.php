@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
-use function Ramsey\Uuid\v1;
+
 
 class CreateController extends Controller
 {

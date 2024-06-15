@@ -35,7 +35,7 @@ export default function DashboardLayout({
             }, 500);
         }
         if (flash?.error) {
-            console.log("erreruruurur");
+            // console.log("erreruruurur");
             setTimeout(() => {
                 toast.error(flash.error);
             }, 500);
