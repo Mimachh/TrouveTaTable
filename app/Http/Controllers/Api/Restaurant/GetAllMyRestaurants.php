@@ -9,9 +9,6 @@ use Illuminate\Http\Request;
 
 class GetAllMyRestaurants extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
     private $restaurantRepository;
 
     public function __construct(RestaurantRepository $restaurantRepository)

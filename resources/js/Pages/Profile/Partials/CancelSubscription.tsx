@@ -5,6 +5,10 @@ import { Button } from "@/Components/ui/button";
 import { FormatUserSubscription, Subscription } from "@/types";
 import { AlertModal } from "@/Components/modales/AlertModal";
 import { toast } from "sonner";
+import {
+    formatPriceFromCents,
+    transformMonthPriceToYearPrice,
+} from "@/lib/format-price";
 
 export default function CancelSubscription({
     className = "",
@@ -19,9 +23,8 @@ export default function CancelSubscription({
     const [subscriptionId, setSubscriptionId] = useState<number | null>(null);
     const [loading, setLoading] = useState(false);
     const [subscriptionName, setSubscriptionName] = useState<string | null>(
-        null
+        null,
     );
- 
 
     const confirmSubscriptionDeletion = () => {
         setConfirmingSubscriptionDeletion(true);
@@ -52,30 +55,52 @@ export default function CancelSubscription({
     return (
         <section className={`space-y-6 ${className}`}>
             <header>
-                <h2 className="text-lg font-medium text-gray-900">
+                <h2 className="text-lg font-medium text-foreground">
                     Abonnement
                 </h2>
             </header>
-            <div>
+            <div className="space-y-2">
                 {subscriptions?.map((subscription) => (
                     <div
                         key={subscription.id}
-                        className="flex flex-col gap-5 border w-fit p-4 rounded-lg"
+                        className="flex w-fit flex-col gap-5 rounded-lg border border-muted-foreground p-4"
                     >
-                        <p className="text-[15px] tracking-wide font-semibold">
+                        <p className="text-[15px] font-semibold tracking-wide text-muted-foreground">
                             {subscription.name} :{" "}
                             <span className="font-normal">
-                                {subscription.price.toFixed(2)} €/{""}
-                                {subscription.recurrence === "monthly"
-                                    ? "mois"
-                                    : "an"}
+                                {subscription.recurrence === "monthly" ? (
+                                    <>
+                                        {formatPriceFromCents(
+                                            subscription.price,
+                                            true,
+                                        )}{" "}
+                                        €/{"mois"}
+                                    </>
+                                ) : (
+                                    <>
+                                        {transformMonthPriceToYearPrice(
+                                            parseInt(
+                                                formatPriceFromCents(
+                                                    subscription.price,
+                                                    true,
+                                                ),
+                                            ),
+                                        )}{" "}
+                                        €/{"an"}
+                                    </>
+                                )}
                             </span>
                         </p>
                         {subscription.isOnGracePeriod ? (
                             <>
-                            {subscription.ends_at && (
-                                <p className="text-sm">Votre abonnement prendra fin le : {new Date(subscription.ends_at).toLocaleDateString('fr-FR')}</p>
-                            )}
+                                {subscription.ends_at && (
+                                    <p className="text-sm">
+                                        Votre abonnement prendra fin le :{" "}
+                                        {new Date(
+                                            subscription.ends_at,
+                                        ).toLocaleDateString("fr-FR")}
+                                    </p>
+                                )}
                             </>
                         ) : (
                             <Button
@@ -93,14 +118,14 @@ export default function CancelSubscription({
                     </div>
                 ))}
             </div>
-        
+
             <AlertModal
                 isOpen={confirmingSubscriptionDeletion}
                 onClose={closeModal}
                 onConfirm={onDelete}
                 loading={loading}
-                title="Êtes-vous sûr de vouloir supprimer votre compte ?"
-                description="Une fois le compte supprimé, les données seront définitivement perdues. Veuillez entrer votre mot de passe pour confirmer la suppression."
+                title="Êtes-vous sûr de vouloir supprimer votre abonnement ?"
+                description="Cette action est irréversible. Vous perdrez accès aux fonctionnalités de votre abonnement."
             />
         </section>
     );

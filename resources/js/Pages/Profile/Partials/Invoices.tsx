@@ -8,7 +8,7 @@ const Invoices = ({ invoices }: InvoiceProps) => {
     return (
         <div>
             <header className="mb-3">
-                <h2 className="text-lg font-medium text-gray-900">
+                <h2 className="text-lg font-medium text-foreground">
                     Mes factures
                 </h2>
             </header>

@@ -12,8 +12,8 @@ export default function Authenticated({
     
     return (
         <ToastProvider>
-            <div className="min-h-screen bg-gray-100">
-                <MainNav user={user} />
+            <div className="min-h-screen bg-background">
+                {/* <MainNav user={user} /> */}
                 {header && <HeaderSection header={header} />}
 
                 <main>{children}</main>

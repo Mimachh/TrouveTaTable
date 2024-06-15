@@ -8,7 +8,6 @@
        
         <!-- Fonts -->
 
-
         <!-- Scripts -->
         @routes
         @viteReactRefresh

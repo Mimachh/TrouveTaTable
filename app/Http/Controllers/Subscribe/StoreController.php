@@ -31,7 +31,7 @@ class StoreController extends Controller
 
         $re = auth()->user()->newSubscription($product->name, $stripeProductId)
         ->create($validated["paymentMethod"]);
-
+        // ici si je récupère l'id du default payement method du user, et que je n'ai pas crée de nouveau pm côté front (il faut faire une vérif aussi) alors je garde la carte actuelle
         return response()->json($re);
 
 
