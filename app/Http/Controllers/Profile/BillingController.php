@@ -3,25 +3,28 @@
 namespace App\Http\Controllers\Profile;
 
 use App\Http\Controllers\Controller;
-use App\Http\Responses\ApiResponse;
 use Exception;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Inertia\Response;
 
 class BillingController extends Controller
 {
     public function edit(Request $request)
     {
         $user = $request->user()->load('subscriptions');
-        // dd($user->paymentMethods());
 
         $subscriptions = $user->getSubscriptionData();
+
+        $intent = auth()->user()->createSetupIntent();
+        $stripeKey = config('stripe.stripe_key');
+
         return Inertia::render('Profile/Billings/Edit', [
             'subscriptions' => $subscriptions,
             "invoices" => $user->invoices()->take(3),
             'paymentMethods' => $paymentMethods = $user->paymentMethods(),
             'defaultPaymentMethod' => $user->defaultPaymentMethod(),
+            'intent' => $intent,
+            'stripeKey' => $stripeKey
         ]);
     }
 
@@ -52,7 +55,14 @@ class BillingController extends Controller
         }
     }
 
-    public function addNewPaymentMethod() {
-        // $user->addPaymentMethod($paymentMethod);
+
+    public function storeNewPaymentMethod(Request $request) {
+        $validated = $request->validate([
+            'paymentMethod' => 'required|string',
+        ]);
+        $user = $request->user();
+        $m = $user->addPaymentMethod($request->paymentMethod);
+        $user->updateDefaultPaymentMethod($request->paymentMethod);
+
     }
 }

@@ -8,14 +8,14 @@ import { hydrateRoot } from "react-dom/client";
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 import sprite from "../../public/Icons/icon/icon.svg?url";
 
-function preloadSprite() {
-    const link = document.createElement("link");
-    link.rel = "preload";
-    link.href = sprite;
-    link.as = "image";
-    link.type = "image/svg+xml";
-    document.head.appendChild(link);
-}
+// function preloadSprite() {
+//     const link = document.createElement("link");
+//     link.rel = "preload";
+//     link.href = sprite;
+//     link.as = "image";
+//     link.type = "image/svg+xml";
+//     document.head.appendChild(link);
+// }
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -26,7 +26,7 @@ createInertiaApp({
         ),
     setup({ el, App, props }) {
         // const root = createRoot(el);
-        preloadSprite();
+        // preloadSprite();
         // root.render(<App {...props} />);
         hydrateRoot(el, <App {...props} />);
     },

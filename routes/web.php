@@ -105,6 +105,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [BillingController::class, 'edit'])->name('edit');
         Route::delete('/payment-method/{paymentMethod}', [BillingController::class, 'deletePaymentMethod'])->name('payment-method.delete');
         Route::put('/payment-method/{paymentMethod}', [BillingController::class, 'updatePaymentMethod'])->name('payment-method.update');
+        Route::post('/store/new-payment-method', [BillingController::class, 'storeNewPaymentMethod'])->name('payment-method.create-new');
     });
   
 

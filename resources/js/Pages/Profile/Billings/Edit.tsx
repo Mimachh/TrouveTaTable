@@ -10,12 +10,15 @@ import { Icon, IconName } from "@/Components/Icon";
 import { Button } from "@/Components/ui/button";
 import { useHandlePaymentMethodModal } from "@/hooks/useHandlePaymentMethodModal";
 import HandlePaymentMethodModal from "@/Components/modales/HandlePaymentMethodModal";
+import StripeLoader from "@/utils/stripe-loader";
 
 type EditProps = PageProps & {
     subscriptions: FormatUserSubscription[];
     invoices?: Invoice[];
     paymentMethods: PaymentMethod[];
     defaultPaymentMethod: PaymentMethod;
+    intent: any;
+    stripeKey: string;
 };
 
 function Edit({
@@ -24,12 +27,20 @@ function Edit({
     invoices,
     paymentMethods,
     defaultPaymentMethod,
+    intent,
+    stripeKey,
 }: EditProps) {
     const onOpen = useHandlePaymentMethodModal.use.onOpen();
     return (
         <>
             <Head title="Abonnements" />
-            <HandlePaymentMethodModal paymentMethods={paymentMethods} defaultPaymentMethod={defaultPaymentMethod} />
+            <StripeLoader />
+            <HandlePaymentMethodModal
+                intent={intent}
+                stripeKey={stripeKey}
+                paymentMethods={paymentMethods}
+                defaultPaymentMethod={defaultPaymentMethod}
+            />
             <div className="py-12">
                 <div className="mx-auto space-y-6">
                     <div className="bg-secondary p-4 shadow sm:rounded-lg sm:p-8">
@@ -39,16 +50,16 @@ function Edit({
                             </h2>
                             {paymentMethods.length > 0 && (
                                 <Button
-                                type="button"
-                                variant={"outline"}
-                                size={"sm"}
-                                onClick={onOpen}
-                            >
-                                <Icon
-                                    name="pencil"
-                                    className="h-5 w-5 text-foreground"
-                                />
-                            </Button>
+                                    type="button"
+                                    variant={"outline"}
+                                    size={"sm"}
+                                    onClick={onOpen}
+                                >
+                                    <Icon
+                                        name="pencil"
+                                        className="h-5 w-5 text-foreground"
+                                    />
+                                </Button>
                             )}
                         </div>
                         <div>
@@ -66,7 +77,6 @@ function Edit({
                                             className="mr-3 h-12 w-12 text-current"
                                         />
                                         <p className="text-gray-700">
-                                            {/* {defaultPaymentMethod.card.brand.charAt(0).toUpperCase() + defaultPaymentMethod.card.brand.slice(1)}  */}
                                             **** **** ****{" "}
                                             {defaultPaymentMethod.card.last4}
                                         </p>
@@ -78,15 +88,13 @@ function Edit({
                                     </p>
                                 </div>
                             )}
-
-                           
                         </div>
                     </div>
 
                     <div className="bg-secondary p-4 shadow sm:rounded-lg sm:p-8">
                         {auth.user?.isSub ? (
                             <CancelSubscription
-                                className="max-w-xl"
+                                className=""
                                 subscriptions={subscriptions}
                             />
                         ) : (

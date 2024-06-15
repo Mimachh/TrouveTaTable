@@ -15,17 +15,15 @@ interface Props {
     showSubmitButton: boolean;
     setShowSubmitButton: (value: boolean) => void;
     openConfirmDeletion: (id: string) => void;
-    setShowUpdateMethod: (value: boolean) => void;
     onClose: () => void;
 }
-const ShowAllPaymentMethod = (props: Props) => {
+const UpdatePaymentMethod = (props: Props) => {
     const {
         paymentMethods,
         defaultPaymentMethod,
         openConfirmDeletion,
         setShowSubmitButton,
         showSubmitButton,
-        setShowUpdateMethod,
         onClose
     } = props;
 
@@ -159,20 +157,9 @@ const ShowAllPaymentMethod = (props: Props) => {
                     )}
             </div>
 
-            <div className="mt-3">
-                <Button
-                    onClick={() => {
-                        setShowUpdateMethod(false);
-                    }}
-                    variant={"ghost"}
-                    className="flex items-center gap-3"
-                >
-                    <Icon name="plus" className="h-6 w-6" />
-                    <span>Ajouter une nouvelle méthode de paiement</span>
-                </Button>
-            </div>
+
         </>
     );
 };
 
-export default ShowAllPaymentMethod;
+export default UpdatePaymentMethod;

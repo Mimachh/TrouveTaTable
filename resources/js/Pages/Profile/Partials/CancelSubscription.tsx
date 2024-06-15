@@ -56,16 +56,16 @@ export default function CancelSubscription({
         <section className={`space-y-6 ${className}`}>
             <header>
                 <h2 className="text-lg font-medium text-foreground">
-                    Abonnement
+                    Abonnement(s)
                 </h2>
             </header>
-            <div className="space-y-2">
+            <div className="space-y-2 ">
                 {subscriptions?.map((subscription) => (
                     <div
                         key={subscription.id}
-                        className="flex w-fit flex-col gap-5 rounded-lg border border-muted-foreground p-4"
+                        className="flex w-full items-center gap-5 p-4"
                     >
-                        <p className="text-[15px] font-semibold tracking-wide text-muted-foreground">
+                        <p className="text-[15px] font-semibold tracking-wide text-foreground">
                             {subscription.name} :{" "}
                             <span className="font-normal">
                                 {subscription.recurrence === "monthly" ? (
@@ -94,18 +94,19 @@ export default function CancelSubscription({
                         {subscription.isOnGracePeriod ? (
                             <>
                                 {subscription.ends_at && (
-                                    <p className="text-sm">
-                                        Votre abonnement prendra fin le :{" "}
+                                    <small className="text-sm">
+                                        Cet abonnement prendra fin le :{" "}
                                         {new Date(
                                             subscription.ends_at,
                                         ).toLocaleDateString("fr-FR")}
-                                    </p>
+                                    </small>
                                 )}
                             </>
                         ) : (
                             <Button
-                                variant={"destructive"}
+                                variant={"link"}
                                 size={"sm"}
+                                className="text-destructive font-tight tracking-tighter"
                                 onClick={() => {
                                     confirmSubscriptionDeletion();
                                     setSubscriptionId(subscription.id);
