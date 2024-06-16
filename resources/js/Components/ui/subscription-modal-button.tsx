@@ -29,6 +29,10 @@ const SubscriptionModalButton = (props: Props) => {
             toast.error("Vous devez être connecté pour continuer");
             return
         }
+        if (user.isFondator) {
+            toast.error("Vous êtes déjà abonné");
+            return;
+        }
 
         contactModalOnOpen();
         contactModalSetProduct(product);

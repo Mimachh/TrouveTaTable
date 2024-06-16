@@ -27,6 +27,7 @@ export default function Welcome({ auth, products }: WelcomeProps) {
     useEffect(() => {
         setUser(auth.user);
     });
+
     const tabs = [
         { id: "Home", label: "Accueil" },
         { id: "Features", label: "Avantages" },
@@ -53,7 +54,7 @@ export default function Welcome({ auth, products }: WelcomeProps) {
                     <Contact ref={(el) => (sectionRefs.current[3] = el)} />
                     <NewsletterSection />
                     <Roadmap ref={(el) => (sectionRefs.current[4] = el)} />
-                    CASHIER
+                
                     <Footer />
                 </div>
             </LazyMotion>

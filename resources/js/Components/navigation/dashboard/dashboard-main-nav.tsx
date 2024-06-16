@@ -80,7 +80,7 @@ const DashboardMainNav = ({
                 </CardContent>
             </Card>
 
-            <Dialog open={true}>
+            <Dialog open={false}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="flex justify-center items-center flex-col gap-y-4 pb-2">

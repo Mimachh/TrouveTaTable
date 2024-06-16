@@ -22,7 +22,16 @@ const UserAvatar = () => {
                 <DropdownMenuLabel>Mon compte</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                    <Link href={route('profile.edit')}>Profil</Link>
+                    <Link href={route("profile.edit")}>Profil</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                    <Link
+                        href={route("logout")}
+                        method="post"
+                        as="button"
+                    >
+                        Déconnexion
+                    </Link>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
