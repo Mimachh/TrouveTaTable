@@ -22,7 +22,7 @@ class UpdateAvatarRestaurantRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "avatar" => ["nullable", "image"]
+            "avatar" => ["nullable", "image", "mimes:jpeg,png,jpg,webp", "max:2048"]
         ];
     }
 }

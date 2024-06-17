@@ -16,8 +16,10 @@ class DeleteAvatarRestaurantController extends Controller
     
     public function __invoke(Restaurant $restaurant)
     {
+    
         $avatar = $restaurant->avatar;
-        if($avatar) {
+       
+        if($avatar && auth()->user()->can('updateAvatar', $restaurant)) {
             $reformatURL = $this->restaurantRepository->reformatFileURL($restaurant->avatar);
             Storage::disk('public')->delete($reformatURL);
             $restaurant->update(['avatar' => null]);

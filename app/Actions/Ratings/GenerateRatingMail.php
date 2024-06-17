@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Actions\Ratings;
 
+use App\Http\Resources\UserResource;
 use App\Mail\Rating\SendRatingMailToClient;
 use App\Models\RatingToken;
 use App\Models\Reservation;
@@ -85,6 +86,7 @@ class GenerateRatingMail
     private function reservationsCanReceiveRating(Restaurant $restaurant): ?iterable
     {
         $proprio = $restaurant->owner;
+        // ici il faut enlever je crois
         if (!$this->ownerCanEnableRating($proprio)) {
             return $restaurant->reservations;
         }
@@ -94,5 +96,9 @@ class GenerateRatingMail
     private function ownerCanEnableRating($owner): bool 
     {
         return $owner->isSub($owner);
+
+
+        // $user = new UserResource($owner->id);
+        // return $user->isFondator();
     }
 }

@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Dashboard\Restaurant;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\Restaurant\UpdateMediaRestaurantRequest;
-use App\Models\Media;
 use App\Models\Restaurant;
 use App\Repositories\RestaurantRepository;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+
 
 class UpdateMediaRestaurantController extends Controller
 {

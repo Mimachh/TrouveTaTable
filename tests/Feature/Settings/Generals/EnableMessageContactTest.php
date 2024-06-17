@@ -11,20 +11,20 @@ use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\put;
 
-it('can not activate restaurant if not auth', function () {
+it('can not activate message contact if not auth', function () {
     $restaurant = Restaurant::factory()->create([
-        'active' => false
+        'accept_messages' => false
     ]);
 
-    $response = put(route('dashboard.settings.change-status', ['restaurant' => $restaurant->id]), [
-        'active' => true,
+    $response = put(route('dashboard.messages.status', ['restaurant' => $restaurant->id]), [
+        'accept_messages' => true,
     ])->assertRedirect(route('login'));
 
 });
 
-it('can not activate restaurant if not his', function () {
+it('can not activate message contact if not his', function () {
     $restaurant = Restaurant::factory()->create([
-        'active' => false
+        'accept_messages' => false
     ]);
 
     $user = User::factory()->create();
@@ -32,38 +32,31 @@ it('can not activate restaurant if not his', function () {
         'active' => false,
         "owner_id" => $user->id
     ]); 
-    $response = $this->actingAs($user)->put(route('dashboard.settings.change-status', ['restaurant' => $restaurant->id]), [
-        'active' => true,
+    $response = $this->actingAs($user)->put(route('dashboard.messages.status', ['restaurant' => $restaurant->id]), [
+        'accept_messages' => true,
     ]);
     assertDatabaseHas('restaurants', [
-        'active' => false,
+        'accept_messages' => false,
     ]);
     $response->assertStatus(403);
 });
 
-it('can not activate restaurant if not fondator', function () {
+it('can not activate contact message if not fondator', function () {
     $user = User::factory()->create();
-    //     ->post(route('subscribe.store', [
-    //         'paymentMethod' => $paymentIntent->payment_method,
-    //         'selectedProductId' => $product->id,
-    //         'recurrence' => 'monthly'
-    //     ]));
 
-
-    
-    $restaurant = Restaurant::factory()->create([
-        'active' => false,
+   $restaurant = Restaurant::factory()->create([
+        'accept_messages' => false,
         "owner_id" => $user->id
     ]);
-    $response = $this->actingAs($user)->put(route('dashboard.settings.change-status', ['restaurant' => $restaurant->id]), [
-        'active' => true,
+    $response = $this->actingAs($user)->put(route('dashboard.messages.status', ['restaurant' => $restaurant->id]), [
+        'accept_messages' => true,
     ])->assertStatus(403);
     assertDatabaseHas('restaurants', [
-        'active' => false,
+        'accept_messages' => false,
     ]);
 });
 
-it('can activate restaurant if fondator', function () {
+it('can activate message contact if fondator', function () {
     $stripe = new StripeClient(config('stripe.stripe_secret'));
     $product =   Product::factory()->create([
         "name" => "Pack Fondateur",
@@ -105,15 +98,15 @@ it('can activate restaurant if fondator', function () {
         ]));
     
     $restaurant = Restaurant::factory()->create([
-        'active' => false,
+        'accept_messages' => false,
         "owner_id" => $user->id
     ]);
 
-    $response = $this->actingAs($user)->put(route('dashboard.settings.change-status', ['restaurant' => $restaurant->id]), [
-        'active' => true,
+    $response = $this->actingAs($user)->put(route('dashboard.messages.status', ['restaurant' => $restaurant->id]), [
+        'accept_messages' => true,
     ])->assertStatus(201);
     assertDatabaseHas('restaurants', [
-        'active' => true,
+        'accept_messages' => true,
     ]);
 
 });

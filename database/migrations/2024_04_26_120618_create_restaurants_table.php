@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('logo')->nullable();
             $table->string('cover')->nullable();
             $table->string('description')->nullable();
-            $table->boolean('active')->default(true);
+            $table->boolean('active')->default(false);
            
 
             $table->string('banner', 1024)->nullable();

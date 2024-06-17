@@ -60,6 +60,7 @@ it('can not enable client mail if auth and restaurant not his', function () {
     $response->assertStatus(403);
 });
 
+// Even without subscription he can enable client mail but i won't works
 it('can enable client mail if auth and restaurant is his', function () {
     $user = User::factory()->create();
     $restaurant = Restaurant::factory()->create([

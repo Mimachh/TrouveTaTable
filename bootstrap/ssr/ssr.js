@@ -1906,7 +1906,7 @@ const DashboardMainNav = ({
           "Prendre un abonnement",
           /* @__PURE__ */ jsx(Zap, { className: "ml-2 h-4 w-4 fill-white" })
         ] }) }) }),
-        /* @__PURE__ */ jsx(Dialog, { open: true, children: /* @__PURE__ */ jsxs(DialogContent, { children: [
+        /* @__PURE__ */ jsx(Dialog, { open: false, children: /* @__PURE__ */ jsxs(DialogContent, { children: [
           /* @__PURE__ */ jsxs(DialogHeader, { children: [
             /* @__PURE__ */ jsx(DialogTitle, { className: "flex justify-center items-center flex-col gap-y-4 pb-2", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-x-2 font-bold text-xl", children: [
               "Upgrade to Genius",
@@ -1983,7 +1983,16 @@ const UserAvatar = () => {
     /* @__PURE__ */ jsxs(DropdownMenuContent, { align: "end", children: [
       /* @__PURE__ */ jsx(DropdownMenuLabel, { children: "Mon compte" }),
       /* @__PURE__ */ jsx(DropdownMenuSeparator, {}),
-      /* @__PURE__ */ jsx(DropdownMenuItem, { children: /* @__PURE__ */ jsx(Link, { href: route("profile.edit"), children: "Profil" }) })
+      /* @__PURE__ */ jsx(DropdownMenuItem, { children: /* @__PURE__ */ jsx(Link, { href: route("profile.edit"), children: "Profil" }) }),
+      /* @__PURE__ */ jsx(DropdownMenuItem, { children: /* @__PURE__ */ jsx(
+        Link,
+        {
+          href: route("logout"),
+          method: "post",
+          as: "button",
+          children: "Déconnexion"
+        }
+      ) })
     ] })
   ] });
 };
@@ -2510,6 +2519,56 @@ const MissingInfoRestaurant = ({ restaurant }) => {
     "."
   ] }) }) });
 };
+const createSelectors$a = (_store) => {
+  let store = _store;
+  store.use = {};
+  for (let k of Object.keys(store.getState())) {
+    store.use[k] = () => store((s) => s[k]);
+  }
+  return store;
+};
+const useUser = createSelectors$a(create((set) => ({
+  user: null,
+  setUser: (user) => set({ user })
+})));
+const GoToFondatorPrices = ({
+  disabled,
+  variant,
+  ...props
+}) => {
+  const v = variant ?? "default";
+  const s = props.size ?? "md";
+  return /* @__PURE__ */ jsx(
+    Button,
+    {
+      variant: v,
+      ...props,
+      disabled,
+      type: "button",
+      size: s,
+      onClick: () => {
+        console.log("Go to fondator prices");
+      },
+      children: disabled ? /* @__PURE__ */ jsx("div", { className: "flex w-full items-center justify-center", children: /* @__PURE__ */ jsx(LoaderCircle, { className: "animate h-6 w-6 animate-spin" }) }) : /* @__PURE__ */ jsx(Fragment, { children: "Mettre à niveau" })
+    }
+  );
+};
+const ErrorMustBeFondator = (props) => {
+  const { message, classNames: classNames2 } = props;
+  return /* @__PURE__ */ jsxs("div", { className: cn("mt-1 flex items-center gap-1 p-1.5 border rounded-md bg-destructive/5", classNames2), children: [
+    /* @__PURE__ */ jsxs("p", { className: "flex items-center gap-1 text-sm tracking-tight", children: [
+      /* @__PURE__ */ jsx("span", { className: "rounded-full bg-destructive p-1", children: /* @__PURE__ */ jsx(X, { className: "h-4 w-4 text-muted" }) }),
+      message
+    ] }),
+    /* @__PURE__ */ jsx(
+      GoToFondatorPrices,
+      {
+        size: "xs",
+        variant: "outline"
+      }
+    )
+  ] });
+};
 const Dashboard = ({
   auth,
   flash,
@@ -2518,6 +2577,7 @@ const Dashboard = ({
   isMissingInfo
 }) => {
   const restaurant = resto.data;
+  const user = useUser.use.user();
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsx(Head, { title: `Dashboard de ${restaurant.name}` }),
     isMissingInfo && /* @__PURE__ */ jsx(MissingInfoRestaurant, { restaurant }),
@@ -2525,7 +2585,14 @@ const Dashboard = ({
       /* @__PURE__ */ jsx(RestaurantStatus, { restaurant }),
       /* @__PURE__ */ jsx(MessageStatus, { restaurant }),
       /* @__PURE__ */ jsx(ReservationStatus, { restaurant }),
-      /* @__PURE__ */ jsx(ServicesStatus, { restaurant })
+      /* @__PURE__ */ jsx(ServicesStatus, { restaurant }),
+      !(user == null ? void 0 : user.isFondator) && /* @__PURE__ */ jsx(
+        ErrorMustBeFondator,
+        {
+          classNames: "bg-background/60 justify-between",
+          message: "Votre niveau d'abonnement ne vous permet pas de profiter pleinement de nos services."
+        }
+      )
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-start gap-4", children: [
       /* @__PURE__ */ jsxs("h1", { className: "text-4xl ", children: [
@@ -3584,7 +3651,7 @@ const __vite_glob_0_11 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.de
   __proto__: null,
   default: Hours
 }, Symbol.toStringTag, { value: "Module" }));
-const createSelectors$a = (_store) => {
+const createSelectors$9 = (_store) => {
   let store = _store;
   store.use = {};
   for (let k of Object.keys(store.getState())) {
@@ -3592,7 +3659,7 @@ const createSelectors$a = (_store) => {
   }
   return store;
 };
-const useSelectedMessage = createSelectors$a(create((set) => ({
+const useSelectedMessage = createSelectors$9(create((set) => ({
   messageId: null,
   setMessageId: (messageId) => set(() => ({ messageId }))
 })));
@@ -3764,8 +3831,22 @@ const PaginationNext = ({
   }
 );
 PaginationNext.displayName = "PaginationNext";
+const useToastErrorNotFondator = () => {
+  const showErrorToast = (props) => {
+    const { message, action } = props;
+    toast.error(message, {
+      action: {
+        label: action,
+        onClick: () => {
+        }
+      }
+    });
+  };
+  return { showErrorToast };
+};
 const EnableDisableContactMessage = (props) => {
   const { restaurant, can } = props;
+  const user = useUser.use.user();
   const [loading, setLoading] = useState(false);
   const [acceptMessages, setAcceptMessages] = useState(
     restaurant.accept_messages
@@ -3774,7 +3855,7 @@ const EnableDisableContactMessage = (props) => {
     accept_messages: ""
   });
   const submit = (e) => {
-    if (!can.enableMessages) {
+    if (!can.enableMessages || !(user == null ? void 0 : user.isFondator)) {
       toast.error("Vous n'avez pas la permission de modifier ce paramètre");
       return;
     }
@@ -3795,6 +3876,7 @@ const EnableDisableContactMessage = (props) => {
       setLoading(false);
     });
   };
+  const { showErrorToast } = useToastErrorNotFondator();
   return /* @__PURE__ */ jsxs(
     Card,
     {
@@ -3805,32 +3887,42 @@ const EnableDisableContactMessage = (props) => {
           /* @__PURE__ */ jsx(CardTitle, { className: "text-md", children: "Formulaire de contact" }),
           /* @__PURE__ */ jsx(CardDescription, { children: "Activer ou désactiver le formulaire de contact en ligne de votre restaurant." })
         ] }),
-        /* @__PURE__ */ jsx(CardContent, { className: "gap-2", children: /* @__PURE__ */ jsx(
-          FormFieldLayout,
-          {
-            label: "Activer le formulaire de contact ?",
-            fieldName: "accept_messages",
-            className: "flex gap-6 w-full items-center border border-muted rounded-lg p-4\n            bg-background space-y-0\n            ",
-            error: (errors == null ? void 0 : errors.accept_messages) ?? "",
-            children: /* @__PURE__ */ jsx(
-              Switch,
-              {
-                disabled: loading || !can.enableMessages,
-                checked: acceptMessages,
-                onCheckedChange: (e) => {
-                  if (!can.enableMessages) {
-                    toast.error("Vous n'avez pas la permission de modifier ce paramètre");
-                    return;
+        /* @__PURE__ */ jsxs(CardContent, { className: "gap-2", children: [
+          /* @__PURE__ */ jsx(
+            FormFieldLayout,
+            {
+              label: "Activer le formulaire de contact ?",
+              fieldName: "accept_messages",
+              className: "flex gap-6 w-full items-center border border-muted rounded-lg p-4\n            bg-background space-y-0\n            ",
+              error: (errors == null ? void 0 : errors.accept_messages) ?? "",
+              children: /* @__PURE__ */ jsx(
+                Switch,
+                {
+                  disabled: loading || !can.enableMessages,
+                  checked: acceptMessages,
+                  onCheckedChange: (e) => {
+                    if (!(user == null ? void 0 : user.isFondator)) {
+                      showErrorToast({
+                        message: "Votre niveau d'abonnement ne vous permet pas d'activer le système de messagerie.",
+                        action: "Mettre à niveau"
+                      });
+                      return;
+                    }
+                    if (!can.enableMessages) {
+                      toast.error("Vous n'avez pas la permission de modifier ce paramètre");
+                      return;
+                    }
+                    setAcceptMessages(() => {
+                      submit(e);
+                      return e;
+                    });
                   }
-                  setAcceptMessages(() => {
-                    submit(e);
-                    return e;
-                  });
                 }
-              }
-            )
-          }
-        ) })
+              )
+            }
+          ),
+          !(user == null ? void 0 : user.isFondator) && /* @__PURE__ */ jsx(ErrorMustBeFondator, { message: "Il faut être abonné pour pouvoir activer le système de contact." })
+        ] })
       ]
     }
   );
@@ -4288,7 +4380,7 @@ const __vite_glob_0_65 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.de
   __proto__: null,
   default: MenuCard
 }, Symbol.toStringTag, { value: "Module" }));
-const createSelectors$9 = (_store) => {
+const createSelectors$8 = (_store) => {
   let store = _store;
   store.use = {};
   for (let k of Object.keys(store.getState())) {
@@ -4296,7 +4388,7 @@ const createSelectors$9 = (_store) => {
   }
   return store;
 };
-const useContactRestaurantModal = createSelectors$9(create((set) => ({
+const useContactRestaurantModal = createSelectors$8(create((set) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),
@@ -6058,7 +6150,7 @@ const __vite_glob_0_31 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.de
   __proto__: null,
   default: CalendarReservation
 }, Symbol.toStringTag, { value: "Module" }));
-const createSelectors$8 = (_store) => {
+const createSelectors$7 = (_store) => {
   let store = _store;
   store.use = {};
   for (let k of Object.keys(store.getState())) {
@@ -6066,7 +6158,7 @@ const createSelectors$8 = (_store) => {
   }
   return store;
 };
-const useShowReservationModal = createSelectors$8(create(
+const useShowReservationModal = createSelectors$7(create(
   (set) => ({
     isOpen: false,
     onOpen: () => {
@@ -6249,7 +6341,7 @@ const SeeReservation = ({ restaurant }) => {
     }
   );
 };
-const createSelectors$7 = (_store) => {
+const createSelectors$6 = (_store) => {
   let store = _store;
   store.use = {};
   for (let k of Object.keys(store.getState())) {
@@ -6257,7 +6349,7 @@ const createSelectors$7 = (_store) => {
   }
   return store;
 };
-const useAddAdminReservationModal = createSelectors$7(create((set) => ({
+const useAddAdminReservationModal = createSelectors$6(create((set) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false, restaurantId: null, serviceId: null, date: null, time: null }),
@@ -6306,7 +6398,7 @@ function formatDateToIsoMidDay({ date }) {
   date2.setHours(12);
   return date2.toISOString();
 }
-const createSelectors$6 = (_store) => {
+const createSelectors$5 = (_store) => {
   let store = _store;
   store.use = {};
   for (let k of Object.keys(store.getState())) {
@@ -6314,7 +6406,7 @@ const createSelectors$6 = (_store) => {
   }
   return store;
 };
-const useReservationAndResetAfterAdding = createSelectors$6(
+const useReservationAndResetAfterAdding = createSelectors$5(
   create((set) => ({
     reset: false,
     setReset: (reset) => set({ reset })
@@ -6922,6 +7014,7 @@ const __vite_glob_0_30 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.de
 }, Symbol.toStringTag, { value: "Module" }));
 const Settings = (props) => {
   const { restaurant, can, isMissingInfo } = props;
+  const user = useUser.use.user();
   const [showButtons, setShowButtons] = useState(false);
   const [isActive, setIsActive] = useState(restaurant.data.active);
   const [loading, setLoading] = useState(false);
@@ -6933,6 +7026,7 @@ const Settings = (props) => {
     city: restaurant.data.city ?? "",
     zip: restaurant.data.zip ?? ""
   });
+  const { showErrorToast } = useToastErrorNotFondator();
   const submit = (e) => {
     if (!can.update_settings) {
       toast.error(
@@ -6957,10 +7051,21 @@ const Settings = (props) => {
     );
   };
   const restaurantStatusSubmit = (e) => {
+    if ((user == null ? void 0 : user.isFondator) == false) {
+      toast.error(
+        "Vous n'avez pas les droits pour effectuer cette action."
+      );
+      return;
+    }
     setLoading(true);
-    axios.put(route("dashboard.settings.change-status", { restaurant: restaurant.data.id }), {
-      active: e
-    }).then((response) => {
+    axios.put(
+      route("dashboard.settings.change-status", {
+        restaurant: restaurant.data.id
+      }),
+      {
+        active: e
+      }
+    ).then((response) => {
       toast.success("Statut modifié !");
       router.reload();
     }).catch((error) => {
@@ -6977,7 +7082,7 @@ const Settings = (props) => {
       {
         label: "Status du restaurant",
         fieldName: "name",
-        className: "flex gap-6 w-fit items-center border border-muted rounded-lg p-4\n                    bg-background space-y-0\n                    ",
+        className: "flex w-fit items-center gap-6 space-y-0 rounded-lg border border-muted bg-background p-4",
         children: [
           isActive == true && "Actif",
           /* @__PURE__ */ jsx(
@@ -6986,8 +7091,17 @@ const Settings = (props) => {
               checked: isActive,
               disabled: loading || processing || !can.change_status,
               onCheckedChange: (e) => {
+                if (!(user == null ? void 0 : user.isFondator)) {
+                  showErrorToast({
+                    message: "Votre niveau d'abonnement ne vous permet pas d'activer le système de messagerie.",
+                    action: "Mettre à niveau"
+                  });
+                  return;
+                }
                 if (!can.change_status) {
-                  toast.error("Vous n'avez pas les droits pour effectuer cette action.");
+                  toast.error(
+                    "Vous n'avez pas les droits pour effectuer cette action."
+                  );
                   return;
                 }
                 setIsActive(() => {
@@ -6997,7 +7111,8 @@ const Settings = (props) => {
               }
             }
           ),
-          !isActive && "Inactif"
+          !isActive && "Inactif",
+          !(user == null ? void 0 : user.isFondator) && /* @__PURE__ */ jsx(ErrorMustBeFondator, { message: "Il faut être abonné pour pouvoir activer le système de contact." })
         ]
       }
     ),
@@ -7007,7 +7122,7 @@ const Settings = (props) => {
     ] }) }),
     /* @__PURE__ */ jsxs("form", { onSubmit: submit, children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
-        /* @__PURE__ */ jsxs("h1", { className: "text-4xl font-semibold tracking-wide p-2", children: [
+        /* @__PURE__ */ jsxs("h1", { className: "p-2 text-4xl font-semibold tracking-wide", children: [
           "Paramètre de votre restaurant: ",
           restaurant.data.name
         ] }),
@@ -7040,7 +7155,7 @@ const Settings = (props) => {
           Card,
           {
             "x-chunk": "dashboard-settings-adresse",
-            className: "md:col-span-1 bg-accent",
+            className: "bg-accent md:col-span-1",
             children: [
               /* @__PURE__ */ jsxs(CardHeader, { className: "px-7", children: [
                 /* @__PURE__ */ jsx(CardTitle, { children: "Informations principales" }),
@@ -7061,7 +7176,7 @@ const Settings = (props) => {
                         name: "name",
                         value: data2.name,
                         placeholder: "Nom du restaurant",
-                        className: "mt-1 block w-full py-3 border",
+                        className: "mt-1 block w-full border py-3",
                         autoComplete: "username",
                         onChange: (e) => {
                           setData("name", e.target.value);
@@ -7085,7 +7200,7 @@ const Settings = (props) => {
                         name: "email",
                         placeholder: "Adresse mail du restaurant",
                         value: data2.email,
-                        className: "mt-1 block w-full py-3 border",
+                        className: "mt-1 block w-full border py-3",
                         onChange: (e) => {
                           setData("email", e.target.value);
                           setShowButtons(true);
@@ -7108,7 +7223,7 @@ const Settings = (props) => {
                         name: "phone",
                         placeholder: "Téléphone du restaurant",
                         value: data2.phone,
-                        className: "mt-1 block w-full py-3 border",
+                        className: "mt-1 block w-full border py-3",
                         onChange: (e) => {
                           setData("phone", e.target.value);
                           setShowButtons(true);
@@ -7125,7 +7240,7 @@ const Settings = (props) => {
           Card,
           {
             "x-chunk": "dashboard-settings-adresse",
-            className: "md:col-span-2 bg-accent",
+            className: "bg-accent md:col-span-2",
             children: [
               /* @__PURE__ */ jsx(CardHeader, { className: "px-7", children: /* @__PURE__ */ jsx(CardTitle, { children: "Localisation" }) }),
               /* @__PURE__ */ jsx(CardContent, { children: /* @__PURE__ */ jsxs("div", { className: "md:grid md:grid-cols-3 md:gap-3", children: [
@@ -7143,7 +7258,7 @@ const Settings = (props) => {
                         name: "address",
                         placeholder: "3 rue du Port",
                         value: data2.address,
-                        className: "mt-1 block w-full py-3 border",
+                        className: "mt-1 block w-full border py-3",
                         autoComplete: "address",
                         onChange: (e) => {
                           setData("address", e.target.value);
@@ -7167,7 +7282,7 @@ const Settings = (props) => {
                         name: "zip",
                         placeholder: "72000",
                         value: data2.zip,
-                        className: "mt-1 block w-full py-3 border",
+                        className: "mt-1 block w-full border py-3",
                         autoComplete: "zip",
                         onChange: (e) => {
                           setData("zip", e.target.value);
@@ -7191,7 +7306,7 @@ const Settings = (props) => {
                         name: "city",
                         placeholder: "Le Mans",
                         value: data2.city,
-                        className: "mt-1 block w-full py-3 border",
+                        className: "mt-1 block w-full border py-3",
                         autoComplete: "city",
                         onChange: (e) => {
                           setData("city", e.target.value);
@@ -7709,7 +7824,7 @@ const __vite_glob_0_43 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.de
   __proto__: null,
   DataTableTables
 }, Symbol.toStringTag, { value: "Module" }));
-const createSelectors$5 = (_store) => {
+const createSelectors$4 = (_store) => {
   let store = _store;
   store.use = {};
   for (let k of Object.keys(store.getState())) {
@@ -7717,7 +7832,7 @@ const createSelectors$5 = (_store) => {
   }
   return store;
 };
-const useUpdateTable = createSelectors$5(
+const useUpdateTable = createSelectors$4(
   create((set) => ({
     openForm: false,
     setOpenForm: (openForm) => set({ openForm }),
@@ -8439,7 +8554,7 @@ const __vite_glob_0_50 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.de
   __proto__: null,
   default: Invoices
 }, Symbol.toStringTag, { value: "Module" }));
-const createSelectors$4 = (_store) => {
+const createSelectors$3 = (_store) => {
   let store = _store;
   store.use = {};
   for (let k of Object.keys(store.getState())) {
@@ -8447,7 +8562,7 @@ const createSelectors$4 = (_store) => {
   }
   return store;
 };
-const useHandlePaymentMethodModal = createSelectors$4(create((set) => ({
+const useHandlePaymentMethodModal = createSelectors$3(create((set) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false })
@@ -10431,7 +10546,7 @@ const __vite_glob_0_73 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.de
   __proto__: null,
   default: Subscribe
 }, Symbol.toStringTag, { value: "Module" }));
-const createSelectors$3 = (_store) => {
+const createSelectors$2 = (_store) => {
   let store = _store;
   store.use = {};
   for (let k of Object.keys(store.getState())) {
@@ -10439,7 +10554,7 @@ const createSelectors$3 = (_store) => {
   }
   return store;
 };
-const useAuthModal = createSelectors$3(create((set) => ({
+const useAuthModal = createSelectors$2(create((set) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),
@@ -10467,18 +10582,6 @@ const RegisterButton = (props) => {
     }
   );
 };
-const createSelectors$2 = (_store) => {
-  let store = _store;
-  store.use = {};
-  for (let k of Object.keys(store.getState())) {
-    store.use[k] = () => store((s) => s[k]);
-  }
-  return store;
-};
-const useUser = createSelectors$2(create((set) => ({
-  user: null,
-  setUser: (user) => set({ user })
-})));
 const GoProfileButton = (props) => {
   const { className } = props;
   return /* @__PURE__ */ jsxs(
@@ -11857,6 +11960,10 @@ const SubscriptionModalButton = (props) => {
       toast.error("Vous devez être connecté pour continuer");
       return;
     }
+    if (user.isFondator) {
+      toast.error("Vous êtes déjà abonné");
+      return;
+    }
     contactModalOnOpen();
     contactModalSetProduct(product);
     contactModalSetRecurrence(frequency);
@@ -12653,7 +12760,6 @@ function Welcome({ auth, products }) {
       /* @__PURE__ */ jsx(Contact, { ref: (el) => sectionRefs.current[3] = el }),
       /* @__PURE__ */ jsx(NewsletterSection, {}),
       /* @__PURE__ */ jsx(Roadmap, { ref: (el) => sectionRefs.current[4] = el }),
-      "CASHIER",
       /* @__PURE__ */ jsx(Footer, {})
     ] }) })
   ] });

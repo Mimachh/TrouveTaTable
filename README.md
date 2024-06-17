@@ -12,8 +12,7 @@ nl2br comme validation pour avoir les sauts de ligne en br
 
 - recheck les endroits ou j'utilise la modale de contact, passer le check côté backend pour plus de sécurité
 
-- Réfléchir au système de liste d'attente. = renvoyer les autres tables suite à la vérif et les mettre dans un select particulier.
-Le client s'inscrit. Si une réservation sur cette table pour ce service est annulée alors le client 1 en liste d'attente est inscrit en résa et reçoit un mail, mail dans lequel il peut annuler ou confirmer. S'il ne confirme pas avant le début du service la table ne sera pas réservée.
+
 
 - Mail de rappel la veille de la réservation.
 
@@ -35,20 +34,11 @@ nettoyer et clarifier index de reservation.
 - gestion des résa avec qr code A FAIRE
 - associer son menu à un qrcode A FAIRE
 - api A FAIRE
+- mail de rappel
+- tester mail de rating avec vérif subscribed
 
 
 
-# plus tard 
-- click and collect
-- service de livraison
-- liste d'attente
-- service de mail marketing  + possibilité d'exporter en csv
-- lutte anti no show (emprunte bancaire ou pré paiement) + informations sur le client
-
-
-
-
-- table menus
 - supprimer son compte et ses cascades
 - supprimer un resto et les cascades : les suppressions doivent être :
     - les files : banner, avatar, les medias
@@ -59,22 +49,6 @@ nettoyer et clarifier index de reservation.
 
 
 
-
-
-## à réfléchir :
-- gestion des employés ? avec adresse/ téléphone ...
-- heure travaillée par employé
-jour/date/début/fin
-- heure de travail prévu 
-- tache pour employé
-- vente
-- menu
-
-
-
-
-
-
 - notif mail pour message reçu
 - abonnement.
 - qr code
@@ -82,7 +56,6 @@ jour/date/début/fin
 
 - Faire page qui affiche tous les avis clients + corriger le message d'erreur qui apparait vite fait
 
-- Création d'un abonnement annuel ou mensuel -> servant comme base pour le SAAS
 
 - vérifier les crons
 
