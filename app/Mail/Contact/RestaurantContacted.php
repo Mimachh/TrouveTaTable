@@ -28,6 +28,7 @@ class RestaurantContacted extends Mailable implements ShouldQueue
     {
         return new Envelope(
             subject: 'Nouveau message reçu ! 📬',
+            from: config('mail.from.address'),
         );
     }
 

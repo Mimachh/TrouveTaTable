@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Mail;
 class Contact {
     public function sendMail(Restaurant $restaurant)
     {
-        Mail::to($restaurant->email)->queue(new RestaurantContacted(
+        Mail::to($restaurant->email)->send(new RestaurantContacted(
             $restaurant,
         ));
     }
