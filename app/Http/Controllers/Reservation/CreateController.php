@@ -23,8 +23,6 @@ class CreateController extends Controller
         //    $now = microtime(true) * 1000;
         $before_today = strtotime("yesterday") * 1000 - 1;
 
-        
-
         try {
 
             // return new RestaurantResource($restaurant);

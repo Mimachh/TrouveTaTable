@@ -8,7 +8,6 @@ import { LazyMotion, domAnimation } from "framer-motion";
 import React from "react";
 import EnablePage from "./Partials/EnablePage";
 import { Avis } from "@/types/avis";
-import { useUser } from "@/hooks/useUser";
 import ErrorMustBeFondator from "@/Components/fondator/message-error-must-be-fondator";
 
 type Props = PageProps & {
@@ -31,8 +30,8 @@ type Props = PageProps & {
 };
 
 const Page = (props: Props) => {
-    const { hours, restaurant, can, avis } = props;
-    const user = useUser.use.user();
+    const { hours, restaurant, can, avis, auth } = props;
+    const user = auth.user;
     return (
         <LazyMotion features={domAnimation}>
                    {!user?.isFondator && (

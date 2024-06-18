@@ -9,9 +9,9 @@ import {
 } from "@/Components/ui/card";
 import { Switch } from "@/Components/ui/switch";
 import useToastErrorNotFondator from "@/hooks/fondator/useToastErrorNotFondator";
-import { useUser } from "@/hooks/useUser";
+import { User } from "@/types";
 import { Restaurant } from "@/types/restaurant";
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import axios from "axios";
 import { ArrowRight, Copy } from "lucide-react";
 import { useState } from "react";
@@ -30,7 +30,9 @@ interface Props {
 const EnablePage = (props: Props) => {
     const { restaurant, can } = props;
     const { showErrorToast } = useToastErrorNotFondator();
-    const user = useUser.use.user();
+    const pageProps = usePage().props;
+    const auth = pageProps.auth as unknown as any;
+    const user = auth.user as User;
     const [loading, setLoading] = useState<boolean>(false);
     const [enablePage, setEnablePage] = useState<boolean>(
         restaurant.enable_page,

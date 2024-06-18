@@ -12,7 +12,6 @@ import { Input } from "@/Components/ui/input";
 import SubmitButton from "@/Components/ui/submit-button";
 import { Switch } from "@/Components/ui/switch";
 import DashboardLayout from "@/Layouts/DashboardLayout";
-import { useUser } from "@/hooks/useUser";
 import { PageProps, User } from "@/types";
 import { Restaurant } from "@/types/restaurant";
 import { router, useForm } from "@inertiajs/react";
@@ -33,8 +32,8 @@ type Props = PageProps & {
 };
 
 const Settings = (props: Props) => {
-    const { restaurant, can, isMissingInfo } = props;
-    const user = useUser.use.user();
+    const { restaurant, can, isMissingInfo, auth } = props;
+    const user = auth.user;
     const [showButtons, setShowButtons] = useState<boolean>(false);
     const [isActive, setIsActive] = useState<boolean>(restaurant.data.active);
     const [loading, setLoading] = useState<boolean>(false);

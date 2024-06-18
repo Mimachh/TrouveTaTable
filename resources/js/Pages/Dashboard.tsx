@@ -1,5 +1,5 @@
 import { Head, Link } from "@inertiajs/react";
-import { PageProps } from "@/types";
+import { PageProps, User } from "@/types";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import { Restaurant } from "@/types/restaurant";
 import { ChartBarIcon } from "@heroicons/react/24/outline";
@@ -9,8 +9,7 @@ import RestaurantStatus from "@/Components/restaurant-message-status/RestaurantS
 import MessageStatus from "@/Components/restaurant-message-status/MessageStatus";
 import ServicesStatus from "@/Components/restaurant-message-status/ServicesStatus";
 import MissingInfoRestaurant from "@/Components/MissingInfoRestaurant";
-import Error from "@/Components/restaurant-message-status/Messages/Error";
-import { useUser } from "@/hooks/useUser";
+
 import ErrorMustBeFondator from "@/Components/fondator/message-error-must-be-fondator";
 
 type DashboardProps = PageProps & {
@@ -28,7 +27,7 @@ const Dashboard = ({
     isMissingInfo,
 }: DashboardProps) => {
     const restaurant = resto.data;
-    const user = useUser.use.user()
+    const user = auth.user as User;
     return (
         <>
             <Head title={`Dashboard de ${restaurant.name}`} />

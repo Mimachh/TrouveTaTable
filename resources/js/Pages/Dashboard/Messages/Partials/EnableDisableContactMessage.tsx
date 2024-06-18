@@ -9,8 +9,9 @@ import {
 } from "@/Components/ui/card";
 import { Switch } from "@/Components/ui/switch";
 import useToastErrorNotFondator from "@/hooks/fondator/useToastErrorNotFondator";
-import { useUser } from "@/hooks/useUser";
+import { User } from "@/types";
 import { Restaurant } from "@/types/restaurant";
+import { usePage } from "@inertiajs/react";
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -24,7 +25,9 @@ interface Props {
 const EnableDisableContactMessage = (props: Props) => {
 
     const { restaurant, can} = props;
-    const user = useUser.use.user();
+    const pageProps = usePage().props;
+    const auth = pageProps.auth as unknown as any;
+    const user = auth.user as User;
     const [loading, setLoading] = useState<boolean>(false);
     const [acceptMessages, setAcceptMessages] = useState<boolean>(
         restaurant.accept_messages

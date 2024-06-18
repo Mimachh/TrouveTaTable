@@ -58,7 +58,7 @@ nettoyer et clarifier index de reservation.
 
 
 - vérifier les crons
-
+- ajouter un cron qui vérifie le niveau de souscription et qui rend false les : messages, active, booking, page
 
 - CE SOIR : 
     - corriger le message d'erreur qui apparait vite fait

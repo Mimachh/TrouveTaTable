@@ -11,11 +11,11 @@ import {
     CardHeader,
     CardTitle,
 } from "@/Components/ui/card";
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 import { ArrowRight, Copy } from "lucide-react";
-import { useUser } from "@/hooks/useUser";
 import useToastErrorNotFondator from "@/hooks/fondator/useToastErrorNotFondator";
+import { User } from "@/types";
 
 interface Props {
     restaurant: Restaurant;
@@ -28,7 +28,10 @@ interface Props {
 const AcceptReservation = (props: Props) => {
     const { restaurant, can } = props;
 
-    const user = useUser.use.user();
+    const pageProps = usePage().props;
+    const auth = pageProps.auth as unknown as any;
+    const user = auth.user as User;
+    
     const { showErrorToast } = useToastErrorNotFondator();
 
     const [loading, setLoading] = useState<boolean>(false);

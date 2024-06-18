@@ -9,7 +9,7 @@ import OpeningHours from "./Partials/OpeningHours";
 import StopReservation from "./Partials/StopReservation";
 import AcceptReservation from "./Partials/AcceptReservation";
 import ErrorMustBeFondator from "@/Components/fondator/message-error-must-be-fondator";
-import { useUser } from "@/hooks/useUser";
+
 
 type Props = PageProps & {
     restaurant: {
@@ -32,7 +32,7 @@ const Hours = ({ restaurant: resto, auth, days, hours, can }: Props) => {
     const [id, setId] = React.useState<number | null>();
     const [dayName, setDayName] = React.useState<string>("");
     const [loadingModal, setLoadingModal] = React.useState(false);
-    const user = useUser.use.user();
+    const user = auth.user;
     const openForm = (id: number, name: string) => {
         setOpen(true);
         setLoadingModal(true);

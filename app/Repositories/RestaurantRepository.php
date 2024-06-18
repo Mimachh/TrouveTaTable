@@ -24,11 +24,19 @@ class RestaurantRepository
     public function isRestaurantCanAcceptReservation(Restaurant $restaurant) {
 
         // here i will add when no subscriptions
+        $owner = $restaurant->owner;
+        if(!(new UserRepository())->isFondator($owner->id)) {
+            return false;
+        }
         $isMissingInfo = $this->isRestaurantMissingInformation($restaurant);
         return $restaurant->accept_reservations && $restaurant->active && !$isMissingInfo;       
     }
 
     public function isRestaurantCanEnablePage(Restaurant $restaurant) {
+        $owner = $restaurant->owner;
+        if(!(new UserRepository())->isFondator($owner->id)) {
+            return false;
+        }
         return $restaurant->enable_page && $restaurant->active;
     }
 
