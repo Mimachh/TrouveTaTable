@@ -69,7 +69,7 @@ const ContactCard = (props: Props) => {
                     </p>
                 </div>
 
-                {restaurant.accept_messages === true && (
+                {restaurant.accept_messages == true && (
                     <ContactButton restaurant={restaurant} variant="default" />
                 )}
             </CardContent>

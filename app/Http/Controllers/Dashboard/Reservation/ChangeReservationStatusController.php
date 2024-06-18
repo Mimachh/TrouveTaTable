@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers\Dashboard\Reservation;
 
-use App\Actions\FormatDate;
 use App\Actions\Reservations\SendMail;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\Reservation\ChangeReservationStatusRequest;
 use App\Http\Resources\ReservationResource;
-use App\Http\Resources\RestaurantResource;
-use App\Mail\Reservation\ChangeStatusMail;
 use App\Models\Reservation;
 use App\Models\Restaurant;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
+
 
 class ChangeReservationStatusController extends Controller
 {

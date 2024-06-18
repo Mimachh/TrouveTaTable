@@ -5,16 +5,16 @@
 
 nl2br comme validation pour avoir les sauts de ligne en br
 
-- Faire les tests pour : créer des horaires / créer une résa / update une résa / ajouter en tant qu'admin une résa / créer , updater et supprimer des tables
+- Faire les tests pour : créer des horaires / créer une résa / créer , updater et supprimer des tables
 
 
-- Table et model pour envoyer un message à un restaurant + notification.
+
 
 - recheck les endroits ou j'utilise la modale de contact, passer le check côté backend pour plus de sécurité
 
 
 
-- Mail de rappel la veille de la réservation.
+
 
 ajouter restaurant type sur welcome.
 nettoyer et clarifier index de reservation.
@@ -30,12 +30,11 @@ nettoyer et clarifier index de reservation.
 - module de resa
 - page de contact
 - inscription à newsletter
-- notation + avis EN COURS - Faire page qui affiche tous les avis clients et l'ajouter au mail newRatingNotifyRestaurant + 
+- notation
 - gestion des résa avec qr code A FAIRE
 - associer son menu à un qrcode A FAIRE
 - api A FAIRE
-- mail de rappel
-- tester mail de rating avec vérif subscribed
+- mail de rappel A FAIRE
 
 
 
@@ -49,12 +48,10 @@ nettoyer et clarifier index de reservation.
 
 
 
-- notif mail pour message reçu
+
 - abonnement.
 - qr code
 
-
-- Faire page qui affiche tous les avis clients + corriger le message d'erreur qui apparait vite fait
 
 
 - vérifier les crons
@@ -62,3 +59,6 @@ nettoyer et clarifier index de reservation.
 
 - CE SOIR : 
     - corriger le message d'erreur qui apparait vite fait
+    - vérifier les crons
+    - notif mail pour message reçu + test
+    - Mail de rappel la veille de la réservation + test

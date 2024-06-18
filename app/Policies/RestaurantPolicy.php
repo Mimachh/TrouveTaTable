@@ -110,6 +110,12 @@ class RestaurantPolicy
         return $user->id == $restaurant->owner_id;
     }
 
+    public function update_reservation_client(User $user, Restaurant $restaurant): bool
+    {
+        return $user->id == $restaurant->owner_id;
+    }
+
+
     // NEED SUBSCRIPTION
     public function change_status(User $user, Restaurant $restaurant): bool
     {
@@ -125,7 +131,7 @@ class RestaurantPolicy
 
     public function enableBookingForm(User $user, Restaurant $restaurant): bool
     {
-        $isFondator = (new UserRepository())->isFondator($user->id);
+        $isFondator = (new UserRepository())->isFondator($restaurant->owner_id);
         return $user->id == $restaurant->owner_id && $isFondator;
     }
 

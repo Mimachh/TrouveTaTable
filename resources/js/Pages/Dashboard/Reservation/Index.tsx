@@ -12,9 +12,12 @@ type DashboardReservationProps = PageProps & {
     restaurant: {
         data: Restaurant;
     };
+    can: {
+        enableBookingForm: boolean;
+    }
 };
 
-const Index = ({ auth, restaurant }: DashboardReservationProps) => {
+const Index = ({ auth, restaurant, can }: DashboardReservationProps) => {
     const today = startOfToday();
     const [selectedDay, setSelectedDay] = useState(today);
     const selectedDayIndex = getSelectedDayIndex(selectedDay);
@@ -40,6 +43,8 @@ const Index = ({ auth, restaurant }: DashboardReservationProps) => {
                     selectedDay={selectedDay}
                     restaurant={restaurant.data}
                     servicesSelectedDay={servicesSelectedDay}
+                    can={can}
+                    user={auth.user}
                 />
             </div>
         </>
