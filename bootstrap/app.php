@@ -41,9 +41,9 @@ return Application::configure(basePath: dirname(__DIR__))
             ->everyMinute()
             ->withoutOverlapping();
             
-        $schedule->command('backup:run')
-            ->hourly()
-            ->withoutOverlapping();
+        // $schedule->command('backup:run')
+        //     ->hourly()
+        //     ->withoutOverlapping();
 
          $schedule->command('app:send-mail-after-reservation-job')
             ->dailyAt('08:00')
