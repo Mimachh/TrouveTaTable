@@ -8,6 +8,8 @@ import {
     CardTitle,
 } from "@/Components/ui/card";
 import { Switch } from "@/Components/ui/switch";
+import useToastErrorNotFondator from "@/hooks/fondator/useToastErrorNotFondator";
+import { useUser } from "@/hooks/useUser";
 import { Restaurant } from "@/types/restaurant";
 import { router } from "@inertiajs/react";
 import axios from "axios";
@@ -27,10 +29,11 @@ interface Props {
 }
 const EnablePage = (props: Props) => {
     const { restaurant, can } = props;
-  
+    const { showErrorToast } = useToastErrorNotFondator();
+    const user = useUser.use.user();
     const [loading, setLoading] = useState<boolean>(false);
     const [enablePage, setEnablePage] = useState<boolean>(
-        restaurant.enable_page
+        restaurant.enable_page,
     );
 
     const [errors, setErrors] = useState({
@@ -38,7 +41,15 @@ const EnablePage = (props: Props) => {
     });
 
     const submit = (e: boolean) => {
-        if(!can.enablePage) {
+        if (!user?.isFondator) {
+            showErrorToast({
+                message:
+                    "Votre niveau d'abonnement ne vous permet pas d'activer le système de messagerie.",
+                action: "Mettre à niveau",
+            });
+            return;
+        }
+        if (!can.enablePage) {
             toast.error("Vous n'avez pas la permission d'activer cette page");
             return;
         }
@@ -46,7 +57,7 @@ const EnablePage = (props: Props) => {
         setErrors({
             enable_page: "",
         });
-    
+
         axios
             .put(`/dashboard/${restaurant.id}/page/enablePage`, {
                 enable_page: e,
@@ -54,11 +65,11 @@ const EnablePage = (props: Props) => {
             .then((response) => {
                 // console.log(response);
                 toast.success("Page activée !");
-                router.reload()
+                router.reload();
             })
             .catch((error) => {
                 toast.error(
-                    "Une erreur est survenue, veuillez réessayer plus tard"
+                    "Une erreur est survenue, veuillez réessayer plus tard",
                 );
                 setErrors(error.response.data.errors);
                 // console.log(error)
@@ -74,7 +85,7 @@ const EnablePage = (props: Props) => {
     };
 
     return (
-        <Card x-chunk="settings-page" className="md:col-span-1 bg-accent h-fit">
+        <Card x-chunk="settings-page" className="h-fit bg-accent md:col-span-1">
             <CardHeader className="px-7 py-3">
                 <CardTitle className="text-md">Page web</CardTitle>
                 <CardDescription>
@@ -85,15 +96,27 @@ const EnablePage = (props: Props) => {
                 <FormFieldLayout
                     label="Activer le page web ?"
                     fieldName="enable_page"
-                    className="flex gap-6 w-full items-center border border-muted rounded-lg p-4
-    bg-background space-y-0
-    "
+                    className="flex w-full items-center gap-6 space-y-0 rounded-lg border border-muted bg-background p-4"
                     error={errors.enable_page}
                 >
                     <Switch
                         checked={enablePage}
                         disabled={loading}
                         onCheckedChange={(e) => {
+                            if (!user?.isFondator) {
+                                showErrorToast({
+                                    message:
+                                        "Votre niveau d'abonnement ne vous permet pas d'activer le système de messagerie.",
+                                    action: "Mettre à niveau",
+                                });
+                                return;
+                            }
+                            if (!can.enablePage) {
+                                toast.error(
+                                    "Vous n'avez pas la permission d'activer cette page",
+                                );
+                                return;
+                            }
                             setEnablePage(() => {
                                 submit(e);
                                 return e;
@@ -103,31 +126,31 @@ const EnablePage = (props: Props) => {
                 </FormFieldLayout>
 
                 {restaurant.enable_page == true && can.enablePage ? (
-                         <div className="text-sm mt-5 flex items-center justify-center gap-2">
-                         <Button
-                             variant={"link"}
-                             onClick={() => {
-                                 window.open(
-                                     restaurant.restaurant_link_page,
-                                     "_blank"
-                                 );
-                             }}
-                         >
-                             <span className="flex gap-2 items-center">
-                                 {" "}
-                                 Voir la page en ligne
-                                 <ArrowRight className="h-4 w-4 text-inherit" />
-                             </span>
-                         </Button>
-                         <Button
-                             className="flex gap-2 items-center"
-                             variant="outline"
-                             onClick={copy}
-                         >
-                             Copier le lien
-                             <Copy className="h-4 w-4 text-inherit" />
-                         </Button>
-                     </div>
+                    <div className="mt-5 flex items-center justify-center gap-2 text-sm">
+                        <Button
+                            variant={"link"}
+                            onClick={() => {
+                                window.open(
+                                    restaurant.restaurant_link_page,
+                                    "_blank",
+                                );
+                            }}
+                        >
+                            <span className="flex items-center gap-2">
+                                {" "}
+                                Voir la page en ligne
+                                <ArrowRight className="h-4 w-4 text-inherit" />
+                            </span>
+                        </Button>
+                        <Button
+                            className="flex items-center gap-2"
+                            variant="outline"
+                            onClick={copy}
+                        >
+                            Copier le lien
+                            <Copy className="h-4 w-4 text-inherit" />
+                        </Button>
+                    </div>
                 ) : (
                     <p className="p-4">La page est actuellement désactivée.</p>
                 )}

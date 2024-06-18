@@ -74,9 +74,10 @@ const Settings = (props: Props) => {
 
     const restaurantStatusSubmit = (e: boolean) => {
         if (user?.isFondator == false) {
-            toast.error(
-                "Vous n'avez pas les droits pour effectuer cette action.",
-            );
+            showErrorToast({
+                message: "Votre niveau d'abonnement ne vous permet pas d'activer le système de messagerie.",
+                action: "Mettre à niveau",
+            });
             return;
         }
         setLoading(true);
@@ -116,8 +117,7 @@ const Settings = (props: Props) => {
                     checked={isActive}
                     disabled={
                         loading ||
-                        processing ||
-                        !can.change_status
+                        processing
                     }
                     onCheckedChange={(e) => {
                         if (!user?.isFondator) {

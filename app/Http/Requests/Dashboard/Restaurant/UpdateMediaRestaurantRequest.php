@@ -42,8 +42,8 @@ class UpdateMediaRestaurantRequest extends FormRequest
             ],
             "attachments.*" => [
                 'image',
-                // File::types(self::$extensions)
-                "mimes:jpeg,png,jpg,webp"
+                File::types(self::$extensions)
+                // "mimes:jpeg,png,jpg,webp"
             ]
         ];
     }

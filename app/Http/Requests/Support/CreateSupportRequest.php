@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests\Dashboard\Reservation;
+namespace App\Http\Requests\Support;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EnableOrDisableRestaurantReservationRequest extends FormRequest
+class CreateSupportRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return auth()->user()->can('enableBookingForm', $this->restaurant);
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class EnableOrDisableRestaurantReservationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'accept_reservations' => 'required|boolean',
+            'subject' => ['required', 'string', 'max:60'],
+            'message' => ['required', 'string', 'max:255'],
         ];
     }
 }

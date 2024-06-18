@@ -4,13 +4,14 @@ namespace App\Policies;
 
 use App\Models\Restaurant;
 use App\Models\User;
+use App\Repositories\UserRepository;
 use Illuminate\Auth\Access\Response;
 
 class RestaurantPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
+
+
+
     public function viewAny(User $user): bool
     {
         //
@@ -69,15 +70,7 @@ class RestaurantPolicy
         //
     }
 
-    public function createTable(User $user, Restaurant $restaurant): bool {
-        return $user->id == $restaurant->owner_id;
-    }
-    public function enablePage(User $user, Restaurant $restaurant): bool
-    {
-        return $user->id == $restaurant->owner_id;
-    }
-
-    public function enableMessages(User $user, Restaurant $restaurant): bool
+    public function createTable(User $user, Restaurant $restaurant): bool
     {
         return $user->id == $restaurant->owner_id;
     }
@@ -92,7 +85,7 @@ class RestaurantPolicy
         return $user->id == $restaurant->owner_id;
     }
 
-    public function updateAvatar(User $user, Restaurant $restaurant): bool 
+    public function updateAvatar(User $user, Restaurant $restaurant): bool
     {
         return $user->id == $restaurant->owner_id;
     }
@@ -112,15 +105,36 @@ class RestaurantPolicy
         return $user->id == $restaurant->owner_id;
     }
 
-    public function update_settings(User $user, Restaurant $restaurant): bool 
-    {
-        return $user->id == $restaurant->owner_id; 
-    }
-
-    public function change_status(User $user, Restaurant $restaurant): bool
+    public function update_settings(User $user, Restaurant $restaurant): bool
     {
         return $user->id == $restaurant->owner_id;
     }
+
+    // NEED SUBSCRIPTION
+    public function change_status(User $user, Restaurant $restaurant): bool
+    {
+        $isFondator = (new UserRepository())->isFondator($user->id);
+        return $user->id == $restaurant->owner_id && $isFondator;
+    }
+
+    public function enablePage(User $user, Restaurant $restaurant): bool
+    {
+        $isFondator = (new UserRepository())->isFondator($user->id);
+        return $user->id == $restaurant->owner_id && $isFondator;
+    }
+
+    public function enableBookingForm(User $user, Restaurant $restaurant): bool
+    {
+        $isFondator = (new UserRepository())->isFondator($user->id);
+        return $user->id == $restaurant->owner_id && $isFondator;
+    }
+
+    public function enableMessages(User $user, Restaurant $restaurant): bool
+    {
+        $isFondator = (new UserRepository())->isFondator($user->id);
+        return $user->id == $restaurant->owner_id && $isFondator;
+    }
+
 
     // SETTINGS NOTIFICATIONS
     public function enable_notifications_after_booking_user(User $user, Restaurant $restaurant): bool

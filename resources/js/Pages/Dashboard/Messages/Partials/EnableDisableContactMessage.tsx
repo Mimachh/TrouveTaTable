@@ -1,6 +1,5 @@
 import ErrorMustBeFondator from "@/Components/fondator/message-error-must-be-fondator";
 import FormFieldLayout from "@/Components/layout/form-field-layout";
-import Error from "@/Components/restaurant-message-status/Messages/Error";
 import {
     Card,
     CardContent,

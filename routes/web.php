@@ -55,6 +55,7 @@ use App\Http\Controllers\Subscribe\CancelSubscriptionController;
 use App\Http\Controllers\Subscribe\CreateController;
 use App\Http\Controllers\Subscribe\Modal\CreateController as ModalCreateController;
 use App\Http\Controllers\Subscribe\StoreController;
+use App\Http\Controllers\Support\CreateSupportController;
 use App\Http\Controllers\Welcome\AppNewsletterController;
 use App\Http\Controllers\Welcome\CreateContactController;
 use App\Http\Controllers\WelcomeController;
@@ -207,6 +208,7 @@ Route::middleware(['auth'])->group(function () {
         });
     });
 
+    Route::post('/support', CreateSupportController::class)->name("support.send");
 
     Route::prefix('restaurant')->as('restaurant.')->group(function () {
         Route::post('store', [CreateRestaurantController::class, 'store'])->name('store');

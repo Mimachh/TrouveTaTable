@@ -8,6 +8,8 @@ import SelectTamponService from "./Partials/SelectTamponService";
 import OpeningHours from "./Partials/OpeningHours";
 import StopReservation from "./Partials/StopReservation";
 import AcceptReservation from "./Partials/AcceptReservation";
+import ErrorMustBeFondator from "@/Components/fondator/message-error-must-be-fondator";
+import { useUser } from "@/hooks/useUser";
 
 type Props = PageProps & {
     restaurant: {
@@ -20,6 +22,7 @@ type Props = PageProps & {
     hours: FormatedDayAndHour[];
     can: {
         deleteRestaurantService: boolean;
+        enableBookingForm: boolean;
     };
 };
 
@@ -29,7 +32,7 @@ const Hours = ({ restaurant: resto, auth, days, hours, can }: Props) => {
     const [id, setId] = React.useState<number | null>();
     const [dayName, setDayName] = React.useState<string>("");
     const [loadingModal, setLoadingModal] = React.useState(false);
-
+    const user = useUser.use.user();
     const openForm = (id: number, name: string) => {
         setOpen(true);
         setLoadingModal(true);
@@ -56,11 +59,15 @@ const Hours = ({ restaurant: resto, auth, days, hours, can }: Props) => {
                 restaurant={restaurant}
                 can={can}
             />
-
+  {!user?.isFondator && (
+                    <ErrorMustBeFondator 
+                    classNames="justify-between"
+                    message="Votre niveau d'abonnement ne vous permet pas d'activer le formulaire de réservation pour vos clients." />
+                )}
             <div className="md:grid md:grid-cols-3 gap-3 space-y-2 md:space-y-0">
                 <OpeningHours openForm={openForm} days={days} hours={hours} />
                 <div className="space-y-2">
-                    <AcceptReservation restaurant={restaurant} />
+                    <AcceptReservation restaurant={restaurant} can={can} />
                     <SelectTamponService restaurant={restaurant} />
                     <StopReservation restaurant={restaurant} />
                 </div>
