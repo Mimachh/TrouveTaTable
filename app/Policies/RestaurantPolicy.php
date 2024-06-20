@@ -70,6 +70,12 @@ class RestaurantPolicy
         //
     }
 
+
+    public function handle_services(User $user, Restaurant $restaurant): bool
+    {
+        return $user->id == $restaurant->owner_id;
+    }
+
     public function createTable(User $user, Restaurant $restaurant): bool
     {
         return $user->id == $restaurant->owner_id;

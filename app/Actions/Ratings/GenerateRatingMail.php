@@ -17,6 +17,9 @@ class GenerateRatingMail
     public function handle() {
         $restaurantCanReceiveRating = $this->loopOverRestaurantsToGetThoseWhereReservationCanBeRated();
         $yesterdayReservations = $this->getYesterdayReservationByReservationCollection($restaurantCanReceiveRating);
+        if (empty($yesterdayReservations)) {
+            return;
+        }
         $this->generateTokenForEachReservationAndSendMail($yesterdayReservations);
         return $yesterdayReservations;
     }

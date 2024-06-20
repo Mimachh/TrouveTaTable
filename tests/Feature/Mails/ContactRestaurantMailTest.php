@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
+use App\Mail\Contact\RestaurantContacted;
 use App\Models\Restaurant;
+use Illuminate\Support\Facades\Mail;
 
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\post;
 
-it('can send message to restaurant', function () {
- 
+it('can send message to restaurant and it queued mail', function () {
+    Mail::fake();
     $restaurant = Restaurant::factory()->create();
     
     post(route('message.send'), [
@@ -28,8 +30,7 @@ it('can send message to restaurant', function () {
     expect($message->subject)->toBe('Test subject');
     expect($message->content)->toBe('Test content');
 
+    Mail::assertQueued(RestaurantContacted::class);
+    Mail::assertQueuedCount(1);
+
 });
-
-
-
-

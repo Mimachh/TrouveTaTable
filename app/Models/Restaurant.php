@@ -122,6 +122,11 @@ class Restaurant extends Model implements Sluggable
         $query->where('accept_rating', 1);
     }
 
+    public function scopeReminderOpen(Builder $query)
+    {
+        $query->where('is_notify_client_a_day_before_booking', 1);
+    }
+
     public function scopeReservationOpen(Builder $query)
     {
         $query->where('accept_reservations', 1);

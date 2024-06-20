@@ -60,5 +60,4 @@ nettoyer et clarifier index de reservation.
 - CE SOIR : 
     - corriger le message d'erreur qui apparait vite fait
     - vérifier les crons
-    - notif mail pour message reçu + test
     - Mail de rappel la veille de la réservation + test
