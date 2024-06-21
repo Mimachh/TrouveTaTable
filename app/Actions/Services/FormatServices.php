@@ -50,9 +50,6 @@ class FormatServices
         }
     }
 
-    public function getServicesWithTheOptionsStartAndEnd()
-    {
-    }
 
     public function filterOffTheServiceWhenEndReservationIsPastToday($services, $date_reservation_no_format, $restaurant)
     {

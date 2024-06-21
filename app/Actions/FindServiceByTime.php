@@ -14,7 +14,6 @@ class FindServiceByTime
         foreach ($services as $service) {
             $startTime = strtotime($service->start_time);
             $endTime = strtotime($service->end_time);
-
             if ($time >= $startTime && $time <= $endTime) {
                 // Si le temps est dans la plage horaire du service, stocker ce service
                 $matchingService = $service;
