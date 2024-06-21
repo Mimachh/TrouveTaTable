@@ -40,14 +40,21 @@ class ReminderMail
 
     private function getRestaurantsWithReminder()
     {
-        $restaurantsEnable = Restaurant::reminderOpen()->with('reservations')->get();
-        if($restaurantsEnable->isEmpty()) {
+        $restaurantsEnable = Restaurant::reminderOpen()->with(['reservations' => function($query) {
+            $query->where('reservations.status', 'accepté'); // Précisez la table avant le nom de la colonne
+        }])->get();
+    
+        if ($restaurantsEnable->isEmpty()) {
             return [];
         }
+    
         $restaurantsArray = [];
         foreach ($restaurantsEnable as $restaurant) {
-            $restaurantsArray[] = $restaurant->reservations;
+            if (!$restaurant->reservations->isEmpty()) {
+                $restaurantsArray[] = $restaurant->reservations;
+            }
         }
+    
         return $restaurantsArray;
     }
 
