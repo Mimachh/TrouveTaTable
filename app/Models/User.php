@@ -63,7 +63,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 
-    public function isSub($userPassed): bool
+    public function isSub($userPassed = null): bool
     {
         $sub = null;
         if($userPassed) {
