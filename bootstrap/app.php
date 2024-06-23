@@ -40,17 +40,21 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('queue:work --stop-when-empty')
             ->everyMinute()
             ->withoutOverlapping();
-            
+
         // $schedule->command('backup:run')
         //     ->hourly()
         //     ->withoutOverlapping();
 
-         $schedule->command('app:send-mail-after-reservation-job')
+        $schedule->command('app:send-mail-after-reservation-job')
             ->dailyAt('08:00')
             ->withoutOverlapping();
+            
         $schedule->command('app:booking-reminder-job')
             ->dailyAt('17:00')
             ->withoutOverlapping();
 
+        $schedule->command('app:check-subscription-job')
+            ->dailyAt('00:00')
+            ->withoutOverlapping();
     })->create();
     // php artisan schedule:list
