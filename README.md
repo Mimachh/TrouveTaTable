@@ -10,11 +10,6 @@ nl2br comme validation pour avoir les sauts de ligne en br
 
 
 
-- recheck les endroits ou j'utilise la modale de contact, passer le check côté backend pour plus de sécurité
-
-
-
-
 
 ajouter restaurant type sur welcome.
 nettoyer et clarifier index de reservation.

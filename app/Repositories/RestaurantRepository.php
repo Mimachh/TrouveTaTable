@@ -17,7 +17,9 @@ class RestaurantRepository
     public function getServicesFromTheSelectedDate(Restaurant $restaurant, $date) {
         $date = Carbon::parse($date);
         $date->setLocale('fr');
-        $dayOfWeekIndex = $date->dayOfWeek;
+        // $dayOfWeekIndex = $date->dayOfWeek;
+        $dayOfWeekIndex = $date->dayOfWeekIso; 
+
         return $restaurant->services->where('day_id', $dayOfWeekIndex);
     }
 
