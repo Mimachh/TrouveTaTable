@@ -48,10 +48,6 @@ nettoyer et clarifier index de reservation.
 - qr code
 
 
-
-- vérifier les crons, maintenant
-- ajouter un cron qui vérifie le niveau de souscription et qui rend false les : messages, active, booking, page
-
 - CE SOIR : 
     - corriger le message d'erreur qui apparait vite fait
     - vérifier les crons : le rappel fonctionne, les mails normaux s'envoient.

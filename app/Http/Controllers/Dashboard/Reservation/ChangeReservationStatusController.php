@@ -12,9 +12,6 @@ use App\Models\Restaurant;
 
 class ChangeReservationStatusController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
     public function __invoke(ChangeReservationStatusRequest $request, Restaurant $restaurant, Reservation $reservation)
     {
         $data = $request->validated();

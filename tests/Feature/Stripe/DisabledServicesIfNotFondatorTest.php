@@ -11,7 +11,7 @@ use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseCount;
 use function Pest\Laravel\assertDatabaseHas;
 
- // user 1 n'a pas d'abonnement mais il a un resto ou tout est actif
+    // user 1 n'a pas d'abonnement mais il a un resto ou tout est actif
     // user 2 n'a pas d'abonnement mais il a un resto ou tout est inactif
     // user 3 pas d'abo pas de resto
     // user 4 a un abo mais pas de resto

@@ -99,7 +99,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/payment-method/{paymentMethod}', [BillingController::class, 'updatePaymentMethod'])->name('payment-method.update');
         Route::post('/store/new-payment-method', [BillingController::class, 'storeNewPaymentMethod'])->name('payment-method.create-new');
     });
-  
+
 
     Route::middleware('must.have.restaurant')->group(function () {
 
@@ -163,7 +163,7 @@ Route::middleware(['auth'])->group(function () {
                         Route::put('/update-after-booking-client', UpdateNotifyClientAfterBookingStatusController::class)->name('notify-after-booking-client'); // TESTED
                         Route::put('/update-day-before-booking-client', UpdateNotifyClientDayBeforeBookingStatusController::class)->name('notify-day-before-booking-client'); // TESTED
                         Route::put('/update-after-message-restaurant', UpdateNotifyRestaurantMessageStatusController::class)->name("notify-after-message-restaurant"); // TESTED
-                    }); 
+                    });
                 });
 
                 Route::prefix('avatar')->as('avatar.')->group(function () {
@@ -218,7 +218,7 @@ Route::middleware(['auth'])->group(function () {
     //         Route::get('/{product}', CreateController::class)->name('create');
     //         Route::post('store', StoreController::class)->name('store');
     //         Route::delete('cancel', CancelSubscriptionController::class)->name('cancel')->withoutMiddleware('redirect.subscribed');
-    
+
     //         Route::get('modal/{product}', ModalCreateController::class)->name('modal.create');
     //     });
     // });
@@ -232,7 +232,7 @@ Route::middleware(["auth"])->group(function () {
         Route::get('/{product}', CreateController::class)->name('create');
         Route::post('store', StoreController::class)->name('store');
         Route::delete('cancel', CancelSubscriptionController::class)->name('cancel')
-        // ->withoutMiddleware('redirect.subscribed')
+            // ->withoutMiddleware('redirect.subscribed')
         ;
 
         Route::get('modal/{product}', ModalCreateController::class)->name('modal.create');
@@ -276,15 +276,15 @@ Route::get('restaurant/notFound', function () {
 //     return view('mails.reservation.status-change');
 // });
 
-Route::get('/mail', function () {
+// Route::get('/mail', function () {
 
-    $reservation = Reservation::where('id', 1)->first();
+//     $reservation = Reservation::where('id', 1)->first();
 
 
-    return new App\Mail\Reservation\RemindBookingMail(
-        $reservation,
-    );
-});
+//     return new App\Mail\Reservation\RemindBookingMail(
+//         $reservation,
+//     );
+// });
 // Route::get('/rating-mail', function () {
 
 //     $ratingRestaurant = new RatingRestaurantResource(RatingRestaurant::find(1));
@@ -312,11 +312,11 @@ Route::get('/mail', function () {
 //                             </form> */}
 //     $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
 //     $product = Product::first();
-       
-       
+
+
 //         // $stripeProductIds = json_decode($product->stripe_product_id, true);
 
-      
+
 //         $price = json_decode($product->price, true);
 
 //         // $stripeProductId = $stripeProductIds['monthly'];
