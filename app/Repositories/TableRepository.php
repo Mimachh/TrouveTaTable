@@ -13,7 +13,7 @@ class TableRepository
     {
         $current_resa_date_format = (new FormatDate)->Ymd($reservation_date);
         
-        $res_table_ids = Reservation::orderBy('reservation_date')->get()->filter(function ($value) use ($current_resa_date_format, $service_id) {
+        $res_table_ids = Reservation::where('status', "accepté")->orderBy('reservation_date')->get()->filter(function ($value) use ($current_resa_date_format, $service_id) {
             $valueDateFormat = (new FormatDate)->Ymd($value->reservation_date);
             return $valueDateFormat == $current_resa_date_format && $value->service_id == $service_id;
         })->pluck('table_id');

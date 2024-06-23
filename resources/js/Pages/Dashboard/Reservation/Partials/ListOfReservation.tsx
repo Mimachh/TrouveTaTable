@@ -17,11 +17,17 @@ import { AddAdminReservation } from "@/Components/modales/AddAdminReservation";
 import { Separator } from "@/Components/ui/separator";
 import { formatDateToIsoMidDay } from "@/lib/format-date-to-iso-mid-day";
 import { useReservationAndResetAfterAdding } from "@/hooks/useReservationAndResetAfterAdding";
+import { User } from "@/types";
+import useToastErrorNotFondator from "@/hooks/fondator/useToastErrorNotFondator";
 
 interface ListReservationProps {
     selectedDay: Date;
+    user: User;
     restaurant: Restaurant;
     servicesSelectedDay: Services[] | null;
+    can: {
+        enableBookingForm: boolean;
+    };
 }
 
 interface FormattedReservation {
@@ -32,22 +38,27 @@ const ListOfReservation = ({
     selectedDay,
     restaurant,
     servicesSelectedDay,
+    can,
+    user,
 }: ListReservationProps) => {
     const [reservations, setReservations] = useState<FormattedReservation[]>(
-        []
+        [],
     );
     const [loading, setLoading] = useState<boolean>(true);
 
     const setRestaurantId = useShowReservationModal.use.setRestaurantId();
-
+    const { showErrorToast } = useToastErrorNotFondator();
     const addAdminReservationModalOnOpen =
         useAddAdminReservationModal.use.onOpen();
     const addAdminReservationModalSetServiceId =
         useAddAdminReservationModal.use.setServiceId();
-    const addAdminReservationModalSetRestaurantId = useAddAdminReservationModal.use.setRestaurantId();
-    const addAdminReservationModalSetDate = useAddAdminReservationModal.use.setDate();
-    const addAdminReservationModalSetTime = useAddAdminReservationModal.use.setTime();
-    
+    const addAdminReservationModalSetRestaurantId =
+        useAddAdminReservationModal.use.setRestaurantId();
+    const addAdminReservationModalSetDate =
+        useAddAdminReservationModal.use.setDate();
+    const addAdminReservationModalSetTime =
+        useAddAdminReservationModal.use.setTime();
+
     const getReservations = () => {
         setReservations([]);
         setLoading(true);
@@ -58,8 +69,8 @@ const ListOfReservation = ({
                 }/reservation/getReservationsByDate/${format(
                     selectedDay,
                     "dd-MM-yyyy",
-                    { locale: fr }
-                )}`
+                    { locale: fr },
+                )}`,
             )
             .then((response) => {
                 if (
@@ -74,7 +85,7 @@ const ListOfReservation = ({
             })
             .catch((error) => {
                 toast.error(
-                    "Une erreur est survenue lors de la récupération des réservations"
+                    "Une erreur est survenue lors de la récupération des réservations",
                 );
                 // console.error(error)
             })
@@ -83,10 +94,11 @@ const ListOfReservation = ({
             });
     };
 
-    const resetTheReservation = useReservationAndResetAfterAdding.use.reset()
-    const setResetTheReservation = useReservationAndResetAfterAdding.use.setReset()
+    const resetTheReservation = useReservationAndResetAfterAdding.use.reset();
+    const setResetTheReservation =
+        useReservationAndResetAfterAdding.use.setReset();
     useEffect(() => {
-        if(resetTheReservation) {
+        if (resetTheReservation) {
             setResetTheReservation(false);
         }
         getReservations();
@@ -103,7 +115,7 @@ const ListOfReservation = ({
                     dateTime={format(selectedDay, "EEEE dd MMMM yyyy", {
                         locale: fr,
                     })}
-                    className="capitalize text-sm"
+                    className="text-sm capitalize"
                 >
                     {format(selectedDay, "EEEE dd MMMM yyyy", {
                         locale: fr,
@@ -116,73 +128,111 @@ const ListOfReservation = ({
                 <>
                     {servicesSelectedDay ? (
                         servicesSelectedDay.map((service, index) => {
-                            const endTimeParts = formatTime(service.end_time).split('h');
+                            const endTimeParts = formatTime(
+                                service.end_time,
+                            ).split("h");
                             const endTime = new Date();
                             endTime.setHours(parseInt(endTimeParts[0]));
                             endTime.setMinutes(parseInt(endTimeParts[1]));
-                        
+
                             // Obtenir l'heure actuelle
                             const now = new Date();
 
-                            const isPastDay = isBefore(endOfDay(selectedDay), now);
+                            const isPastDay = isBefore(
+                                endOfDay(selectedDay),
+                                now,
+                            );
                             const isToday = isSameDay(new Date(), selectedDay);
-                           
+
                             return (
-                            <div key={service.id} className="mt-4">
-                                <div className="flex  items-center justify-between">
-                                    <div>
-                                        <h2 className="font-medium text-muted-foreground">
-                                            {service.name}
-                                        </h2>
-                                        <small className="tracking-tighter">
-                                            {formatTime(service.start_time)} -{" "}
-                                            {formatTime(service.end_time)}
-                                        </small>
+                                <div key={service.id} className="mt-4">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <h2 className="font-medium text-muted-foreground">
+                                                {service.name}
+                                            </h2>
+                                            <small className="tracking-tighter">
+                                                {formatTime(service.start_time)}{" "}
+                                                - {formatTime(service.end_time)}
+                                            </small>
+                                        </div>
+
+                                        {!isPastDay &&
+                                            (!isToday ||
+                                                (isToday && now < endTime)) && (
+                                                <Button
+                                                    size={"xs"}
+                                                    type="button"
+                                                    onClick={() => {
+                                                        if (!user.isFondator) {
+                                                            showErrorToast({
+                                                                message:
+                                                                    "Votre niveau d'abonnement ne vous permet pas de réaliser de réservation.",
+                                                                action: "Mettre à niveau",
+                                                            });
+                                                            return;
+                                                        }
+                                                        if (
+                                                            !can.enableBookingForm
+                                                        ) {
+                                                            toast.error(
+                                                                "Vous n'avez pas la permission de faire une réservation",
+                                                            );
+                                                            return;
+                                                        }
+
+                                                        addAdminReservationModalSetDate(
+                                                            selectedDay,
+                                                        );
+                                                        addAdminReservationModalSetRestaurantId(
+                                                            restaurant.id,
+                                                        );
+                                                        addAdminReservationModalSetServiceId(
+                                                            service.id,
+                                                        );
+                                                        addAdminReservationModalSetTime(
+                                                            `${formatTime(service.start_time)}/${formatTime(service.end_time)}`,
+                                                        );
+                                                        addAdminReservationModalOnOpen();
+                                                    }}
+                                                >
+                                                    <Plus className="h-3 w-3" />
+                                                </Button>
+                                            )}
                                     </div>
 
-                                    {!isPastDay && (!isToday || (isToday && now < endTime)) && (
-                                        <Button
-                                        size={"xs"}
-                                        type="button"
-                                        onClick={() => {
-                                            addAdminReservationModalSetDate(selectedDay)
-                                            addAdminReservationModalSetRestaurantId(restaurant.id)
-                                            addAdminReservationModalSetServiceId(
+                                    {reservations[service.id] &&
+                                    reservations[service.id].reservations
+                                        .length > 0 ? (
+                                        <ol
+                                            className="mt-4 space-y-1 text-sm leading-6"
+                                            key={service.id}
+                                        >
+                                            {reservations[
                                                 service.id
-                                            );
-                                            addAdminReservationModalSetTime(`${formatTime(service.start_time)}/${formatTime(service.end_time)}`)
-                                            addAdminReservationModalOnOpen();
-                                        }}
-                                    >
-                                        <Plus className="w-3 h-3" />
-                                    </Button>
+                                            ].reservations.map(
+                                                (reservation) => (
+                                                    <ReservationItem
+                                                        key={reservation.id}
+                                                        reservation={
+                                                            reservation
+                                                        }
+                                                    />
+                                                ),
+                                            )}
+                                        </ol>
+                                    ) : (
+                                        <p>
+                                            Pas de réservations pour ce service.
+                                        </p>
+                                    )}
+                                    {index !==
+                                        servicesSelectedDay.length - 1 && (
+                                        <Separator className="my-3" />
                                     )}
                                 </div>
-
-                                {reservations[service.id] &&
-                                reservations[service.id].reservations.length >
-                                    0 ? (
-                                    <ol
-                                        className="mt-4 space-y-1 text-sm leading-6"
-                                        key={service.id}
-                                    >
-                                        {reservations[
-                                            service.id
-                                        ].reservations.map((reservation) => (
-                                            <ReservationItem
-                                                key={reservation.id}
-                                                reservation={reservation}
-                                            />
-                                        ))}
-                                    </ol>
-                                ) : (
-                                    <p>Pas de réservations pour ce service.</p>
-                                )}
-                                {index !== servicesSelectedDay.length - 1 && (
-                                    <Separator className="my-3" />
-                                )}
-                            </div>
-                            )})
+                            );
+                        })
                     ) : (
                         <>Fermé</>
                     )}
@@ -190,7 +240,10 @@ const ListOfReservation = ({
             )}
 
             <SeeReservation restaurant={restaurant} />
-            <AddAdminReservation />
+
+            {can.enableBookingForm && user.isFondator && (
+                <AddAdminReservation />
+            )}
         </section>
     );
 };
@@ -221,7 +274,7 @@ const ReservationItem = ({ reservation }: { reservation: Reservation }) => {
             key={reservation.id}
             className="group flex items-center space-x-4 rounded-xl px-4 py-2 focus-within:bg-muted hover:bg-muted"
         >
-            <div className="group-hover:bg-background h-10 w-10 bg-muted flex rounded-full items-center justify-center">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted group-hover:bg-background">
                 <CalendarX className="h-5 w-5" />
             </div>
             <div className="flex-auto">

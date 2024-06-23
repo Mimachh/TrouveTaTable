@@ -49,7 +49,7 @@ export const ContactRestaurant = () => {
             },
             onError: (e) => {
                 setLoading(false);
-                console.log(errors, e);
+                // console.log(errors, e);
             },
         });
     };

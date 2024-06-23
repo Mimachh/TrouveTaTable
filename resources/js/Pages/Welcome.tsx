@@ -26,12 +26,14 @@ export default function Welcome({ auth, products }: WelcomeProps) {
     const setUser = useUser.use.setUser();
     useEffect(() => {
         setUser(auth.user);
-    })
+    });
+
     const tabs = [
         { id: "Home", label: "Accueil" },
-        { id: "Features", label: "Nos avantages" },
+        { id: "Features", label: "Avantages" },
         { id: "Price", label: "Prix" },
         { id: "Contact", label: "Contact" },
+        { id: "Roadmap", label: "Roadmap" },
     ];
     const { csrf_token } = usePage().props;
     return (
@@ -40,9 +42,7 @@ export default function Welcome({ auth, products }: WelcomeProps) {
             <LazyMotion features={domAnimation}>
                 <div className="min-h-[300vh] bg-background">
                     <Head title="Welcome" />
-
                     <Index tabs={tabs} sectionRefs={sectionRefs} />
-
                     <LandingHeader
                         ref={(el) => (sectionRefs.current[0] = el)}
                     />
@@ -50,27 +50,11 @@ export default function Welcome({ auth, products }: WelcomeProps) {
                     <StarterPrice
                         ref={(el) => (sectionRefs.current[2] = el)}
                         products={products.data}
-                    
                     />
-                   
-                    <Contact />
+                    <Contact ref={(el) => (sectionRefs.current[3] = el)} />
                     <NewsletterSection />
-                    <Roadmap />
-                   
-                   ANIMATIONS
-                   CASHIER
+                    <Roadmap ref={(el) => (sectionRefs.current[4] = el)} />
                 
-                    {/* <form action={route("credit.buy")}
-                            method="POST"
-                            className="w-full"
-                            >
-                                <input
-                                    type="hidden"
-                                    name="_token"
-                                    value={csrf_token as string}
-                                />
-                                <Button className="w-full">Get started</Button>
-                            </form> */}
                     <Footer />
                 </div>
             </LazyMotion>

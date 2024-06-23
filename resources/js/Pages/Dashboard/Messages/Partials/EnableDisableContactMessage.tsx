@@ -1,3 +1,4 @@
+import ErrorMustBeFondator from "@/Components/fondator/message-error-must-be-fondator";
 import FormFieldLayout from "@/Components/layout/form-field-layout";
 import {
     Card,
@@ -7,7 +8,10 @@ import {
     CardTitle,
 } from "@/Components/ui/card";
 import { Switch } from "@/Components/ui/switch";
+import useToastErrorNotFondator from "@/hooks/fondator/useToastErrorNotFondator";
+import { User } from "@/types";
 import { Restaurant } from "@/types/restaurant";
+import { usePage } from "@inertiajs/react";
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -21,7 +25,9 @@ interface Props {
 const EnableDisableContactMessage = (props: Props) => {
 
     const { restaurant, can} = props;
-
+    const pageProps = usePage().props;
+    const auth = pageProps.auth as unknown as any;
+    const user = auth.user as User;
     const [loading, setLoading] = useState<boolean>(false);
     const [acceptMessages, setAcceptMessages] = useState<boolean>(
         restaurant.accept_messages
@@ -32,7 +38,7 @@ const EnableDisableContactMessage = (props: Props) => {
     });
 
     const submit = (e: boolean) => {
-        if(!can.enableMessages) {
+        if(!can.enableMessages || !user?.isFondator) {
             toast.error("Vous n'avez pas la permission de modifier ce paramètre");
             return;
         }
@@ -60,7 +66,7 @@ const EnableDisableContactMessage = (props: Props) => {
                 setLoading(false);
             });
     };
-
+    const { showErrorToast } = useToastErrorNotFondator();
     return (
         <Card
             x-chunk="settings-messages"
@@ -86,6 +92,13 @@ const EnableDisableContactMessage = (props: Props) => {
                         disabled={loading || !can.enableMessages}
                         checked={acceptMessages}
                         onCheckedChange={(e) => {
+                            if(!user?.isFondator) {
+                                showErrorToast({
+                                    message: "Votre niveau d'abonnement ne vous permet pas d'activer le système de messagerie.",
+                                    action: "Mettre à niveau",
+                                });
+                                return;
+                            }
                             if(!can.enableMessages) {
                                 toast.error("Vous n'avez pas la permission de modifier ce paramètre");
                                 return;
@@ -97,6 +110,9 @@ const EnableDisableContactMessage = (props: Props) => {
                         }}
                     />
                 </FormFieldLayout>
+                {!user?.isFondator && (
+                    <ErrorMustBeFondator message="Il faut être abonné pour pouvoir activer le système de contact." />
+                )}
             </CardContent>
         </Card>
     );

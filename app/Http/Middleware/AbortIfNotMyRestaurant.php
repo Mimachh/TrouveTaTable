@@ -17,7 +17,7 @@ class AbortIfNotMyRestaurant
     {
         $restaurant = $request->route('restaurant');
         if (auth()->user()->restaurants->contains($restaurant->id) 
-        // || auth()->user()->isAdmin()
+        // || auth()->user()->isAdmin
         ) {
             return $next($request);
         }

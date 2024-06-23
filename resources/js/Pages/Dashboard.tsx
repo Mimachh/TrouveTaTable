@@ -1,5 +1,5 @@
 import { Head, Link } from "@inertiajs/react";
-import { PageProps } from "@/types";
+import { PageProps, User } from "@/types";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import { Restaurant } from "@/types/restaurant";
 import { ChartBarIcon } from "@heroicons/react/24/outline";
@@ -9,6 +9,8 @@ import RestaurantStatus from "@/Components/restaurant-message-status/RestaurantS
 import MessageStatus from "@/Components/restaurant-message-status/MessageStatus";
 import ServicesStatus from "@/Components/restaurant-message-status/ServicesStatus";
 import MissingInfoRestaurant from "@/Components/MissingInfoRestaurant";
+
+import ErrorMustBeFondator from "@/Components/fondator/message-error-must-be-fondator";
 
 type DashboardProps = PageProps & {
     restaurants: Restaurant[];
@@ -25,6 +27,7 @@ const Dashboard = ({
     isMissingInfo,
 }: DashboardProps) => {
     const restaurant = resto.data;
+    const user = auth.user as User;
     return (
         <>
             <Head title={`Dashboard de ${restaurant.name}`} />
@@ -38,7 +41,9 @@ const Dashboard = ({
                     <MessageStatus restaurant={restaurant} />
                     <ReservationStatus restaurant={restaurant} />
                     <ServicesStatus restaurant={restaurant} />
-                    
+                    {!user?.isFondator && (<ErrorMustBeFondator 
+                    classNames="bg-background/60 justify-between"
+                    message="Votre niveau d'abonnement ne vous permet pas de profiter pleinement de nos services." />)}
                 </div>
             )}
             <div className="flex items-center justify-start gap-4">

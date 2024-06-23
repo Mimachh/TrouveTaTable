@@ -9,6 +9,7 @@ use App\Actions\FormatTime;
 use App\Http\Resources\ReservationResource;
 use App\Http\Resources\RestaurantResource;
 use App\Mail\Reservation\ChangeStatusMail;
+use App\Mail\Reservation\NotifyRestaurantMail;
 use App\Mail\Reservation\ReservationCreatedMail;
 use App\Models\Reservation;
 use App\Models\Restaurant;
@@ -26,7 +27,7 @@ class SendMail
         : void
     {
 
-        $checkIfCan = (new MailRepository())->isRestaurantCanSendReservationMail($restaurant);
+        $checkIfCan = (new MailRepository())->canSendMail($restaurant);
         if(!$checkIfCan) {
             return;
         }
@@ -43,6 +44,7 @@ class SendMail
             $status,
             $reason
         ));
+        
     }
 
     public function AfterCreated(
@@ -67,5 +69,13 @@ class SendMail
             $restaurant,
             $reservationResource
         ));
+
+        if($restaurant->is_notify_restaurant_after_booking) {
+            Mail::to($restaurant->email)->queue(new NotifyRestaurantMail(
+                $restaurant,
+                $reservationResource
+            ));
+        }
+
     }
 }

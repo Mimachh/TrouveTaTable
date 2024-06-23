@@ -3,8 +3,11 @@
 namespace App\Http\Requests\Dashboard\Restaurant;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Validation\Rules\File;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\JsonResponse;
 
 class UpdateMediaRestaurantRequest extends FormRequest
 {
@@ -26,8 +29,9 @@ class UpdateMediaRestaurantRequest extends FormRequest
     public function rules(): array
     {
         return [
+  
             "attachments" => [
-                'array', 'max:5',
+                'array', 'max:5', 'min:1',
                 function ($attribute, $value, $fail) {
 
                     $totalSize = collect($value)->sum(fn(UploadedFile $file) => $file->getSize());
@@ -37,9 +41,19 @@ class UpdateMediaRestaurantRequest extends FormRequest
                 }
             ],
             "attachments.*" => [
-                'file',
+                'image',
                 File::types(self::$extensions)
+                // "mimes:jpeg,png,jpg,webp"
             ]
         ];
     }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'errors' => $validator->errors()
+        ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY));
+    }
+
+    
 }

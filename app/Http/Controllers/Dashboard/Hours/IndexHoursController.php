@@ -22,13 +22,14 @@ class IndexHoursController extends Controller
         $restaurantResource = new RestaurantResource($restaurant);
       
         $hours = (new GetHoursOfRestaurant)->planning($restaurantResource->services);
-       
+   
         return inertia('Dashboard/Hours/Index', [
             "restaurant" => $restaurantResource,
             "days" => $days,
             "hours" => $hours,
             "can" => [
-                "deleteRestaurantService" => auth()->user()->can('deleteRestaurantService', $restaurant)
+                "deleteRestaurantService" => auth()->user()->can('deleteRestaurantService', $restaurant),
+                "enableBookingForm" => auth()->user()->can('enableBookingForm', $restaurant),
             ]
         ]);
     }

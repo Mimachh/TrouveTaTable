@@ -11,7 +11,7 @@ class IndexRestaurantNotificationController extends Controller
     public function __invoke(Restaurant $restaurant)
     {
         $restaurantResource = new RestaurantResource($restaurant);
-
+        
         return inertia('Dashboard/Settings/Notifications/Index', [
             'restaurant' => $restaurantResource,
             "can" => [

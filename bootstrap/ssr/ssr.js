@@ -1,6 +1,6 @@
 import { jsx, jsxs, Fragment } from "react/jsx-runtime";
 import * as React from "react";
-import React__default, { useEffect, createContext, useState, useContext, useRef, Fragment as Fragment$1, forwardRef } from "react";
+import React__default, { useEffect, createContext, useState, useContext, useRef, forwardRef } from "react";
 import { useTheme as useTheme$1 } from "next-themes";
 import { Toaster as Toaster$1, toast } from "sonner";
 import { clsx } from "clsx";
@@ -9,7 +9,7 @@ import { useForm, Head, router, Link, usePage, createInertiaApp } from "@inertia
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { cva } from "class-variance-authority";
 import { Slot } from "@radix-ui/react-slot";
-import { LoaderCircle, MailIcon, ArrowLeft, Settings as Settings$1, LayoutDashboard, HandPlatter, X, Search, Store, ChevronsUpDown, Check, PlusCircle, ChevronRight, Circle, Sun, Moon, Trash, Plus, ChevronDown, ChevronUp, Edit as Edit$1, ArrowRight, Copy, ChevronLeft, MoreHorizontal, ArrowUpDown, MessageCircle, Phone, MessageSquare, Star as Star$1, CalendarDays, Camera, CameraIcon, Upload, CalendarX, ExternalLink, Minus, Calendar as Calendar$2, Clock, User2, CalendarCheck, StarIcon, CheckIcon } from "lucide-react";
+import { LoaderCircle, MailIcon, ArrowLeft, Settings as Settings$1, LayoutDashboard, HandPlatter, X, Search, Store, ChevronsUpDown, Check, PlusCircle, ChevronRight, Circle, Sun, Moon, Zap, ImageIcon, VideoIcon, Trash, Plus, ChevronDown, ChevronUp, Edit as Edit$2, ArrowRight, Copy, ChevronLeft, MoreHorizontal, ArrowUpDown, MessageCircle, Phone, MessageSquare, Star as Star$1, CalendarDays, Camera, CameraIcon, Upload, CalendarX, ExternalLink, Minus, Calendar as Calendar$2, Clock, User2, CalendarCheck, StarIcon, CheckIcon } from "lucide-react";
 import { motion, useAnimationControls, AnimatePresence, m, LazyMotion, domAnimation, useAnimate, stagger, useCycle, MotionConfig, useScroll, useMotionValueEvent, useMotionValue, useMotionTemplate } from "framer-motion";
 import { ChevronRightIcon, XMarkIcon, ArrowTrendingUpIcon, UserGroupIcon, PencilIcon, BoltIcon, CursorArrowRaysIcon, AdjustmentsHorizontalIcon, UserIcon, BellAlertIcon, UsersIcon, ChatBubbleLeftRightIcon, DocumentIcon, ClockIcon, CalendarDaysIcon, ChartBarIcon, BugAntIcon, ComputerDesktopIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { Command as Command$1 } from "cmdk";
@@ -18,6 +18,7 @@ import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { create } from "zustand";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import axios from "axios";
+import * as AvatarPrimitive from "@radix-ui/react-avatar";
 import { useDateSegment, useLocale, useTimeField } from "react-aria";
 import { useTimeFieldState, useDatePickerState } from "react-stately";
 import * as SeparatorPrimitive from "@radix-ui/react-separator";
@@ -28,6 +29,7 @@ import { fr } from "date-fns/locale";
 import { useReactTable, getCoreRowModel, getSortedRowModel, flexRender, getPaginationRowModel } from "@tanstack/react-table";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 import { ChevronLeftIcon, ChevronRightIcon as ChevronRightIcon$1 } from "@heroicons/react/20/solid";
+import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 import { Transition } from "@headlessui/react";
 import { DayPicker } from "react-day-picker";
 import createServer from "@inertiajs/react/server";
@@ -189,7 +191,8 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        primaryBlue: "bg-primaryBlue text-background-foreground hover:bg-primaryBlue/90"
+        primaryBlue: "bg-primaryBlue text-background-foreground hover:bg-primaryBlue/90",
+        premium: "bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 text-white border-0"
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -508,7 +511,7 @@ const RegisterForm = (props) => {
           children: /* @__PURE__ */ jsx(
             Input,
             {
-              id: "email",
+              id: "emailRegister",
               name: "email",
               value: data2.email,
               autoComplete: "email",
@@ -1230,7 +1233,7 @@ const SettingsProjectNavigation = (props) => {
     }
   );
 };
-const containerVariants = {
+const containerVariants$1 = {
   close: {
     width: "5rem",
     transition: {
@@ -1248,7 +1251,7 @@ const containerVariants = {
     }
   }
 };
-const svgVariants = {
+const svgVariants$1 = {
   close: {
     rotate: 360
   },
@@ -1301,7 +1304,7 @@ const Navigation = () => {
     /* @__PURE__ */ jsx("div", { className: "sticky z-10 top-0 left-0 h-fit", children: /* @__PURE__ */ jsx("div", { className: "min-h-screen", children: /* @__PURE__ */ jsxs(
       motion.nav,
       {
-        variants: containerVariants,
+        variants: containerVariants$1,
         animate: containerControls,
         initial: "close",
         className: "bg-secondary border border-r flex flex-col p-5 justify-start absolute gap-24 top-0 left-0 min-h-full h-fit shadow",
@@ -1327,7 +1330,7 @@ const Navigation = () => {
                       {
                         strokeLinecap: "round",
                         strokeLinejoin: "round",
-                        variants: svgVariants,
+                        variants: svgVariants$1,
                         animate: svgControls,
                         d: "M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3",
                         transition: {
@@ -1481,6 +1484,20 @@ const DialogHeader = ({
   }
 );
 DialogHeader.displayName = "DialogHeader";
+const DialogFooter = ({
+  className,
+  ...props
+}) => /* @__PURE__ */ jsx(
+  "div",
+  {
+    className: cn(
+      "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
+      className
+    ),
+    ...props
+  }
+);
+DialogFooter.displayName = "DialogFooter";
 const DialogTitle = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
   DialogPrimitive.Title,
   {
@@ -1596,7 +1613,7 @@ const PopoverContent = React.forwardRef(({ className, align = "center", sideOffs
   }
 ) }));
 PopoverContent.displayName = PopoverPrimitive.Content.displayName;
-const createSelectors$a = (_store) => {
+const createSelectors$b = (_store) => {
   let store = _store;
   store.use = {};
   for (let k of Object.keys(store.getState())) {
@@ -1604,7 +1621,7 @@ const createSelectors$a = (_store) => {
   }
   return store;
 };
-const useRestaurantModal = createSelectors$a(create((set) => ({
+const useRestaurantModal = createSelectors$b(create((set) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),
@@ -1822,6 +1839,26 @@ function ModeToggle() {
     ] })
   ] });
 }
+const badgeVariants = cva(
+  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  {
+    variants: {
+      variant: {
+        default: "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
+        secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
+        outline: "text-foreground",
+        premium: "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white border-0"
+      }
+    },
+    defaultVariants: {
+      variant: "default"
+    }
+  }
+);
+function Badge({ className, variant, ...props }) {
+  return /* @__PURE__ */ jsx("div", { className: cn(badgeVariants({ variant }), className), ...props });
+}
 const getDashboardMainNav = (id) => {
   const routes = [
     {
@@ -1839,8 +1876,24 @@ const DashboardMainNav = ({
 }) => {
   const restaurant = usePage().props.restaurant;
   const currentRestaurant = restaurant.data;
-  const routes = getDashboardMainNav(currentRestaurant.id);
-  return /* @__PURE__ */ jsx(
+  getDashboardMainNav(currentRestaurant.id);
+  const tools = [
+    {
+      label: "Image Generation",
+      icon: ImageIcon,
+      href: "/image",
+      bgColor: "bg-pink-500/10 dark:bg-pink-500/20",
+      color: "text-pink-700"
+    },
+    {
+      label: "Video Generation",
+      icon: VideoIcon,
+      href: "/video",
+      bgColor: "bg-orange-500/10 dark:bg-orange-500/20",
+      color: "text-orange-700"
+    }
+  ];
+  return /* @__PURE__ */ jsxs(
     "nav",
     {
       className: cn(
@@ -1848,18 +1901,31 @@ const DashboardMainNav = ({
         className
       ),
       ...props,
-      children: routes.map((route2) => /* @__PURE__ */ jsx(
-        Link,
-        {
-          href: route2.href,
-          className: cn(
-            "text-sm font-medium transition-colors hover:text-primary",
-            route2.active ? "text-black dark:text-white" : "text-muted-foreground"
-          ),
-          children: route2.label
-        },
-        route2.href
-      ))
+      children: [
+        /* @__PURE__ */ jsx(Card, { className: "border-0 py-2", children: /* @__PURE__ */ jsx(CardContent, { className: "flex items-center py-0", children: /* @__PURE__ */ jsxs(Button, { variant: "premium", className: "w-full", children: [
+          "Prendre un abonnement",
+          /* @__PURE__ */ jsx(Zap, { className: "ml-2 h-4 w-4 fill-white" })
+        ] }) }) }),
+        /* @__PURE__ */ jsx(Dialog, { open: false, children: /* @__PURE__ */ jsxs(DialogContent, { children: [
+          /* @__PURE__ */ jsxs(DialogHeader, { children: [
+            /* @__PURE__ */ jsx(DialogTitle, { className: "flex justify-center items-center flex-col gap-y-4 pb-2", children: /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-x-2 font-bold text-xl", children: [
+              "Upgrade to Genius",
+              /* @__PURE__ */ jsx(Badge, { variant: "premium", className: "uppercase text-sm py-1", children: "pro" })
+            ] }) }),
+            /* @__PURE__ */ jsx(DialogDescription, { className: "text-center pt-2 space-y-2 text-zinc-900 font-medium", children: tools.map((tool) => /* @__PURE__ */ jsxs(Card, { className: "p-3 border-black/5 flex items-center justify-between", children: [
+              /* @__PURE__ */ jsxs("div", { className: "flex items-center gap-x-4", children: [
+                /* @__PURE__ */ jsx("div", { className: cn("p-2 w-fit rounded-md", tool.bgColor), children: /* @__PURE__ */ jsx(tool.icon, { className: cn("w-6 h-6", tool.color) }) }),
+                /* @__PURE__ */ jsx("div", { className: "font-semibold text-sm", children: tool.label })
+              ] }),
+              /* @__PURE__ */ jsx(Check, { className: "text-primary w-5 h-5" })
+            ] }, tool.href)) })
+          ] }),
+          /* @__PURE__ */ jsx(DialogFooter, { children: /* @__PURE__ */ jsxs(Button, { size: "lg", variant: "premium", className: "w-full", children: [
+            "Upgrade",
+            /* @__PURE__ */ jsx(Zap, { className: "w-4 h-4 ml-2 fill-white" })
+          ] }) })
+        ] }) })
+      ]
     }
   );
 };
@@ -1875,6 +1941,61 @@ function Skeleton({
     }
   );
 }
+const Avatar$1 = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  AvatarPrimitive.Root,
+  {
+    ref,
+    className: cn(
+      "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full",
+      className
+    ),
+    ...props
+  }
+));
+Avatar$1.displayName = AvatarPrimitive.Root.displayName;
+const AvatarImage = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  AvatarPrimitive.Image,
+  {
+    ref,
+    className: cn("aspect-square h-full w-full", className),
+    ...props
+  }
+));
+AvatarImage.displayName = AvatarPrimitive.Image.displayName;
+const AvatarFallback = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx(
+  AvatarPrimitive.Fallback,
+  {
+    ref,
+    className: cn(
+      "flex h-full w-full items-center justify-center rounded-full bg-muted",
+      className
+    ),
+    ...props
+  }
+));
+AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
+const UserAvatar = () => {
+  return /* @__PURE__ */ jsxs(DropdownMenu, { children: [
+    /* @__PURE__ */ jsx(DropdownMenuTrigger, { asChild: true, children: /* @__PURE__ */ jsxs(Avatar$1, { className: "cursor-pointer", children: [
+      /* @__PURE__ */ jsx(AvatarImage, { src: "https://github.com/shadcn.png" }),
+      /* @__PURE__ */ jsx(AvatarFallback, { children: "CN" })
+    ] }) }),
+    /* @__PURE__ */ jsxs(DropdownMenuContent, { align: "end", children: [
+      /* @__PURE__ */ jsx(DropdownMenuLabel, { children: "Mon compte" }),
+      /* @__PURE__ */ jsx(DropdownMenuSeparator, {}),
+      /* @__PURE__ */ jsx(DropdownMenuItem, { children: /* @__PURE__ */ jsx(Link, { href: route("profile.edit"), children: "Profil" }) }),
+      /* @__PURE__ */ jsx(DropdownMenuItem, { children: /* @__PURE__ */ jsx(
+        Link,
+        {
+          href: route("logout"),
+          method: "post",
+          as: "button",
+          children: "Déconnexion"
+        }
+      ) })
+    ] })
+  ] });
+};
 const DashboardNavbar = () => {
   const [resto, setResto] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -1889,21 +2010,21 @@ const DashboardNavbar = () => {
   };
   const restaurantModalReset = useRestaurantModal.use.reset();
   const restaurantModalSetReset = useRestaurantModal.use.setReset();
-  useEffect(
-    () => {
+  useEffect(() => {
+    getRestaurants();
+    if (restaurantModalReset) {
+      setLoading(true);
       getRestaurants();
-      if (restaurantModalReset) {
-        setLoading(true);
-        getRestaurants();
-        restaurantModalSetReset(false);
-      }
-    },
-    [restaurantModalReset]
-  );
-  return /* @__PURE__ */ jsx("div", { className: "border-b", children: /* @__PURE__ */ jsxs("div", { className: "flex h-16 items-center px-4 md:px-10 mx-auto", children: [
-    !loading ? /* @__PURE__ */ jsx(RestaurantSwitcher, { items: resto }) : /* @__PURE__ */ jsx(Skeleton, { className: "w-[200px] bg-secondary h-10 rounded" }),
-    /* @__PURE__ */ jsx(DashboardMainNav, { className: "mx-6 md:flex hidden" }),
-    /* @__PURE__ */ jsx("div", { className: "ml-auto flex items-center space-x-4", children: /* @__PURE__ */ jsx(ModeToggle, {}) })
+      restaurantModalSetReset(false);
+    }
+  }, [restaurantModalReset]);
+  return /* @__PURE__ */ jsx("div", { className: "border-b", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto flex h-16 items-center px-4 md:px-10", children: [
+    !loading ? /* @__PURE__ */ jsx(RestaurantSwitcher, { items: resto }) : /* @__PURE__ */ jsx(Skeleton, { className: "h-10 w-[200px] rounded bg-secondary" }),
+    /* @__PURE__ */ jsx(DashboardMainNav, { className: "mx-6 hidden md:flex" }),
+    /* @__PURE__ */ jsxs("div", { className: "ml-auto flex items-center space-x-4", children: [
+      /* @__PURE__ */ jsx(ModeToggle, {}),
+      /* @__PURE__ */ jsx(UserAvatar, {})
+    ] })
   ] }) });
 };
 const Modal = ({
@@ -2042,7 +2163,6 @@ function DashboardLayout({
       }, 500);
     }
     if (flash == null ? void 0 : flash.error) {
-      console.log("erreruruurur");
       setTimeout(() => {
         toast.error(flash.error);
       }, 500);
@@ -2134,219 +2254,6 @@ const ServicesStatus = ({ restaurant }) => {
     )
   ] });
 };
-function LogoCarotte(props) {
-  return /* @__PURE__ */ jsx(
-    "svg",
-    {
-      xmlns: "http://www.w3.org/2000/svg",
-      viewBox: "0 0 83.169 167.444",
-      fill: "currentColor",
-      ...props,
-      children: /* @__PURE__ */ jsxs("g", { transform: "translate(-67.53 -18.176)", children: [
-        /* @__PURE__ */ jsxs(
-          "g",
-          {
-            stroke: "#000",
-            strokeLinecap: "round",
-            transform: "matrix(.46241 .26133 .0033 .58893 116.005 -13.28)",
-            children: [
-              /* @__PURE__ */ jsx(
-                "path",
-                {
-                  fill: "#2bbe69",
-                  strokeWidth: "5.879",
-                  d: "M26.573 159.04a31.239 53.784 0 01-14.718-71.698A31.239 53.784 0 0153.492 61.97a31.239 53.784 0 0114.757 71.674 31.239 53.784 0 01-41.623 25.44"
-                }
-              ),
-              /* @__PURE__ */ jsx(
-                "rect",
-                {
-                  width: "0.744",
-                  height: "76.196",
-                  x: "39.429",
-                  y: "84.408",
-                  fill: "green",
-                  strokeWidth: "4.921",
-                  ry: "0.328"
-                }
-              )
-            ]
-          }
-        ),
-        /* @__PURE__ */ jsxs(
-          "g",
-          {
-            stroke: "#000",
-            strokeLinecap: "round",
-            transform: "matrix(-.28837 .3783 .24196 .4872 91.92 -6.934)",
-            children: [
-              /* @__PURE__ */ jsx(
-                "path",
-                {
-                  fill: "#2bbe69",
-                  strokeWidth: "5.879",
-                  d: "M26.573 159.04a31.239 53.784 0 01-14.718-71.698A31.239 53.784 0 0153.492 61.97a31.239 53.784 0 0114.757 71.674 31.239 53.784 0 01-41.623 25.44"
-                }
-              ),
-              /* @__PURE__ */ jsx(
-                "rect",
-                {
-                  width: "0.744",
-                  height: "76.196",
-                  x: "39.429",
-                  y: "84.408",
-                  fill: "green",
-                  strokeWidth: "4.921",
-                  ry: "0.328"
-                }
-              )
-            ]
-          }
-        ),
-        /* @__PURE__ */ jsxs(
-          "g",
-          {
-            stroke: "#000",
-            strokeLinecap: "round",
-            transform: "matrix(.54683 -.1773 .25709 .79293 72.99 -17.02)",
-            children: [
-              /* @__PURE__ */ jsx(
-                "path",
-                {
-                  fill: "#2bbe69",
-                  strokeWidth: "5.879",
-                  d: "M26.573 159.04a31.239 53.784 0 01-14.718-71.698A31.239 53.784 0 0153.492 61.97a31.239 53.784 0 0114.757 71.674 31.239 53.784 0 01-41.623 25.44"
-                }
-              ),
-              /* @__PURE__ */ jsx(
-                "rect",
-                {
-                  width: "0.744",
-                  height: "76.196",
-                  x: "39.429",
-                  y: "84.408",
-                  fill: "green",
-                  strokeWidth: "4.921",
-                  ry: "0.328"
-                }
-              )
-            ]
-          }
-        ),
-        /* @__PURE__ */ jsx(
-          "ellipse",
-          {
-            cx: "157.773",
-            cy: "71.377",
-            fill: "#a40",
-            stroke: "#084285",
-            strokeWidth: "0.095",
-            rx: "30.439",
-            ry: "53.302",
-            transform: "matrix(.89924 .43747 -.45938 .88824 0 0)"
-          }
-        ),
-        /* @__PURE__ */ jsx(
-          "path",
-          {
-            fill: "none",
-            stroke: "#000",
-            strokeLinecap: "round",
-            strokeWidth: "4.793",
-            d: "M194.633 103.29a34.053 59.502 0 01-25.68 40.21 34.053 59.502 0 01-32.61-19.588 34.053 59.502 0 01-6.102-59.3",
-            transform: "matrix(.94187 .33598 -.471 .88214 0 0)"
-          }
-        ),
-        /* @__PURE__ */ jsx(
-          "ellipse",
-          {
-            cx: "159.906",
-            cy: "64.507",
-            fill: "#ff7f2a",
-            stroke: "#084285",
-            strokeWidth: "0.087",
-            rx: "27.842",
-            ry: "49.115",
-            transform: "matrix(.88697 .46183 -.43493 .90046 0 0)"
-          }
-        ),
-        /* @__PURE__ */ jsx(
-          "path",
-          {
-            fill: "none",
-            stroke: "#000",
-            strokeLinecap: "round",
-            strokeWidth: "5.086",
-            d: "M-134.8-10.758a36.345 69.222 0 01-27.025 23.715 36.345 69.222 0 01-27.27-22.681",
-            transform: "matrix(-.8073 -.59014 .49128 -.871 0 0)"
-          }
-        ),
-        /* @__PURE__ */ jsx(
-          "path",
-          {
-            fill: "none",
-            stroke: "#000",
-            strokeLinecap: "round",
-            strokeWidth: "4.834",
-            d: "M125.255-91.246a43.144 24.717 0 0118.182-6.636",
-            transform: "matrix(.99391 .11017 .02027 -.9998 0 0)"
-          }
-        ),
-        /* @__PURE__ */ jsx(
-          "path",
-          {
-            fill: "none",
-            stroke: "#000",
-            strokeLinecap: "round",
-            strokeWidth: "5.174",
-            d: "M104.117-138.295a51.463 23.735 0 0121.688-6.373",
-            transform: "matrix(.9936 .1129 .04956 -.99877 0 0)"
-          }
-        ),
-        /* @__PURE__ */ jsx(
-          "path",
-          {
-            fill: "none",
-            stroke: "#000",
-            strokeLinecap: "round",
-            strokeWidth: "4.834",
-            d: "M81.018-151.513A43.144 24.717 0 0199.2-158.15",
-            transform: "matrix(.99391 .11017 .02027 -.9998 0 0)"
-          }
-        ),
-        /* @__PURE__ */ jsx(
-          "path",
-          {
-            fill: "#fff",
-            stroke: "#000",
-            strokeLinecap: "round",
-            strokeWidth: "2.83",
-            d: "M97.759 133.919a12.635 12.038 0 01-5.963-16.027 12.635 12.038 0 0116.809-5.718 12.635 12.038 0 016.04 16.001 12.635 12.038 0 01-16.781 5.791"
-          }
-        ),
-        /* @__PURE__ */ jsx(
-          "path",
-          {
-            fill: "#fff",
-            stroke: "#000",
-            strokeLinecap: "round",
-            strokeWidth: "2.83",
-            d: "M122.921 133.874a12.635 12.038 0 01-5.953-16.047 12.635 12.038 0 0116.84-5.679 12.635 12.038 0 015.969 16.042 12.635 12.038 0 01-16.835 5.694"
-          }
-        ),
-        /* @__PURE__ */ jsx(
-          "path",
-          {
-            stroke: "#000",
-            strokeLinecap: "round",
-            strokeWidth: "2.83",
-            d: "M106.777 126.054a3.348 3.385 0 01-1.578-4.512 3.348 3.385 0 014.463-1.597 3.348 3.385 0 011.582 4.51 3.348 3.385 0 01-4.462 1.602m16.732-.106a3.348 3.385 0 01-1.577-4.513 3.348 3.385 0 014.463-1.597 3.348 3.385 0 011.582 4.511 3.348 3.385 0 01-4.462 1.601"
-          }
-        )
-      ] })
-    }
-  );
-}
 function LogoTomate(props) {
   return /* @__PURE__ */ jsx(
     "svg",
@@ -2612,6 +2519,56 @@ const MissingInfoRestaurant = ({ restaurant }) => {
     "."
   ] }) }) });
 };
+const createSelectors$a = (_store) => {
+  let store = _store;
+  store.use = {};
+  for (let k of Object.keys(store.getState())) {
+    store.use[k] = () => store((s) => s[k]);
+  }
+  return store;
+};
+const useUser = createSelectors$a(create((set) => ({
+  user: null,
+  setUser: (user) => set({ user })
+})));
+const GoToFondatorPrices = ({
+  disabled,
+  variant,
+  ...props
+}) => {
+  const v = variant ?? "default";
+  const s = props.size ?? "md";
+  return /* @__PURE__ */ jsx(
+    Button,
+    {
+      variant: v,
+      ...props,
+      disabled,
+      type: "button",
+      size: s,
+      onClick: () => {
+        console.log("Go to fondator prices");
+      },
+      children: disabled ? /* @__PURE__ */ jsx("div", { className: "flex w-full items-center justify-center", children: /* @__PURE__ */ jsx(LoaderCircle, { className: "animate h-6 w-6 animate-spin" }) }) : /* @__PURE__ */ jsx(Fragment, { children: "Mettre à niveau" })
+    }
+  );
+};
+const ErrorMustBeFondator = (props) => {
+  const { message, classNames: classNames2 } = props;
+  return /* @__PURE__ */ jsxs("div", { className: cn("mt-1 flex items-center gap-1 p-1.5 border rounded-md bg-destructive/5", classNames2), children: [
+    /* @__PURE__ */ jsxs("p", { className: "flex items-center gap-1 text-sm tracking-tight", children: [
+      /* @__PURE__ */ jsx("span", { className: "rounded-full bg-destructive p-1", children: /* @__PURE__ */ jsx(X, { className: "h-4 w-4 text-muted" }) }),
+      message
+    ] }),
+    /* @__PURE__ */ jsx(
+      GoToFondatorPrices,
+      {
+        size: "xs",
+        variant: "outline"
+      }
+    )
+  ] });
+};
 const Dashboard = ({
   auth,
   flash,
@@ -2620,6 +2577,7 @@ const Dashboard = ({
   isMissingInfo
 }) => {
   const restaurant = resto.data;
+  const user = useUser.use.user();
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsx(Head, { title: `Dashboard de ${restaurant.name}` }),
     isMissingInfo && /* @__PURE__ */ jsx(MissingInfoRestaurant, { restaurant }),
@@ -2627,7 +2585,14 @@ const Dashboard = ({
       /* @__PURE__ */ jsx(RestaurantStatus, { restaurant }),
       /* @__PURE__ */ jsx(MessageStatus, { restaurant }),
       /* @__PURE__ */ jsx(ReservationStatus, { restaurant }),
-      /* @__PURE__ */ jsx(ServicesStatus, { restaurant })
+      /* @__PURE__ */ jsx(ServicesStatus, { restaurant }),
+      !(user == null ? void 0 : user.isFondator) && /* @__PURE__ */ jsx(
+        ErrorMustBeFondator,
+        {
+          classNames: "bg-background/60 justify-between",
+          message: "Votre niveau d'abonnement ne vous permet pas de profiter pleinement de nos services."
+        }
+      )
     ] }),
     /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-start gap-4", children: [
       /* @__PURE__ */ jsxs("h1", { className: "text-4xl ", children: [
@@ -3257,25 +3222,6 @@ const __vite_glob_0_14 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.de
   __proto__: null,
   default: SelectTamponService
 }, Symbol.toStringTag, { value: "Module" }));
-const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
-  {
-    variants: {
-      variant: {
-        default: "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
-        secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-        outline: "text-foreground"
-      }
-    },
-    defaultVariants: {
-      variant: "default"
-    }
-  }
-);
-function Badge({ className, variant, ...props }) {
-  return /* @__PURE__ */ jsx("div", { className: cn(badgeVariants({ variant }), className), ...props });
-}
 const Table = React.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsx("div", { className: "relative w-full overflow-auto", children: /* @__PURE__ */ jsx(
   "table",
   {
@@ -3404,7 +3350,7 @@ const OpeningHours = ({ openForm, days: days2, hours }) => {
                     onClick: () => openForm(day.day_id, day.day_name),
                     variant: "ghost",
                     size: "sm",
-                    children: /* @__PURE__ */ jsx(Edit$1, { className: "w-4 h-4" })
+                    children: /* @__PURE__ */ jsx(Edit$2, { className: "w-4 h-4" })
                   }
                 ) })
               ]
@@ -3885,8 +3831,22 @@ const PaginationNext = ({
   }
 );
 PaginationNext.displayName = "PaginationNext";
+const useToastErrorNotFondator = () => {
+  const showErrorToast = (props) => {
+    const { message, action } = props;
+    toast.error(message, {
+      action: {
+        label: action,
+        onClick: () => {
+        }
+      }
+    });
+  };
+  return { showErrorToast };
+};
 const EnableDisableContactMessage = (props) => {
   const { restaurant, can } = props;
+  const user = useUser.use.user();
   const [loading, setLoading] = useState(false);
   const [acceptMessages, setAcceptMessages] = useState(
     restaurant.accept_messages
@@ -3895,7 +3855,7 @@ const EnableDisableContactMessage = (props) => {
     accept_messages: ""
   });
   const submit = (e) => {
-    if (!can.enableMessages) {
+    if (!can.enableMessages || !(user == null ? void 0 : user.isFondator)) {
       toast.error("Vous n'avez pas la permission de modifier ce paramètre");
       return;
     }
@@ -3916,6 +3876,7 @@ const EnableDisableContactMessage = (props) => {
       setLoading(false);
     });
   };
+  const { showErrorToast } = useToastErrorNotFondator();
   return /* @__PURE__ */ jsxs(
     Card,
     {
@@ -3926,32 +3887,42 @@ const EnableDisableContactMessage = (props) => {
           /* @__PURE__ */ jsx(CardTitle, { className: "text-md", children: "Formulaire de contact" }),
           /* @__PURE__ */ jsx(CardDescription, { children: "Activer ou désactiver le formulaire de contact en ligne de votre restaurant." })
         ] }),
-        /* @__PURE__ */ jsx(CardContent, { className: "gap-2", children: /* @__PURE__ */ jsx(
-          FormFieldLayout,
-          {
-            label: "Activer le formulaire de contact ?",
-            fieldName: "accept_messages",
-            className: "flex gap-6 w-full items-center border border-muted rounded-lg p-4\n            bg-background space-y-0\n            ",
-            error: (errors == null ? void 0 : errors.accept_messages) ?? "",
-            children: /* @__PURE__ */ jsx(
-              Switch,
-              {
-                disabled: loading || !can.enableMessages,
-                checked: acceptMessages,
-                onCheckedChange: (e) => {
-                  if (!can.enableMessages) {
-                    toast.error("Vous n'avez pas la permission de modifier ce paramètre");
-                    return;
+        /* @__PURE__ */ jsxs(CardContent, { className: "gap-2", children: [
+          /* @__PURE__ */ jsx(
+            FormFieldLayout,
+            {
+              label: "Activer le formulaire de contact ?",
+              fieldName: "accept_messages",
+              className: "flex gap-6 w-full items-center border border-muted rounded-lg p-4\n            bg-background space-y-0\n            ",
+              error: (errors == null ? void 0 : errors.accept_messages) ?? "",
+              children: /* @__PURE__ */ jsx(
+                Switch,
+                {
+                  disabled: loading || !can.enableMessages,
+                  checked: acceptMessages,
+                  onCheckedChange: (e) => {
+                    if (!(user == null ? void 0 : user.isFondator)) {
+                      showErrorToast({
+                        message: "Votre niveau d'abonnement ne vous permet pas d'activer le système de messagerie.",
+                        action: "Mettre à niveau"
+                      });
+                      return;
+                    }
+                    if (!can.enableMessages) {
+                      toast.error("Vous n'avez pas la permission de modifier ce paramètre");
+                      return;
+                    }
+                    setAcceptMessages(() => {
+                      submit(e);
+                      return e;
+                    });
                   }
-                  setAcceptMessages(() => {
-                    submit(e);
-                    return e;
-                  });
                 }
-              }
-            )
-          }
-        ) })
+              )
+            }
+          ),
+          !(user == null ? void 0 : user.isFondator) && /* @__PURE__ */ jsx(ErrorMustBeFondator, { message: "Il faut être abonné pour pouvoir activer le système de contact." })
+        ] })
       ]
     }
   );
@@ -4405,7 +4376,7 @@ const MenuCard = (props) => {
     }
   );
 };
-const __vite_glob_0_64 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_65 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: MenuCard
 }, Symbol.toStringTag, { value: "Module" }));
@@ -4783,7 +4754,7 @@ const ContactCard = (props) => {
     }
   );
 };
-const __vite_glob_0_61 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_62 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: ContactCard
 }, Symbol.toStringTag, { value: "Module" }));
@@ -4855,7 +4826,7 @@ const NewsletterCard = (props) => {
     }
   );
 };
-const __vite_glob_0_65 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_66 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: NewsletterCard
 }, Symbol.toStringTag, { value: "Module" }));
@@ -4876,7 +4847,7 @@ const DescriptionCard = (props) => {
     }
   );
 };
-const __vite_glob_0_62 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_63 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: DescriptionCard
 }, Symbol.toStringTag, { value: "Module" }));
@@ -4935,7 +4906,7 @@ const Avis$1 = (props) => {
     /* @__PURE__ */ jsx(Separator, { className: "my-2" })
   ] }, avis2.id)) });
 };
-const __vite_glob_0_67 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_68 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Avis$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -4977,7 +4948,7 @@ const Note$1 = (props) => {
     ] })
   ] }) });
 };
-const __vite_glob_0_68 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_69 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Note$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5010,7 +4981,7 @@ const RatingCard$1 = (props) => {
     }
   );
 };
-const __vite_glob_0_69 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_70 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: RatingCard$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5062,7 +5033,7 @@ const HoursCard = (props) => {
     }
   );
 };
-const __vite_glob_0_63 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_64 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: HoursCard
 }, Symbol.toStringTag, { value: "Module" }));
@@ -5699,7 +5670,7 @@ const UploadFileInput = ({
     /* @__PURE__ */ jsx("p", { className: "text-xs flex-wrap text-center leading-5 text-muted-foreground", children: "PNG, JPG, WEBP jusqu'à 1Go" })
   ] }) }) });
 };
-const __vite_glob_0_66 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_67 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: PageContent
 }, Symbol.toStringTag, { value: "Module" }));
@@ -7043,6 +7014,7 @@ const __vite_glob_0_30 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.de
 }, Symbol.toStringTag, { value: "Module" }));
 const Settings = (props) => {
   const { restaurant, can, isMissingInfo } = props;
+  const user = useUser.use.user();
   const [showButtons, setShowButtons] = useState(false);
   const [isActive, setIsActive] = useState(restaurant.data.active);
   const [loading, setLoading] = useState(false);
@@ -7054,6 +7026,7 @@ const Settings = (props) => {
     city: restaurant.data.city ?? "",
     zip: restaurant.data.zip ?? ""
   });
+  const { showErrorToast } = useToastErrorNotFondator();
   const submit = (e) => {
     if (!can.update_settings) {
       toast.error(
@@ -7078,10 +7051,21 @@ const Settings = (props) => {
     );
   };
   const restaurantStatusSubmit = (e) => {
+    if ((user == null ? void 0 : user.isFondator) == false) {
+      toast.error(
+        "Vous n'avez pas les droits pour effectuer cette action."
+      );
+      return;
+    }
     setLoading(true);
-    axios.put(route("dashboard.settings.change-status", { restaurant: restaurant.data.id }), {
-      active: e
-    }).then((response) => {
+    axios.put(
+      route("dashboard.settings.change-status", {
+        restaurant: restaurant.data.id
+      }),
+      {
+        active: e
+      }
+    ).then((response) => {
       toast.success("Statut modifié !");
       router.reload();
     }).catch((error) => {
@@ -7098,7 +7082,7 @@ const Settings = (props) => {
       {
         label: "Status du restaurant",
         fieldName: "name",
-        className: "flex gap-6 w-fit items-center border border-muted rounded-lg p-4\n                    bg-background space-y-0\n                    ",
+        className: "flex w-fit items-center gap-6 space-y-0 rounded-lg border border-muted bg-background p-4",
         children: [
           isActive == true && "Actif",
           /* @__PURE__ */ jsx(
@@ -7107,8 +7091,17 @@ const Settings = (props) => {
               checked: isActive,
               disabled: loading || processing || !can.change_status,
               onCheckedChange: (e) => {
+                if (!(user == null ? void 0 : user.isFondator)) {
+                  showErrorToast({
+                    message: "Votre niveau d'abonnement ne vous permet pas d'activer le système de messagerie.",
+                    action: "Mettre à niveau"
+                  });
+                  return;
+                }
                 if (!can.change_status) {
-                  toast.error("Vous n'avez pas les droits pour effectuer cette action.");
+                  toast.error(
+                    "Vous n'avez pas les droits pour effectuer cette action."
+                  );
                   return;
                 }
                 setIsActive(() => {
@@ -7118,7 +7111,8 @@ const Settings = (props) => {
               }
             }
           ),
-          !isActive && "Inactif"
+          !isActive && "Inactif",
+          !(user == null ? void 0 : user.isFondator) && /* @__PURE__ */ jsx(ErrorMustBeFondator, { message: "Il faut être abonné pour pouvoir activer le système de contact." })
         ]
       }
     ),
@@ -7128,7 +7122,7 @@ const Settings = (props) => {
     ] }) }),
     /* @__PURE__ */ jsxs("form", { onSubmit: submit, children: [
       /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
-        /* @__PURE__ */ jsxs("h1", { className: "text-4xl font-semibold tracking-wide p-2", children: [
+        /* @__PURE__ */ jsxs("h1", { className: "p-2 text-4xl font-semibold tracking-wide", children: [
           "Paramètre de votre restaurant: ",
           restaurant.data.name
         ] }),
@@ -7161,7 +7155,7 @@ const Settings = (props) => {
           Card,
           {
             "x-chunk": "dashboard-settings-adresse",
-            className: "md:col-span-1 bg-accent",
+            className: "bg-accent md:col-span-1",
             children: [
               /* @__PURE__ */ jsxs(CardHeader, { className: "px-7", children: [
                 /* @__PURE__ */ jsx(CardTitle, { children: "Informations principales" }),
@@ -7182,7 +7176,7 @@ const Settings = (props) => {
                         name: "name",
                         value: data2.name,
                         placeholder: "Nom du restaurant",
-                        className: "mt-1 block w-full py-3 border",
+                        className: "mt-1 block w-full border py-3",
                         autoComplete: "username",
                         onChange: (e) => {
                           setData("name", e.target.value);
@@ -7206,7 +7200,7 @@ const Settings = (props) => {
                         name: "email",
                         placeholder: "Adresse mail du restaurant",
                         value: data2.email,
-                        className: "mt-1 block w-full py-3 border",
+                        className: "mt-1 block w-full border py-3",
                         onChange: (e) => {
                           setData("email", e.target.value);
                           setShowButtons(true);
@@ -7229,7 +7223,7 @@ const Settings = (props) => {
                         name: "phone",
                         placeholder: "Téléphone du restaurant",
                         value: data2.phone,
-                        className: "mt-1 block w-full py-3 border",
+                        className: "mt-1 block w-full border py-3",
                         onChange: (e) => {
                           setData("phone", e.target.value);
                           setShowButtons(true);
@@ -7246,7 +7240,7 @@ const Settings = (props) => {
           Card,
           {
             "x-chunk": "dashboard-settings-adresse",
-            className: "md:col-span-2 bg-accent",
+            className: "bg-accent md:col-span-2",
             children: [
               /* @__PURE__ */ jsx(CardHeader, { className: "px-7", children: /* @__PURE__ */ jsx(CardTitle, { children: "Localisation" }) }),
               /* @__PURE__ */ jsx(CardContent, { children: /* @__PURE__ */ jsxs("div", { className: "md:grid md:grid-cols-3 md:gap-3", children: [
@@ -7264,7 +7258,7 @@ const Settings = (props) => {
                         name: "address",
                         placeholder: "3 rue du Port",
                         value: data2.address,
-                        className: "mt-1 block w-full py-3 border",
+                        className: "mt-1 block w-full border py-3",
                         autoComplete: "address",
                         onChange: (e) => {
                           setData("address", e.target.value);
@@ -7288,7 +7282,7 @@ const Settings = (props) => {
                         name: "zip",
                         placeholder: "72000",
                         value: data2.zip,
-                        className: "mt-1 block w-full py-3 border",
+                        className: "mt-1 block w-full border py-3",
                         autoComplete: "zip",
                         onChange: (e) => {
                           setData("zip", e.target.value);
@@ -7312,7 +7306,7 @@ const Settings = (props) => {
                         name: "city",
                         placeholder: "Le Mans",
                         value: data2.city,
-                        className: "mt-1 block w-full py-3 border",
+                        className: "mt-1 block w-full border py-3",
                         autoComplete: "city",
                         onChange: (e) => {
                           setData("city", e.target.value);
@@ -7899,7 +7893,7 @@ const CellAction = ({ data: data2 }) => {
               setTable(data2);
             },
             children: [
-              /* @__PURE__ */ jsx(Edit$1, { className: "w-4 h-4" }),
+              /* @__PURE__ */ jsx(Edit$2, { className: "w-4 h-4" }),
               "Mettre à jour"
             ]
           }
@@ -8186,314 +8180,895 @@ const __vite_glob_0_45 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.de
   __proto__: null,
   default: Error404
 }, Symbol.toStringTag, { value: "Module" }));
-function ApplicationLogo(props) {
-  return /* @__PURE__ */ jsx(LogoCarotte, { className: "w-16 h-16 mt-2" });
-}
-const DropDownContext = createContext({
-  open: false,
-  setOpen: () => {
+var IconSize = /* @__PURE__ */ ((IconSize2) => {
+  IconSize2["xs"] = "12";
+  IconSize2["sm"] = "16";
+  IconSize2["md"] = "24";
+  IconSize2["lg"] = "32";
+  IconSize2["xl"] = "40";
+  return IconSize2;
+})(IconSize || {});
+const Icon = ({
+  name,
+  testId,
+  className,
+  size = "md",
+  ...props
+}) => {
+  const absoluteHref = `${window.location.origin}/`;
+  const iconSize = IconSize[size];
+  const iconClasses = cn("inline-block flex-shrink-0", className);
+  return /* @__PURE__ */ jsx(
+    "svg",
+    {
+      className: iconClasses,
+      fill: "currentColor",
+      stroke: "currentColor",
+      width: iconSize,
+      height: iconSize,
+      "data-testid": testId,
+      "data-name": name,
+      ...props,
+      children: /* @__PURE__ */ jsx("use", { href: `${absoluteHref}Icons/icon/icon.svg#${name}` })
+    }
+  );
+};
+const containerVariants = {
+  close: {
+    width: "5rem",
+    transition: {
+      type: "spring",
+      damping: 15,
+      duration: 0.5
+    }
   },
-  toggleOpen: () => {
+  open: {
+    width: "16rem",
+    transition: {
+      type: "spring",
+      damping: 15,
+      duration: 0.5
+    }
   }
-});
-const Dropdown = ({ children }) => {
-  const [open, setOpen] = useState(false);
-  const toggleOpen = () => {
-    setOpen((previousState) => !previousState);
-  };
-  return /* @__PURE__ */ jsx(DropDownContext.Provider, { value: { open, setOpen, toggleOpen }, children: /* @__PURE__ */ jsx("div", { className: "relative", children }) });
 };
-const Trigger = ({ children }) => {
-  const { open, setOpen, toggleOpen } = useContext(DropDownContext);
-  return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsx("div", { onClick: toggleOpen, children }),
-    open && /* @__PURE__ */ jsx("div", { className: "fixed inset-0 z-40", onClick: () => setOpen(false) })
-  ] });
+const svgVariants = {
+  close: {
+    rotate: 360
+  },
+  open: {
+    rotate: 180
+  }
 };
-const Content = ({ align = "right", width = "48", contentClasses = "py-1 bg-white", children }) => {
-  const { open, setOpen } = useContext(DropDownContext);
-  let alignmentClasses = "origin-top";
-  if (align === "left") {
-    alignmentClasses = "ltr:origin-top-left rtl:origin-top-right start-0";
-  } else if (align === "right") {
-    alignmentClasses = "ltr:origin-top-right rtl:origin-top-left end-0";
-  }
-  let widthClasses = "";
-  if (width === "48") {
-    widthClasses = "w-48";
-  }
-  return /* @__PURE__ */ jsx(Fragment, { children: /* @__PURE__ */ jsx(
-    Transition,
-    {
-      as: Fragment$1,
-      show: open,
-      enter: "transition ease-out duration-200",
-      enterFrom: "opacity-0 scale-95",
-      enterTo: "opacity-100 scale-100",
-      leave: "transition ease-in duration-75",
-      leaveFrom: "opacity-100 scale-100",
-      leaveTo: "opacity-0 scale-95",
-      children: /* @__PURE__ */ jsx(
-        "div",
-        {
-          className: `absolute z-50 mt-2 rounded-md shadow-lg ${alignmentClasses} ${widthClasses}`,
-          onClick: () => setOpen(false),
-          children: /* @__PURE__ */ jsx("div", { className: `rounded-md ring-1 ring-black ring-opacity-5 ` + contentClasses, children })
+const ProfileNavigation = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const containerControls = useAnimationControls();
+  const svgControls = useAnimationControls();
+  useEffect(() => {
+    if (isOpen) {
+      containerControls.start("open");
+      svgControls.start("open");
+    } else {
+      containerControls.start("close");
+      svgControls.start("close");
+    }
+  }, [isOpen]);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const nav = document.querySelector("nav");
+      const projectNav = document.querySelector("#project-navigation");
+      if (selectedProject === null) {
+        if (nav && !nav.contains(event.target)) {
+          setIsOpen(false);
         }
-      )
-    }
-  ) });
-};
-const DropdownLink = ({ className = "", children, ...props }) => {
-  return /* @__PURE__ */ jsx(
-    Link,
+      } else {
+        if (nav && !nav.contains(event.target) && projectNav && !projectNav.contains(event.target)) {
+          setIsOpen(false);
+          setSelectedProject(null);
+        }
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [selectedProject]);
+  const handleOpenClose = () => {
+    setIsOpen(!isOpen);
+    setSelectedProject(null);
+  };
+  return /* @__PURE__ */ jsx(Fragment, { children: /* @__PURE__ */ jsx("div", { className: "sticky left-0 top-0 z-10 h-fit", children: /* @__PURE__ */ jsx("div", { className: "min-h-screen", children: /* @__PURE__ */ jsxs(
+    motion.nav,
     {
-      ...props,
-      className: "block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out " + className,
-      children
-    }
-  );
-};
-Dropdown.Trigger = Trigger;
-Dropdown.Content = Content;
-Dropdown.Link = DropdownLink;
-function NavLink({ active = false, className = "", children, ...props }) {
-  return /* @__PURE__ */ jsx(
-    Link,
-    {
-      ...props,
-      className: "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none " + (active ? "border-primaryBlue focus:border-primaryBlue " : "border-transparent text-muted-foreground hover:text-muted-foreground hover:border-muted-foreground/70 focus:text-gray-700 focus:border-gray-300 ") + className,
-      children
-    }
-  );
-}
-function ResponsiveNavLink({ active = false, className = "", children, ...props }) {
-  return /* @__PURE__ */ jsx(
-    Link,
-    {
-      ...props,
-      className: `w-full flex items-start ps-3 pe-4 py-2 border-l-4 ${active ? "border-indigo-400 text-indigo-700 bg-indigo-50 focus:text-indigo-800 focus:bg-indigo-100 focus:border-indigo-700" : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300 focus:text-gray-800 focus:bg-gray-50 focus:border-gray-300"} text-base font-medium focus:outline-none transition duration-150 ease-in-out ${className}`,
-      children
-    }
-  );
-}
-const isRole = (user, role_slug) => {
-  return user.roles.some((role) => role.slug === role_slug);
-};
-const MainNav = ({ user }) => {
-  const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
-  const isAdmin = isRole(user, "admin");
-  return /* @__PURE__ */ jsxs("nav", { className: "bg-white border-b border-gray-100", children: [
-    /* @__PURE__ */ jsx("div", { className: "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8", children: /* @__PURE__ */ jsxs("div", { className: "flex justify-between h-16", children: [
-      /* @__PURE__ */ jsxs("div", { className: "flex", children: [
-        /* @__PURE__ */ jsx("div", { className: "shrink-0 flex items-center", children: /* @__PURE__ */ jsx(Link, { href: "/", children: /* @__PURE__ */ jsx(ApplicationLogo, { className: "block h-9 w-auto fill-current text-gray-800" }) }) }),
-        /* @__PURE__ */ jsxs("div", { className: "hidden space-x-8 sm:-my-px sm:ms-10 sm:flex", children: [
+      variants: containerVariants,
+      animate: containerControls,
+      initial: "close",
+      className: "absolute left-0 top-0 flex h-fit min-h-full flex-col justify-start gap-24 border border-r bg-secondary p-5 shadow",
+      children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex h-full w-full flex-row place-items-center justify-between", children: [
+          /* @__PURE__ */ jsx("div", { className: "h-10 w-10 rounded-full bg-gradient-to-br from-orange-500 to-amber-700" }),
           /* @__PURE__ */ jsx(
-            NavLink,
+            "button",
             {
-              href: route("dashboard"),
-              active: route().current("dashboard"),
-              children: "Dashboard"
-            }
-          ),
-          /* @__PURE__ */ jsx(
-            NavLink,
-            {
-              href: route("devis.index"),
-              active: route().current("devis.index"),
-              children: "Devis"
-            }
-          ),
-          user.isSub || isAdmin ? /* @__PURE__ */ jsx(
-            NavLink,
-            {
-              href: route("facture.index"),
-              active: route().current("facture.index"),
-              children: "Facture"
-            }
-          ) : /* @__PURE__ */ jsx("p", { className: "relative inline-flex items-center px-1 pt-1 text-sm text-muted-foreground/50 font-medium leading-5", children: "Facture 🔏" })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxs("div", { className: "flex items-center", children: [
-        isAdmin ? null : user.isSub ? null : /* @__PURE__ */ jsxs(Fragment, { children: [
-          /* @__PURE__ */ jsxs("p", { className: "font-semibold text-sm text-muted-foreground", children: [
-            user.available_credits,
-            " crédits restants"
-          ] }),
-          /* @__PURE__ */ jsx(
-            Link,
-            {
-              href: "/",
-              className: "w-fit ms-5 bg-primary text-muted px-3 text-[14px] py-2 rounded-lg",
-              children: "Devenir Pro"
+              className: "flex rounded-full p-1",
+              onClick: () => handleOpenClose(),
+              children: /* @__PURE__ */ jsx(
+                "svg",
+                {
+                  xmlns: "http://www.w3.org/2000/svg",
+                  fill: "none",
+                  viewBox: "0 0 24 24",
+                  strokeWidth: 1,
+                  stroke: "currentColor",
+                  className: "h-8 w-8 stroke-secondary-foreground/80",
+                  children: /* @__PURE__ */ jsx(
+                    motion.path,
+                    {
+                      strokeLinecap: "round",
+                      strokeLinejoin: "round",
+                      variants: svgVariants,
+                      animate: svgControls,
+                      d: "M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3",
+                      transition: {
+                        duration: 0.5,
+                        ease: "easeInOut"
+                      }
+                    }
+                  )
+                }
+              )
             }
           )
         ] }),
-        /* @__PURE__ */ jsx("div", { className: "hidden sm:flex sm:items-center", children: /* @__PURE__ */ jsx("div", { className: "ms-3 relative", children: /* @__PURE__ */ jsxs(Dropdown, { children: [
-          /* @__PURE__ */ jsx(Dropdown.Trigger, { children: /* @__PURE__ */ jsx("span", { className: "inline-flex rounded-md", children: /* @__PURE__ */ jsxs(
-            "button",
+        /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-3", children: [
+          /* @__PURE__ */ jsx(
+            NavigationLink,
             {
-              type: "button",
-              className: "inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150",
-              children: [
-                user.name,
-                /* @__PURE__ */ jsx(
-                  "svg",
+              name: "Profil",
+              href: route("profile.edit"),
+              active: route().current("profile.edit"),
+              children: /* @__PURE__ */ jsx(Icon, { name: "user", className: "w-8 min-w-8 h-8 stroke-inherit stroke-[0.75]" })
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            NavigationLink,
+            {
+              name: "Abonnement",
+              href: route("billings.edit"),
+              active: route().current("billings.edit"),
+              children: /* @__PURE__ */ jsx(Icon, { name: "credit-card", className: "w-8 min-w-8 h-8 stroke-inherit stroke-[0.75]" })
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            ProjectLink,
+            {
+              name: "Paramètres",
+              active: false,
+              setSelectedProject,
+              className: "flex cursor-pointer place-items-center gap-3 rounded stroke-secondary-foreground/60 stroke-[0.75] p-1 text-red-600 text-secondary-foreground/60 transition-colors duration-100 hover:bg-secondary-foreground/80 hover:stroke-muted hover:text-muted",
+              children: /* @__PURE__ */ jsx(Icon, { name: "settings", className: "h-8 w-8 min-w-8 stroke-inherit stroke-[0.75]" })
+            }
+          )
+        ] })
+      ]
+    }
+  ) }) }) });
+};
+const ProfileNavbar = () => {
+  return /* @__PURE__ */ jsx("div", { className: "border-b", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto flex h-16 items-center px-4 md:px-10", children: [
+    /* @__PURE__ */ jsx(
+      Button,
+      {
+        variant: "link",
+        onClick: () => {
+          router.visit("/dashboard");
+        },
+        children: "Retour au tableau de bord"
+      }
+    ),
+    /* @__PURE__ */ jsxs("div", { className: "ml-auto flex items-center space-x-4", children: [
+      /* @__PURE__ */ jsx(ModeToggle, {}),
+      /* @__PURE__ */ jsx(UserAvatar, {})
+    ] })
+  ] }) });
+};
+function ProfileLayout({
+  header,
+  children
+}) {
+  const props = usePage().props;
+  props.auth.user;
+  const flash = usePage().props.flash;
+  useEffect(() => {
+    if (flash == null ? void 0 : flash.message) {
+      setTimeout(() => {
+        toast.success(flash.message);
+      }, 500);
+    }
+    if (flash == null ? void 0 : flash.error) {
+      setTimeout(() => {
+        toast.error(flash.error);
+      }, 500);
+    }
+  }, [flash == null ? void 0 : flash.message, flash == null ? void 0 : flash.error]);
+  return /* @__PURE__ */ jsx(ThemeProvider, { children: /* @__PURE__ */ jsxs(ToastProvider, { children: [
+    /* @__PURE__ */ jsx(ModalProvider, {}),
+    /* @__PURE__ */ jsxs("main", { className: "w-full h-full flex flex-row relative", children: [
+      /* @__PURE__ */ jsx(ProfileNavigation, {}),
+      /* @__PURE__ */ jsxs("section", { className: "w-full ml-20", children: [
+        /* @__PURE__ */ jsx(ProfileNavbar, {}),
+        /* @__PURE__ */ jsxs("section", { className: "flex flex-col p-2 md:p-10 gap-5 relative z-0", children: [
+          header,
+          children
+        ] })
+      ] })
+    ] })
+  ] }) });
+}
+const formatPriceFromCents = (price, withCents) => {
+  if (withCents) {
+    return Number(price / 100).toFixed(2).replace(".", ",");
+  } else {
+    return Number(price / 100).toFixed(0).replace(".", ",");
+  }
+};
+const formatPrice = (price) => {
+  return Number(price).toFixed(2).replace(".", ",");
+};
+const transformMonthPriceToYearPrice = (price) => {
+  const newPrice = Number(price * 12);
+  return formatPrice(newPrice);
+};
+function CancelSubscription({
+  className = "",
+  subscriptions
+}) {
+  const [confirmingSubscriptionDeletion, setConfirmingSubscriptionDeletion] = useState(false);
+  const passwordInput = useRef(null);
+  const [subscriptionId, setSubscriptionId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [subscriptionName, setSubscriptionName] = useState(
+    null
+  );
+  const confirmSubscriptionDeletion = () => {
+    setConfirmingSubscriptionDeletion(true);
+  };
+  const closeModal = () => {
+    setConfirmingSubscriptionDeletion(false);
+    setSubscriptionId(null);
+    setSubscriptionName(null);
+  };
+  const onDelete = () => {
+    router.delete("/subscribe/cancel", {
+      data: {
+        sub_name: subscriptionName,
+        id: subscriptionId
+      },
+      preserveScroll: true,
+      onSuccess: () => {
+        closeModal(), toast.success("Abonnement annulé avec succès");
+      },
+      onError: () => {
+        var _a;
+        return (_a = passwordInput.current) == null ? void 0 : _a.focus();
+      }
+    });
+  };
+  return /* @__PURE__ */ jsxs("section", { className: `space-y-6 ${className}`, children: [
+    /* @__PURE__ */ jsx("header", { children: /* @__PURE__ */ jsx("h2", { className: "text-lg font-medium text-foreground", children: "Abonnement(s)" }) }),
+    /* @__PURE__ */ jsx("div", { className: "space-y-2 ", children: subscriptions == null ? void 0 : subscriptions.map((subscription) => /* @__PURE__ */ jsxs(
+      "div",
+      {
+        className: "flex w-full items-center gap-5 p-4",
+        children: [
+          /* @__PURE__ */ jsxs("p", { className: "text-[15px] font-semibold tracking-wide text-foreground", children: [
+            subscription.name,
+            " :",
+            " ",
+            /* @__PURE__ */ jsx("span", { className: "font-normal", children: subscription.recurrence === "monthly" ? /* @__PURE__ */ jsxs(Fragment, { children: [
+              formatPriceFromCents(
+                subscription.price,
+                true
+              ),
+              " ",
+              "€/",
+              "mois"
+            ] }) : /* @__PURE__ */ jsxs(Fragment, { children: [
+              transformMonthPriceToYearPrice(
+                parseInt(
+                  formatPriceFromCents(
+                    subscription.price,
+                    true
+                  )
+                )
+              ),
+              " ",
+              "€/",
+              "an"
+            ] }) })
+          ] }),
+          subscription.isOnGracePeriod ? /* @__PURE__ */ jsx(Fragment, { children: subscription.ends_at && /* @__PURE__ */ jsxs("small", { className: "text-sm", children: [
+            "Cet abonnement prendra fin le :",
+            " ",
+            new Date(
+              subscription.ends_at
+            ).toLocaleDateString("fr-FR")
+          ] }) }) : /* @__PURE__ */ jsx(
+            Button,
+            {
+              variant: "link",
+              size: "sm",
+              className: "text-destructive font-tight tracking-tighter",
+              onClick: () => {
+                confirmSubscriptionDeletion();
+                setSubscriptionId(subscription.id);
+                setSubscriptionName(subscription.name);
+              },
+              children: "Annuler"
+            }
+          )
+        ]
+      },
+      subscription.id
+    )) }),
+    /* @__PURE__ */ jsx(
+      AlertModal,
+      {
+        isOpen: confirmingSubscriptionDeletion,
+        onClose: closeModal,
+        onConfirm: onDelete,
+        loading,
+        title: "Êtes-vous sûr de vouloir supprimer votre abonnement ?",
+        description: "Cette action est irréversible. Vous perdrez accès aux fonctionnalités de votre abonnement."
+      }
+    )
+  ] });
+}
+const __vite_glob_0_48 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  default: CancelSubscription
+}, Symbol.toStringTag, { value: "Module" }));
+const Invoices = ({ invoices }) => {
+  return /* @__PURE__ */ jsxs("div", { children: [
+    /* @__PURE__ */ jsx("header", { className: "mb-3", children: /* @__PURE__ */ jsx("h2", { className: "text-lg font-medium text-foreground", children: "Mes factures" }) }),
+    invoices.map((invoice) => /* @__PURE__ */ jsxs("div", { className: "flex gap-3", children: [
+      /* @__PURE__ */ jsx("span", { children: new Date(invoice.created * 1e3).toLocaleDateString(
+        "fr-FR"
+      ) }),
+      /* @__PURE__ */ jsxs("span", { children: [
+        (invoice.total / 100).toFixed(2),
+        " €"
+      ] }),
+      /* @__PURE__ */ jsx("span", { children: /* @__PURE__ */ jsx(
+        "a",
+        {
+          className: "text-primaryBlue underline",
+          href: "/user/invoice/" + invoice.id,
+          children: "Télécharger"
+        }
+      ) })
+    ] }, invoice.id))
+  ] });
+};
+const __vite_glob_0_50 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  default: Invoices
+}, Symbol.toStringTag, { value: "Module" }));
+const createSelectors$3 = (_store) => {
+  let store = _store;
+  store.use = {};
+  for (let k of Object.keys(store.getState())) {
+    store.use[k] = () => store((s) => s[k]);
+  }
+  return store;
+};
+const useHandlePaymentMethodModal = createSelectors$3(create((set) => ({
+  isOpen: false,
+  onOpen: () => set({ isOpen: true }),
+  onClose: () => set({ isOpen: false })
+})));
+const ConfirmDelete = (props) => {
+  const { idToDelete, setIdToDelete, setShowDeleteConfirm, setShowUpdateMethod } = props;
+  const { data: data2, delete: deletePaymentMethod, processing } = useForm({
+    id: idToDelete
+  });
+  const resetDelete = () => {
+    setIdToDelete(null);
+    setShowDeleteConfirm(false);
+    setShowUpdateMethod(true);
+  };
+  const confirmDelete = () => {
+    if (!data2.id) {
+      return toast.error("Une erreur s'est produite lors de la suppression de votre méthode de paiement. Veuillez réessayer plus tard ou nous contacter.");
+    }
+    deletePaymentMethod(route("billings.payment-method.delete", { id: data2.id }), {
+      preserveScroll: true,
+      onSuccess: () => {
+        toast.success("Votre méthode de paiement a été supprimée avec succès.");
+        setIdToDelete(null);
+        setShowDeleteConfirm(false);
+        setShowUpdateMethod(true);
+      },
+      onError: () => {
+        setIdToDelete(null);
+        setShowDeleteConfirm(false);
+        setShowUpdateMethod(true);
+        toast.error("Une erreur s'est produite lors de la suppression de votre méthode de paiement. Veuillez réessayer plus tard ou nous contacter.");
+      }
+    });
+  };
+  return /* @__PURE__ */ jsxs("div", { className: "h-[45vh] w-full overflow-y-auto", children: [
+    /* @__PURE__ */ jsx("p", { className: "mt-8 text-sm font-normal tracking-tight", children: "Souhaitez-vous supprimé votre méthode de paiement ? Ceci est irréversible." }),
+    /* @__PURE__ */ jsxs("div", { className: "mt-12 flex w-full items-center justify-center gap-6", children: [
+      /* @__PURE__ */ jsx(
+        Button,
+        {
+          type: "button",
+          className: "h-16 w-16 rounded-full p-3 px-0 py-0",
+          onClick: resetDelete,
+          disabled: processing,
+          children: /* @__PURE__ */ jsx(Icon, { name: "x", className: "h-9 w-9" })
+        }
+      ),
+      idToDelete && /* @__PURE__ */ jsx(
+        SubmitButton,
+        {
+          variant: "destructive",
+          type: "button",
+          className: "h-16 w-16 rounded-full p-3 px-0 py-0",
+          onClick: confirmDelete,
+          disabled: processing,
+          children: /* @__PURE__ */ jsx(Icon, { name: "check", className: "h-9 w-9" })
+        }
+      )
+    ] })
+  ] });
+};
+const RadioGroup = React.forwardRef(({ className, ...props }, ref) => {
+  return /* @__PURE__ */ jsx(
+    RadioGroupPrimitive.Root,
+    {
+      className: cn("grid gap-2", className),
+      ...props,
+      ref
+    }
+  );
+});
+RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
+const RadioGroupItem = React.forwardRef(({ className, ...props }, ref) => {
+  return /* @__PURE__ */ jsx(
+    RadioGroupPrimitive.Item,
+    {
+      ref,
+      className: cn(
+        "aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+        className
+      ),
+      ...props,
+      children: /* @__PURE__ */ jsx(RadioGroupPrimitive.Indicator, { className: "flex items-center justify-center", children: /* @__PURE__ */ jsx(Circle, { className: "h-2.5 w-2.5 fill-current text-current" }) })
+    }
+  );
+});
+RadioGroupItem.displayName = RadioGroupPrimitive.Item.displayName;
+const UpdatePaymentMethod = (props) => {
+  const {
+    paymentMethods,
+    defaultPaymentMethod,
+    openConfirmDeletion,
+    setShowSubmitButton,
+    showSubmitButton,
+    onClose
+  } = props;
+  const { data: data2, processing, errors, put, reset } = useForm({
+    id: defaultPaymentMethod.id
+  });
+  const submit = () => {
+    put(route("billings.payment-method.update", { id: data2.id }), {
+      preserveScroll: true,
+      onSuccess: () => {
+        setShowSubmitButton(false);
+        onClose();
+        toast.success("Votre méthode de paiement a été mise à jour.");
+      },
+      onError: (e) => {
+        reset();
+        toast.error("Une erreur est survenue. Veuillez réessayer.");
+      }
+    });
+  };
+  return /* @__PURE__ */ jsx(Fragment, { children: /* @__PURE__ */ jsxs("div", { children: [
+    paymentMethods && paymentMethods.length > 0 && /* @__PURE__ */ jsxs("div", { className: "max-h-[45vh] w-full overflow-y-auto border p-3", children: [
+      /* @__PURE__ */ jsxs("p", { className: "text-md mb-4 font-semibold text-foreground/70", children: [
+        "Vos cartes enregistrées :",
+        " "
+      ] }),
+      /* @__PURE__ */ jsx(
+        RadioGroup,
+        {
+          onValueChange: (e) => {
+            setShowSubmitButton(true);
+            data2.id = e;
+          },
+          defaultValue: data2.id,
+          children: paymentMethods.map((paymentMethod) => {
+            {
+              return /* @__PURE__ */ jsxs("div", { className: "grid grid-cols-8 items-center gap-2", children: [
+                /* @__PURE__ */ jsxs(
+                  "div",
                   {
-                    className: "ms-2 -me-0.5 h-4 w-4",
-                    xmlns: "http://www.w3.org/2000/svg",
-                    viewBox: "0 0 20 20",
-                    fill: "currentColor",
+                    className: cn(
+                      "col-span-7 flex h-16 w-full cursor-pointer items-center space-x-2 rounded-lg border p-1",
+                      paymentMethod.id === defaultPaymentMethod.id && "bg-primary/10"
+                    ),
+                    children: [
+                      /* @__PURE__ */ jsx(
+                        RadioGroupItem,
+                        {
+                          value: paymentMethod.id,
+                          id: paymentMethod.id,
+                          className: "cursor-pointer"
+                        }
+                      ),
+                      /* @__PURE__ */ jsxs(
+                        Label,
+                        {
+                          htmlFor: paymentMethod.id,
+                          className: "flex h-full w-full cursor-pointer items-center",
+                          children: [
+                            /* @__PURE__ */ jsx(
+                              Icon,
+                              {
+                                name: paymentMethod.card.brand,
+                                className: "mr-3 h-12 w-12 text-current"
+                              }
+                            ),
+                            "**** **** ****",
+                            " ",
+                            defaultPaymentMethod.card.last4,
+                            " ",
+                            "-",
+                            " ",
+                            paymentMethod.card.exp_month,
+                            "/",
+                            paymentMethod.card.exp_year
+                          ]
+                        }
+                      )
+                    ]
+                  },
+                  paymentMethod.id
+                ),
+                paymentMethod.id !== defaultPaymentMethod.id && /* @__PURE__ */ jsx(
+                  Button,
+                  {
+                    variant: "ghost",
+                    size: "xs",
+                    onClick: () => {
+                      openConfirmDeletion(
+                        paymentMethod.id
+                      );
+                    },
                     children: /* @__PURE__ */ jsx(
-                      "path",
+                      Icon,
                       {
-                        fillRule: "evenodd",
-                        d: "M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z",
-                        clipRule: "evenodd"
+                        name: "trash",
+                        className: "h-5 w-5 text-destructive"
                       }
                     )
                   }
                 )
-              ]
+              ] });
             }
-          ) }) }),
-          /* @__PURE__ */ jsxs(Dropdown.Content, { children: [
-            /* @__PURE__ */ jsx(
-              Dropdown.Link,
-              {
-                href: route("profile.edit"),
-                children: "Profil"
-              }
-            ),
-            /* @__PURE__ */ jsx(
-              Dropdown.Link,
-              {
-                href: route("entreprise.edit"),
-                children: "Entreprise"
-              }
-            ),
-            /* @__PURE__ */ jsx(
-              Dropdown.Link,
-              {
-                href: route("logout"),
-                method: "post",
-                as: "button",
-                children: "Déconnexion"
-              }
-            )
-          ] })
-        ] }) }) })
-      ] }),
-      /* @__PURE__ */ jsx("div", { className: "-me-2 flex items-center sm:hidden", children: /* @__PURE__ */ jsx(
-        "button",
-        {
-          onClick: () => setShowingNavigationDropdown(
-            (previousState) => !previousState
-          ),
-          className: "inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out",
-          children: /* @__PURE__ */ jsxs(
-            "svg",
-            {
-              className: "h-6 w-6",
-              stroke: "currentColor",
-              fill: "none",
-              viewBox: "0 0 24 24",
-              children: [
-                /* @__PURE__ */ jsx(
-                  "path",
-                  {
-                    className: !showingNavigationDropdown ? "inline-flex" : "hidden",
-                    strokeLinecap: "round",
-                    strokeLinejoin: "round",
-                    strokeWidth: "2",
-                    d: "M4 6h16M4 12h16M4 18h16"
-                  }
-                ),
-                /* @__PURE__ */ jsx(
-                  "path",
-                  {
-                    className: showingNavigationDropdown ? "inline-flex" : "hidden",
-                    strokeLinecap: "round",
-                    strokeLinejoin: "round",
-                    strokeWidth: "2",
-                    d: "M6 18L18 6M6 6l12 12"
-                  }
-                )
-              ]
-            }
-          )
+          })
         }
-      ) })
-    ] }) }),
-    /* @__PURE__ */ jsxs(
-      "div",
+      )
+    ] }),
+    showSubmitButton && /* @__PURE__ */ jsxs("div", { className: "mt-6 flex w-full items-center gap-2", children: [
+      /* @__PURE__ */ jsx(
+        Button,
+        {
+          variant: "outline",
+          type: "button",
+          className: "w-full",
+          disabled: processing,
+          onClick: () => {
+            setShowSubmitButton(false);
+          },
+          children: "Annuler"
+        }
+      ),
+      /* @__PURE__ */ jsx(
+        SubmitButton,
+        {
+          disabled: processing,
+          onClick: submit,
+          className: "w-full",
+          children: "Mettre à jour"
+        }
+      )
+    ] })
+  ] }) });
+};
+const AddNewPaymentMethod = (props) => {
+  const { stripeKey, intent, onReset } = props;
+  const [stripe, setStripe] = useState(null);
+  const [elements, setElements] = useState(null);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const stripeInstance = window.Stripe(stripeKey);
+    setStripe(stripeInstance);
+    setLoading(false);
+  }, [stripeKey]);
+  useEffect(() => {
+    if (stripe) {
+      setLoading(true);
+      const clientSecret = intent.client_secret;
+      const elementsInstance = stripe.elements({ clientSecret });
+      setElements(elementsInstance);
+      const paymentElementOptions = {
+        layout: "tabs"
+      };
+      const paymentElement = elementsInstance.create(
+        "payment",
+        paymentElementOptions
+      );
+      paymentElement.mount("#payment-element");
+      setTimeout(() => {
+        setLoading(false);
+      }, 1500);
+    }
+  }, [stripe]);
+  const { data: data2, processing, post, reset } = useForm({
+    paymentMethod: ""
+  });
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const { error, setupIntent } = await stripe.confirmSetup({
+      elements,
+      confirmParams: {
+        // Make sure to change this to your payment completion page
+        return_url: "http://localhost:8000/billings"
+      },
+      redirect: "if_required"
+    });
+    if (error) {
+      if (error.type === "card_error" || error.type === "validation_error") {
+        toast.error(error.message);
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
+    } else {
+      data2.paymentMethod = setupIntent.payment_method;
+      post(route("billings.payment-method.create-new"), {
+        ...data2,
+        preserveScroll: true,
+        onSuccess: () => {
+          toast.success("Votre méthode de paiement a été ajoutée.");
+          onReset();
+        },
+        onError: (e2) => {
+          reset();
+          toast.error("Une erreur est survenue. Veuillez réessayer.");
+        }
+      });
+    }
+  };
+  return /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsxs("form", { id: "payment-form", onSubmit, children: [
+    /* @__PURE__ */ jsx("div", { id: "payment-element" }),
+    /* @__PURE__ */ jsx(
+      SubmitButton,
       {
-        className: (showingNavigationDropdown ? "block" : "hidden") + " sm:hidden",
-        children: [
-          /* @__PURE__ */ jsxs("div", { className: "pt-2 pb-3 space-y-1", children: [
-            /* @__PURE__ */ jsx(
-              ResponsiveNavLink,
-              {
-                href: route("dashboard"),
-                active: route().current("dashboard"),
-                children: "Dashboard"
-              }
-            ),
-            /* @__PURE__ */ jsx(
-              ResponsiveNavLink,
-              {
-                href: route("devis.index"),
-                active: route().current("devis.index"),
-                children: "Devis"
-              }
-            ),
-            /* @__PURE__ */ jsx(
-              ResponsiveNavLink,
-              {
-                href: route("facture.index"),
-                active: route().current("facture.index"),
-                children: "Facture"
-              }
-            )
-          ] }),
-          /* @__PURE__ */ jsxs("div", { className: "pt-4 pb-1 border-t border-gray-200", children: [
-            /* @__PURE__ */ jsxs("div", { className: "px-4", children: [
-              /* @__PURE__ */ jsx("div", { className: "font-medium text-base text-gray-800", children: user.name }),
-              /* @__PURE__ */ jsx("div", { className: "font-medium text-sm text-gray-500", children: user.email })
-            ] }),
-            /* @__PURE__ */ jsxs("div", { className: "mt-3 space-y-1", children: [
-              /* @__PURE__ */ jsx(ResponsiveNavLink, { href: route("profile.edit"), children: "Profile" }),
-              /* @__PURE__ */ jsx(ResponsiveNavLink, { href: route("entreprise.edit"), children: "Entreprise" }),
-              /* @__PURE__ */ jsx(
-                ResponsiveNavLink,
+        disabled: processing || loading,
+        className: "my-6 w-full",
+        id: "card-button",
+        type: "submit",
+        children: "Ajouter"
+      }
+    ),
+    /* @__PURE__ */ jsx("div", { id: "payment-message", className: "hidden" })
+  ] }) });
+};
+const HandlePaymentMethodModal = (props) => {
+  const { paymentMethods, defaultPaymentMethod, intent, stripeKey } = props;
+  const isOpen = useHandlePaymentMethodModal.use.isOpen();
+  const onClose = useHandlePaymentMethodModal.use.onClose();
+  const [showSubmitButton, setShowSubmitButton] = useState(false);
+  const [showUpdateMethod, setShowUpdateMethod] = useState(true);
+  const [idToDelete, setIdToDelete] = useState(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showAddMethod, setShowAddMethod] = useState(false);
+  const openConfirmDeletion = (id) => {
+    setIdToDelete(id);
+    setShowDeleteConfirm(true);
+    setShowUpdateMethod(false);
+  };
+  const onReset = () => {
+    setShowUpdateMethod(true);
+    setShowAddMethod(false);
+    onClose();
+  };
+  return /* @__PURE__ */ jsxs(
+    Modal,
+    {
+      title: `Modifier vos moyens de paiement`,
+      isOpen,
+      onClose: () => {
+        onReset();
+      },
+      children: [
+        !showUpdateMethod && /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsxs(
+          Button,
+          {
+            size: "xs",
+            variant: "link",
+            onClick: () => {
+              setShowUpdateMethod(true);
+            },
+            className: "flex items-center gap-2",
+            children: [
+              /* @__PURE__ */ jsx(Icon, { name: "arrow-left", className: "h-5 w-5" }),
+              /* @__PURE__ */ jsx("span", { children: "Retour à mes cartes" })
+            ]
+          }
+        ) }),
+        showUpdateMethod && /* @__PURE__ */ jsx(
+          UpdatePaymentMethod,
+          {
+            defaultPaymentMethod,
+            openConfirmDeletion,
+            setShowSubmitButton,
+            paymentMethods,
+            showSubmitButton,
+            onClose
+          }
+        ),
+        showDeleteConfirm && /* @__PURE__ */ jsx(
+          ConfirmDelete,
+          {
+            idToDelete,
+            setShowDeleteConfirm,
+            setShowUpdateMethod,
+            setIdToDelete
+          }
+        ),
+        showAddMethod && /* @__PURE__ */ jsx(Fragment, { children: /* @__PURE__ */ jsx(
+          AddNewPaymentMethod,
+          {
+            intent,
+            stripeKey,
+            onReset
+          }
+        ) }),
+        showUpdateMethod && /* @__PURE__ */ jsx("div", { className: "mt-3", children: /* @__PURE__ */ jsxs(
+          Button,
+          {
+            onClick: () => {
+              setShowUpdateMethod(false);
+              setShowAddMethod(true);
+            },
+            variant: "ghost",
+            className: "flex items-center gap-3",
+            children: [
+              /* @__PURE__ */ jsx(Icon, { name: "plus", className: "h-6 w-6" }),
+              /* @__PURE__ */ jsx("span", { children: "Ajouter une nouvelle méthode de paiement" })
+            ]
+          }
+        ) })
+      ]
+    }
+  );
+};
+const StripeLoader = () => {
+  useEffect(() => {
+    if (document.querySelector(`script[src="https://js.stripe.com/v3/"]`)) {
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = "https://js.stripe.com/v3/";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+  return null;
+};
+function Edit$1({
+  auth,
+  subscriptions,
+  invoices,
+  paymentMethods,
+  defaultPaymentMethod,
+  intent,
+  stripeKey
+}) {
+  var _a;
+  const onOpen = useHandlePaymentMethodModal.use.onOpen();
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx(Head, { title: "Abonnements" }),
+    /* @__PURE__ */ jsx(StripeLoader, {}),
+    /* @__PURE__ */ jsx(
+      HandlePaymentMethodModal,
+      {
+        intent,
+        stripeKey,
+        paymentMethods,
+        defaultPaymentMethod
+      }
+    ),
+    /* @__PURE__ */ jsx("div", { className: "py-12", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto space-y-6", children: [
+      /* @__PURE__ */ jsxs("div", { className: "bg-secondary p-4 shadow sm:rounded-lg sm:p-8", children: [
+        /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
+          /* @__PURE__ */ jsx("h2", { className: "text-lg font-medium text-foreground", children: "Informations de paiement" }),
+          paymentMethods.length > 0 && /* @__PURE__ */ jsx(
+            Button,
+            {
+              type: "button",
+              variant: "outline",
+              size: "sm",
+              onClick: onOpen,
+              children: /* @__PURE__ */ jsx(
+                Icon,
                 {
-                  method: "post",
-                  href: route("logout"),
-                  as: "button",
-                  children: "Log Out"
+                  name: "pencil",
+                  className: "h-5 w-5 text-foreground"
                 }
               )
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsx("div", { children: defaultPaymentMethod && /* @__PURE__ */ jsxs("div", { className: "mt-10 w-fit rounded-lg bg-white p-6 shadow-md", children: [
+          /* @__PURE__ */ jsxs("p", { className: "mb-4 text-lg font-semibold text-gray-700", children: [
+            "Votre méthode de paiement par défaut :",
+            " "
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "mb-2 flex items-center", children: [
+            /* @__PURE__ */ jsx(
+              Icon,
+              {
+                name: defaultPaymentMethod.card.brand,
+                className: "mr-3 h-12 w-12 text-current"
+              }
+            ),
+            /* @__PURE__ */ jsxs("p", { className: "text-gray-700", children: [
+              "**** **** ****",
+              " ",
+              defaultPaymentMethod.card.last4
             ] })
+          ] }),
+          /* @__PURE__ */ jsxs("p", { className: "text-gray-500", children: [
+            "Validité :",
+            " ",
+            defaultPaymentMethod.card.exp_month,
+            "/",
+            defaultPaymentMethod.card.exp_year
           ] })
-        ]
-      }
-    )
+        ] }) })
+      ] }),
+      /* @__PURE__ */ jsx("div", { className: "bg-secondary p-4 shadow sm:rounded-lg sm:p-8", children: ((_a = auth.user) == null ? void 0 : _a.isSub) ? /* @__PURE__ */ jsx(
+        CancelSubscription,
+        {
+          className: "",
+          subscriptions
+        }
+      ) : /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx("p", { children: "Vous n'avez pas d'abonnement actif" }) }) }),
+      invoices && invoices.length > 0 && /* @__PURE__ */ jsx("div", { className: "bg-secondary p-4 shadow sm:rounded-lg sm:p-8", children: /* @__PURE__ */ jsx(Invoices, { invoices }) })
+    ] }) })
   ] });
-};
-const HeaderSection = ({ header, classNames: classNames2 }) => {
-  return /* @__PURE__ */ jsx("header", { className: cn(classNames2), children: header });
-};
-function Authenticated({
-  user,
-  header,
-  children
-}) {
-  return /* @__PURE__ */ jsx(ToastProvider, { children: /* @__PURE__ */ jsxs("div", { className: "min-h-screen bg-gray-100", children: [
-    /* @__PURE__ */ jsx(MainNav, { user }),
-    header && /* @__PURE__ */ jsx(HeaderSection, { header }),
-    /* @__PURE__ */ jsx("main", { children })
-  ] }) });
 }
+Edit$1.layout = (page) => {
+  return /* @__PURE__ */ jsx(
+    ProfileLayout,
+    {
+      header: /* @__PURE__ */ jsx("h1", { className: "p-2 text-4xl font-semibold tracking-wide", children: "Abonnements" }),
+      children: page
+    }
+  );
+};
+const __vite_glob_0_46 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  default: Edit$1
+}, Symbol.toStringTag, { value: "Module" }));
 function DangerButton({ className = "", disabled, children, ...props }) {
   return /* @__PURE__ */ jsx(
     "button",
@@ -8553,8 +9128,8 @@ function DeleteUserForm({
   };
   return /* @__PURE__ */ jsxs("section", { className: `space-y-6 ${className}`, children: [
     /* @__PURE__ */ jsxs("header", { children: [
-      /* @__PURE__ */ jsx("h2", { className: "text-lg font-medium text-gray-900", children: "Supprimer mon compte" }),
-      /* @__PURE__ */ jsx("p", { className: "mt-1 text-sm text-gray-600", children: "Une fois le compte supprimé, toutes les données sont définitivement perdues. Veuillez télécharger toutes les données ou informations que vous souhaitez conserver." })
+      /* @__PURE__ */ jsx("h2", { className: "text-lg font-medium text-foreground", children: "Supprimer mon compte" }),
+      /* @__PURE__ */ jsx("p", { className: "mt-1 text-sm text-muted-foreground", children: "Une fois le compte supprimé, toutes les données sont définitivement perdues. Veuillez télécharger toutes les données ou informations que vous souhaitez conserver." })
     ] }),
     /* @__PURE__ */ jsx(Button, { variant: "destructive", size: "sm", onClick: confirmUserDeletion, children: "Supprimer" }),
     /* @__PURE__ */ jsx(
@@ -8608,7 +9183,7 @@ function DeleteUserForm({
     )
   ] });
 }
-const __vite_glob_0_48 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_49 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: DeleteUserForm
 }, Symbol.toStringTag, { value: "Module" }));
@@ -8727,7 +9302,7 @@ function UpdatePasswordForm({
     ] })
   ] });
 }
-const __vite_glob_0_50 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_51 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: UpdatePasswordForm
 }, Symbol.toStringTag, { value: "Module" }));
@@ -8747,8 +9322,8 @@ function UpdateProfileInformation({
   };
   return /* @__PURE__ */ jsxs("section", { className, children: [
     /* @__PURE__ */ jsxs("header", { children: [
-      /* @__PURE__ */ jsx("h2", { className: "text-lg font-medium text-gray-900", children: "Information du profil" }),
-      /* @__PURE__ */ jsx("p", { className: "mt-1 text-sm text-gray-600", children: "Modifier vos informations de profil et votre adresse e-mail." })
+      /* @__PURE__ */ jsx("h2", { className: "text-lg font-medium text-foreground", children: "Information du profil" }),
+      /* @__PURE__ */ jsx("p", { className: "mt-1 text-sm text-muted-foreground", children: "Modifier vos informations de profil et votre adresse e-mail." })
     ] }),
     /* @__PURE__ */ jsxs("form", { onSubmit: submit, className: "mt-6 space-y-4", children: [
       /* @__PURE__ */ jsx(
@@ -8822,166 +9397,42 @@ function UpdateProfileInformation({
     ] })
   ] });
 }
-const __vite_glob_0_51 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_52 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: UpdateProfileInformation
-}, Symbol.toStringTag, { value: "Module" }));
-function CancelSubscription({
-  className = "",
-  subscriptions
-}) {
-  const [confirmingSubscriptionDeletion, setConfirmingSubscriptionDeletion] = useState(false);
-  const passwordInput = useRef(null);
-  const [subscriptionId, setSubscriptionId] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [subscriptionName, setSubscriptionName] = useState(
-    null
-  );
-  const confirmSubscriptionDeletion = () => {
-    setConfirmingSubscriptionDeletion(true);
-  };
-  const closeModal = () => {
-    setConfirmingSubscriptionDeletion(false);
-    setSubscriptionId(null);
-    setSubscriptionName(null);
-  };
-  const onDelete = () => {
-    router.delete("/subscribe/cancel", {
-      data: {
-        sub_name: subscriptionName,
-        id: subscriptionId
-      },
-      preserveScroll: true,
-      onSuccess: () => {
-        closeModal(), toast.success("Abonnement annulé avec succès");
-      },
-      onError: () => {
-        var _a;
-        return (_a = passwordInput.current) == null ? void 0 : _a.focus();
-      }
-    });
-  };
-  return /* @__PURE__ */ jsxs("section", { className: `space-y-6 ${className}`, children: [
-    /* @__PURE__ */ jsx("header", { children: /* @__PURE__ */ jsx("h2", { className: "text-lg font-medium text-gray-900", children: "Abonnement" }) }),
-    /* @__PURE__ */ jsx("div", { children: subscriptions == null ? void 0 : subscriptions.map((subscription) => /* @__PURE__ */ jsxs(
-      "div",
-      {
-        className: "flex flex-col gap-5 border w-fit p-4 rounded-lg",
-        children: [
-          /* @__PURE__ */ jsxs("p", { className: "text-[15px] tracking-wide font-semibold", children: [
-            subscription.name,
-            " :",
-            " ",
-            /* @__PURE__ */ jsxs("span", { className: "font-normal", children: [
-              subscription.price.toFixed(2),
-              " €/",
-              "",
-              subscription.recurrence === "monthly" ? "mois" : "an"
-            ] })
-          ] }),
-          subscription.isOnGracePeriod ? /* @__PURE__ */ jsx(Fragment, { children: subscription.ends_at && /* @__PURE__ */ jsxs("p", { className: "text-sm", children: [
-            "Votre abonnement prendra fin le : ",
-            new Date(subscription.ends_at).toLocaleDateString("fr-FR")
-          ] }) }) : /* @__PURE__ */ jsx(
-            Button,
-            {
-              variant: "destructive",
-              size: "sm",
-              onClick: () => {
-                confirmSubscriptionDeletion();
-                setSubscriptionId(subscription.id);
-                setSubscriptionName(subscription.name);
-              },
-              children: "Annuler"
-            }
-          )
-        ]
-      },
-      subscription.id
-    )) }),
-    /* @__PURE__ */ jsx(
-      AlertModal,
-      {
-        isOpen: confirmingSubscriptionDeletion,
-        onClose: closeModal,
-        onConfirm: onDelete,
-        loading,
-        title: "Êtes-vous sûr de vouloir supprimer votre compte ?",
-        description: "Une fois le compte supprimé, les données seront définitivement perdues. Veuillez entrer votre mot de passe pour confirmer la suppression."
-      }
-    )
-  ] });
-}
-const __vite_glob_0_47 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  default: CancelSubscription
-}, Symbol.toStringTag, { value: "Module" }));
-const Invoices = ({ invoices }) => {
-  return /* @__PURE__ */ jsxs("div", { children: [
-    /* @__PURE__ */ jsx("header", { className: "mb-3", children: /* @__PURE__ */ jsx("h2", { className: "text-lg font-medium text-gray-900", children: "Mes factures" }) }),
-    invoices.map((invoice) => /* @__PURE__ */ jsxs("div", { className: "flex gap-3", children: [
-      /* @__PURE__ */ jsx("span", { children: new Date(invoice.created * 1e3).toLocaleDateString(
-        "fr-FR"
-      ) }),
-      /* @__PURE__ */ jsxs("span", { children: [
-        (invoice.total / 100).toFixed(2),
-        " €"
-      ] }),
-      /* @__PURE__ */ jsx("span", { children: /* @__PURE__ */ jsx(
-        "a",
-        {
-          className: "text-primaryBlue underline",
-          href: "/user/invoice/" + invoice.id,
-          children: "Télécharger"
-        }
-      ) })
-    ] }, invoice.id))
-  ] });
-};
-const __vite_glob_0_49 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  default: Invoices
 }, Symbol.toStringTag, { value: "Module" }));
 function Edit({
   auth,
   mustVerifyEmail,
-  status,
-  subscriptions,
-  invoices
+  status
 }) {
-  var _a;
-  return /* @__PURE__ */ jsxs(
-    Authenticated,
+  usePage().props;
+  return /* @__PURE__ */ jsxs(Fragment, { children: [
+    /* @__PURE__ */ jsx(Head, { title: "Profile" }),
+    /* @__PURE__ */ jsx("div", { className: "py-12", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto space-y-6 ", children: [
+      /* @__PURE__ */ jsx("div", { className: "bg-secondary p-4 shadow sm:rounded-lg sm:p-8", children: /* @__PURE__ */ jsx(
+        UpdateProfileInformation,
+        {
+          mustVerifyEmail,
+          status,
+          className: "max-w-xl"
+        }
+      ) }),
+      /* @__PURE__ */ jsx("div", { className: "bg-secondary p-4 shadow sm:rounded-lg sm:p-8", children: /* @__PURE__ */ jsx(UpdatePasswordForm, { className: "max-w-xl" }) }),
+      /* @__PURE__ */ jsx("div", { className: "bg-secondary p-4 shadow sm:rounded-lg sm:p-8", children: /* @__PURE__ */ jsx(DeleteUserForm, { className: "max-w-xl" }) })
+    ] }) })
+  ] });
+}
+Edit.layout = (page) => {
+  return /* @__PURE__ */ jsx(
+    ProfileLayout,
     {
-      user: auth.user,
-      header: /* @__PURE__ */ jsx("h2", { className: "font-semibold text-xl text-gray-800 leading-tight", children: "Profil" }),
-      children: [
-        /* @__PURE__ */ jsx(Head, { title: "Profile" }),
-        /* @__PURE__ */ jsx("div", { className: "py-12", children: /* @__PURE__ */ jsxs("div", { className: "max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6", children: [
-          /* @__PURE__ */ jsx("div", { className: "p-4 sm:p-8 bg-white shadow sm:rounded-lg", children: /* @__PURE__ */ jsx(
-            UpdateProfileInformation,
-            {
-              mustVerifyEmail,
-              status,
-              className: "max-w-xl"
-            }
-          ) }),
-          /* @__PURE__ */ jsx("div", { className: "p-4 sm:p-8 bg-white shadow sm:rounded-lg", children: /* @__PURE__ */ jsx(UpdatePasswordForm, { className: "max-w-xl" }) }),
-          ((_a = auth.user) == null ? void 0 : _a.isSub) && /* @__PURE__ */ jsx("div", { className: "p-4 sm:p-8 bg-white shadow sm:rounded-lg", children: /* @__PURE__ */ jsx(
-            CancelSubscription,
-            {
-              className: "max-w-xl",
-              subscriptions
-            }
-          ) }),
-          invoices && invoices.length > 0 && /* @__PURE__ */ jsx("div", { className: "p-4 sm:p-8 bg-white shadow sm:rounded-lg", children: /* @__PURE__ */ jsx(Invoices, { invoices }) }),
-          /* @__PURE__ */ jsx("div", { className: "p-4 sm:p-8 bg-white shadow sm:rounded-lg", children: /* @__PURE__ */ jsx(DeleteUserForm, { className: "max-w-xl" }) })
-        ] }) })
-      ]
+      header: /* @__PURE__ */ jsx("h1", { className: "p-2 text-4xl font-semibold tracking-wide", children: "Profil" }),
+      children: page
     }
   );
-}
-const __vite_glob_0_46 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+};
+const __vite_glob_0_47 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Edit
 }, Symbol.toStringTag, { value: "Module" }));
@@ -9005,7 +9456,7 @@ const Index$3 = (props) => {
     /* @__PURE__ */ jsx(ContactRestaurant, {})
   ] });
 };
-const __vite_glob_0_52 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_53 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Index$3
 }, Symbol.toStringTag, { value: "Module" }));
@@ -9100,7 +9551,7 @@ const RatingForm = (props) => {
     ] })
   ] });
 };
-const __vite_glob_0_54 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_55 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: RatingForm
 }, Symbol.toStringTag, { value: "Module" }));
@@ -9300,7 +9751,7 @@ const Index$2 = (props) => {
     )
   ] }) }) }) });
 };
-const __vite_glob_0_53 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_54 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Index$2
 }, Symbol.toStringTag, { value: "Module" }));
@@ -9399,7 +9850,7 @@ const DateInput = ({
     }
   );
 };
-const __vite_glob_0_55 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_56 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: DateInput
 }, Symbol.toStringTag, { value: "Module" }));
@@ -9497,7 +9948,7 @@ const TimeAndGuestSelector = ({
     )
   ] }) : /* @__PURE__ */ jsx("small", { children: "Aucun service disponible pour le jour sélectionné" }) }) : /* @__PURE__ */ jsx("div", { children: "Loading" }) });
 };
-const __vite_glob_0_58 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_59 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: TimeAndGuestSelector
 }, Symbol.toStringTag, { value: "Module" }));
@@ -9554,7 +10005,7 @@ const TableInput = ({
     }
   ) : /* @__PURE__ */ jsx("small", { children: "Aucune table disponible." }) });
 };
-const __vite_glob_0_57 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_58 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: TableInput
 }, Symbol.toStringTag, { value: "Module" }));
@@ -9861,7 +10312,7 @@ const UserInputs = ({
 const Success = () => {
   return /* @__PURE__ */ jsx("div", { className: "space-y-4" });
 };
-const __vite_glob_0_56 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_57 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Index$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -9900,7 +10351,7 @@ const RestaurantCanNotAcceptReservation = (props) => {
     }
   );
 };
-const __vite_glob_0_59 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_60 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: RestaurantCanNotAcceptReservation
 }, Symbol.toStringTag, { value: "Module" }));
@@ -9911,7 +10362,7 @@ function Example() {
     /* @__PURE__ */ jsx("p", { className: "mt-6 text-base leading-7 text-muted-foreground", children: "Désolé, le restaurant que vous cherchez n'est pas disponible ou n'existe pas. Veuillez réessayer plus tard." })
   ] }) }) });
 }
-const __vite_glob_0_60 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_61 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Example
 }, Symbol.toStringTag, { value: "Module" }));
@@ -9938,7 +10389,7 @@ const RestaurantPage = (props) => {
 RestaurantPage.layout = (page) => {
   return /* @__PURE__ */ jsx(RestaurantPageLayout, { children: page });
 };
-const __vite_glob_0_70 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_71 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: RestaurantPage
 }, Symbol.toStringTag, { value: "Module" }));
@@ -9952,10 +10403,13 @@ const CreateRestaurant = () => {
   }, [isOpen]);
   return /* @__PURE__ */ jsx(Fragment, { children: /* @__PURE__ */ jsx(ThemeProvider, { children: /* @__PURE__ */ jsx(ModalProvider, {}) }) });
 };
-const __vite_glob_0_71 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_72 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: CreateRestaurant
 }, Symbol.toStringTag, { value: "Module" }));
+const HeaderSection = ({ header, classNames: classNames2 }) => {
+  return /* @__PURE__ */ jsx("header", { className: cn(classNames2), children: header });
+};
 const Create = ({
   stripeKey,
   intent,
@@ -10043,27 +10497,6 @@ const Create = ({
     /* @__PURE__ */ jsx("div", { id: "payment-message", className: "hidden" })
   ] }) });
 };
-const StripeLoader = () => {
-  useEffect(() => {
-    if (document.querySelector(`script[src="https://js.stripe.com/v3/"]`)) {
-      return;
-    }
-    const script = document.createElement("script");
-    script.src = "https://js.stripe.com/v3/";
-    script.async = true;
-    script.onload = () => {
-      console.log("Stripe script loaded successfully.");
-    };
-    script.onerror = (error) => {
-      console.error("Failed to load the Stripe script.", error);
-    };
-    document.body.appendChild(script);
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
-  return null;
-};
 function PaiementLayout({
   user,
   header,
@@ -10109,11 +10542,11 @@ const Subscribe = (props) => {
     ) })
   ] });
 };
-const __vite_glob_0_72 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_73 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Subscribe
 }, Symbol.toStringTag, { value: "Module" }));
-const createSelectors$3 = (_store) => {
+const createSelectors$2 = (_store) => {
   let store = _store;
   store.use = {};
   for (let k of Object.keys(store.getState())) {
@@ -10121,7 +10554,7 @@ const createSelectors$3 = (_store) => {
   }
   return store;
 };
-const useAuthModal = createSelectors$3(create((set) => ({
+const useAuthModal = createSelectors$2(create((set) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),
@@ -10149,18 +10582,6 @@ const RegisterButton = (props) => {
     }
   );
 };
-const createSelectors$2 = (_store) => {
-  let store = _store;
-  store.use = {};
-  for (let k of Object.keys(store.getState())) {
-    store.use[k] = () => store((s) => s[k]);
-  }
-  return store;
-};
-const useUser = createSelectors$2(create((set) => ({
-  user: null,
-  setUser: (user) => set({ user })
-})));
 const GoProfileButton = (props) => {
   const { className } = props;
   return /* @__PURE__ */ jsxs(
@@ -10228,7 +10649,7 @@ const MobileNav = (props) => {
                       open: { rotate: 45, y: 5 }
                     },
                     className: cn(
-                      "w-6 h-[1px]  block",
+                      "w-6 h-[1px]  block cursor-pointor",
                       !mobileNav ? "bg-black" : "bg-green-200"
                     )
                   }
@@ -10427,8 +10848,8 @@ const DesktopNav = (props) => {
         duration: 0.35,
         ease: "easeInOut"
       },
-      className: "z-50 fixed top-2 w-full",
-      children: /* @__PURE__ */ jsxs("div", { className: "hidden md:flex items-center justify-between bg-welcomeBackground/30 border border-welcomePrimary/70 backdrop-blur-md h-14 md:w-[700px] md:mx-auto w-full md:px-6 rounded-full", children: [
+      className: "fixed top-2 z-50 w-full",
+      children: /* @__PURE__ */ jsxs("div", { className: "hidden h-14 w-full items-center justify-between rounded-full border border-welcomePrimary/70 bg-welcomeBackground/30 backdrop-blur-md md:mx-auto md:flex md:w-[770px] md:px-6", children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center md:gap-6", children: [
           /* @__PURE__ */ jsx("p", { children: "Logo" }),
           /* @__PURE__ */ jsx("div", { className: "flex items-center md:gap-4", children: tabs.map((tab) => /* @__PURE__ */ jsxs(
@@ -10436,8 +10857,8 @@ const DesktopNav = (props) => {
             {
               onClick: () => handleTabClick(tab.id),
               className: cn(
-                activeTab === tab.id ? "" : " hover:text-green-900/50",
-                "relative rounded-full transition px-3 py-2 text-sm font-normal text-neutral-800 outline-2 outline-welcomeBackground focus-visible:outline"
+                activeTab === tab.id ? "" : "hover:text-green-900/50",
+                "relative cursor-pointer rounded-full px-3 py-2 text-sm font-normal text-neutral-800 outline-2 outline-welcomeBackground transition focus-visible:outline"
               ),
               children: [
                 activeTab === tab.id && /* @__PURE__ */ jsx(
@@ -10445,7 +10866,7 @@ const DesktopNav = (props) => {
                   {
                     layoutId: "active-pill",
                     style: { borderRadius: 9999 },
-                    className: "bg-welcomePrimary/70 absolute inset-0"
+                    className: "absolute inset-0 bg-welcomePrimary/70"
                   }
                 ),
                 /* @__PURE__ */ jsx("span", { className: "relative z-10 mix-blend-darken", children: tab.label })
@@ -10896,7 +11317,7 @@ const LandingHeader = forwardRef((props, ref) => {
       id: "Home",
       ref,
       ...props,
-      className: "max-w-[1480px] lg:max-h-[600px] mx-auto min-h-screen px-2 flex lg:flex-row flex-col space-y-10 md:space-y-0 items-center md:justify-between justify-center  md:px-8 lg:px-16 md:w-full",
+      className: "max-w-[1480px] mx-auto min-h-screen 3xl:min-h-fit 3xl:py-52 px-2 flex lg:flex-row flex-col space-y-10 md:space-y-0 items-center md:justify-between justify-center  md:px-8 lg:px-16 md:w-full",
       children: [
         /* @__PURE__ */ jsx(Text, {}),
         /* @__PURE__ */ jsx(CalendarCard, {})
@@ -11256,67 +11677,166 @@ const CardStoreFront = () => {
   );
 };
 const Features = forwardRef((props, ref) => {
-  return /* @__PURE__ */ jsxs(
-    "div",
-    {
-      className: "w-full",
-      id: "Features",
-      ref,
-      ...props,
-      children: [
-        /* @__PURE__ */ jsx(
-          "div",
-          {
-            className: " bg-neutral-900 lg:h-fit py-10 px-4 md:px-0 min-h-screen",
-            children: /* @__PURE__ */ jsxs("div", { className: "space-y-4 max-w-7xl px-4 mx-auto flex flex-col justify-center", children: [
-              /* @__PURE__ */ jsx("h2", { className: "header-welcome text-welcomeBackground/90 md:text-5xl text-2xl font-bold  mb-5", children: "Nos avantages" }),
-              /* @__PURE__ */ jsxs("div", { className: "space-y-4", children: [
-                /* @__PURE__ */ jsxs("div", { className: "md:flex items-center justify-center gap-4 space-y-4 md:space-y-0", children: [
-                  /* @__PURE__ */ jsx(CardBook, {}),
-                  /* @__PURE__ */ jsx(CardRating, {})
-                ] }),
-                /* @__PURE__ */ jsx("div", { className: "md:flex items-center justify-center", children: /* @__PURE__ */ jsx(CardStoreFront, {}) })
-              ] })
-            ] })
-          }
-        ),
-        /* @__PURE__ */ jsxs("div", { className: " min-h-screen lg:max-h-[600px] md:px-0 max-w-7xl mx-auto px-4 flex flex-col flex-1 justify-center", children: [
-          /* @__PURE__ */ jsx("h3", { className: "mb-10 header-welcome mt-6 md:mt-0 text-neutral-800  md:w-2/3 font-bold md:text-5xl text-2xl", children: "Est-ce que ce service est fait pour moi ?" }),
-          /* @__PURE__ */ jsx("div", { className: "p-4  items-center justify-center", children: /* @__PURE__ */ jsxs("div", { className: "md:flex items-center justify-between", children: [
-            /* @__PURE__ */ jsxs("div", { className: "md:grid md:grid-cols-2 md:w-2/3 gap-5 space-y-5 md:space-y-0", children: [
-              /* @__PURE__ */ jsx(Card, { className: "bg-[#D87093]/5 py-5", children: /* @__PURE__ */ jsxs(CardContent, { children: [
-                /* @__PURE__ */ jsx("span", { className: "font-semibold text-[#D87093]", children: "Vous dirigez un restaurant" }),
-                " ",
-                "et cherchez à automatiser la confirmation des réservations et les rappels par email pour éviter les no-shows."
-              ] }) }),
-              /* @__PURE__ */ jsx(Card, { className: "bg-welcomeBackground/40 py-5", children: /* @__PURE__ */ jsxs(CardContent, { children: [
-                /* @__PURE__ */ jsx("span", { className: "font-semibold text-green-950", children: "Vous êtes restaurateur / gérant d'un restaurant" }),
-                " ",
-                "avez besoin d'une présence en ligne plus forte pour attirer plus de visiteurs."
-              ] }) }),
-              /* @__PURE__ */ jsx(Card, { className: "bg-[#4682B4]/20 py-5", children: /* @__PURE__ */ jsxs(CardContent, { children: [
-                /* @__PURE__ */ jsxs("span", { className: "font-semibold text-[#4682B4]", children: [
-                  "Vous avez un restaurant",
-                  " "
-                ] }),
-                " ",
-                "et vous avez besoin d'un système de réservation performant et intuitif."
-              ] }) }),
-              /* @__PURE__ */ jsx(Card, { children: /* @__PURE__ */ jsxs(CardContent, { className: "bg-[#f9a825]/15 py-5", children: [
-                /* @__PURE__ */ jsxs("span", { className: "font-semibold text-[#f9a825]", children: [
-                  "Votre restaurant",
-                  " "
-                ] }),
-                " ",
-                "veut optimiser les réservations et faciliter la communication avec les clients grâce à un formulaire de contact."
-              ] }) })
-            ] }),
-            /* @__PURE__ */ jsx("div", { className: "md:w-1/3", children: "IMAGE ICI MAIS JE SAIS PAS QUOI" })
-          ] }) })
-        ] })
-      ]
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.2, delayChildren: 0.4 }
     }
-  );
+  };
+  const childrenX = {
+    hidden: { opacity: 0, x: -100 },
+    show: { opacity: 1, x: 0 }
+  };
+  const childrenY = {
+    hidden: { opacity: 0, x: 100 },
+    show: { opacity: 1, x: 0 }
+  };
+  return /* @__PURE__ */ jsxs("div", { className: "w-full", id: "Features", ref, ...props, children: [
+    /* @__PURE__ */ jsx("div", { className: "min-h-fit bg-neutral-900 px-4 py-10 md:py-36 md:px-0 lg:h-fit", children: /* @__PURE__ */ jsxs("div", { className: "mx-auto flex max-w-7xl flex-col justify-center space-y-4 px-4", children: [
+      /* @__PURE__ */ jsx("h2", { className: "header-welcome mb-5 text-2xl font-bold text-welcomeBackground/90 md:text-5xl", children: "Nos avantages" }),
+      /* @__PURE__ */ jsxs("div", { className: "space-y-4", children: [
+        /* @__PURE__ */ jsxs("div", { className: "items-center justify-center gap-4 space-y-4 md:flex md:space-y-0", children: [
+          /* @__PURE__ */ jsx(
+            m.div,
+            {
+              initial: {
+                opacity: 0,
+                y: 20
+              },
+              whileInView: {
+                opacity: 1,
+                y: [20, -5, 0]
+              },
+              transition: {
+                duration: 0.5,
+                ease: [0.4, 0, 0.2, 1]
+              },
+              children: /* @__PURE__ */ jsx(CardBook, {})
+            }
+          ),
+          /* @__PURE__ */ jsx(
+            m.div,
+            {
+              initial: {
+                opacity: 0,
+                y: 20
+              },
+              whileInView: {
+                opacity: 1,
+                y: [20, -5, 0]
+              },
+              transition: {
+                duration: 0.5,
+                delay: 0.2,
+                ease: [0.4, 0, 0.2, 1]
+              },
+              children: /* @__PURE__ */ jsx(CardRating, {})
+            }
+          )
+        ] }),
+        /* @__PURE__ */ jsx("div", { className: "items-center justify-center md:flex", children: /* @__PURE__ */ jsx(
+          m.div,
+          {
+            initial: {
+              opacity: 0,
+              y: 20
+            },
+            whileInView: {
+              opacity: 1,
+              y: [20, -5, 0]
+            },
+            transition: {
+              duration: 0.5,
+              delay: 0.4,
+              ease: [0.4, 0, 0.2, 1]
+            },
+            children: /* @__PURE__ */ jsx(CardStoreFront, {})
+          }
+        ) })
+      ] })
+    ] }) }),
+    /* @__PURE__ */ jsxs("div", { className: "mx-auto flex py-10 md:py-36 max-w-7xl flex-1 flex-col justify-center px-4 md:px-0 ", children: [
+      /* @__PURE__ */ jsx("h3", { className: "header-welcome tracking-tight text-center mb-10 mt-6 text-2xl font-bold text-neutral-800 md:mt-0  md:text-5xl", children: "Est-ce que ce service est fait pour moi ?" }),
+      /* @__PURE__ */ jsx("div", { className: "items-center justify-center p-4 md:max-w-4xl mx-auto", children: /* @__PURE__ */ jsx("div", { className: "items-center justify-between md:flex", children: /* @__PURE__ */ jsxs(
+        m.div,
+        {
+          variants: container,
+          initial: "hidden",
+          whileInView: "show",
+          className: "gap-5 space-y-5 md:grid md:grid-cols-2 md:space-y-0",
+          children: [
+            /* @__PURE__ */ jsx(
+              m.div,
+              {
+                variants: childrenX,
+                transition: {
+                  duration: 0.9,
+                  type: "spring"
+                },
+                children: /* @__PURE__ */ jsx(Card, { className: "h-full bg-[#D87093]/5 py-5", children: /* @__PURE__ */ jsxs(CardContent, { children: [
+                  /* @__PURE__ */ jsx("span", { className: "font-semibold text-[#D87093]", children: "Vous dirigez un restaurant" }),
+                  " ",
+                  "et cherchez à automatiser la confirmation des réservations et les rappels par email pour éviter les no-shows."
+                ] }) })
+              }
+            ),
+            /* @__PURE__ */ jsx(
+              m.div,
+              {
+                variants: childrenY,
+                transition: {
+                  duration: 0.9,
+                  type: "spring"
+                },
+                children: /* @__PURE__ */ jsx(Card, { className: "h-full bg-welcomeBackground/40 py-5", children: /* @__PURE__ */ jsxs(CardContent, { children: [
+                  /* @__PURE__ */ jsx("span", { className: "font-semibold text-green-950", children: "Vous êtes restaurateur / gérant d'un restaurant" }),
+                  " ",
+                  "avez besoin d'une présence en ligne plus forte pour attirer plus de visiteurs."
+                ] }) })
+              }
+            ),
+            /* @__PURE__ */ jsx(
+              m.div,
+              {
+                variants: childrenX,
+                transition: {
+                  duration: 0.9,
+                  type: "spring"
+                },
+                children: /* @__PURE__ */ jsx(Card, { className: "h-full bg-[#4682B4]/20 py-5", children: /* @__PURE__ */ jsxs(CardContent, { children: [
+                  /* @__PURE__ */ jsxs("span", { className: "font-semibold text-[#4682B4]", children: [
+                    "Vous avez un restaurant",
+                    " "
+                  ] }),
+                  " ",
+                  "et vous avez besoin d'un système de réservation performant et intuitif."
+                ] }) })
+              }
+            ),
+            /* @__PURE__ */ jsx(
+              m.div,
+              {
+                variants: childrenY,
+                transition: {
+                  duration: 0.9,
+                  type: "spring"
+                },
+                children: /* @__PURE__ */ jsx(Card, { className: "h-full bg-[#f9a825]/15 py-5", children: /* @__PURE__ */ jsxs(CardContent, { children: [
+                  /* @__PURE__ */ jsxs("span", { className: "font-semibold text-[#f9a825]", children: [
+                    "Votre restaurant",
+                    " "
+                  ] }),
+                  " ",
+                  "veut optimiser les réservations et faciliter la communication avec les clients grâce à un formulaire de contact."
+                ] }) })
+              }
+            )
+          ]
+        }
+      ) }) })
+    ] })
+  ] });
 });
 const createSelectors$1 = (_store) => {
   let store = _store;
@@ -11337,20 +11857,6 @@ const useSubscriptionModal = createSelectors$1(
     setRecurrence: (recurrence) => set({ recurrence })
   }))
 );
-const formatPriceFromCents = (price, withCents) => {
-  if (withCents) {
-    return Number(price / 100).toFixed(2).replace(".", ",");
-  } else {
-    return Number(price / 100).toFixed(0).replace(".", ",");
-  }
-};
-const formatPrice = (price) => {
-  return Number(price).toFixed(2).replace(".", ",");
-};
-const transformMonthPriceToYearPrice = (price) => {
-  const newPrice = Number(price * 12);
-  return formatPrice(newPrice);
-};
 const SubscriptionModal = () => {
   const contactModalOnClose = useSubscriptionModal.use.onClose();
   const contactModalIsOpen = useSubscriptionModal.use.isOpen();
@@ -11442,7 +11948,7 @@ const SubscriptionModal = () => {
   );
 };
 const SubscriptionModalButton = (props) => {
-  const { product, frequency } = props;
+  const { product, frequency = "monthly" } = props;
   const contactModalOnOpen = useSubscriptionModal.use.onOpen();
   const contactModalSetProduct = useSubscriptionModal.use.setProduct();
   const contactModalSetRecurrence = useSubscriptionModal.use.setRecurrence();
@@ -11452,6 +11958,10 @@ const SubscriptionModalButton = (props) => {
     if (!user) {
       authModalOnOpen();
       toast.error("Vous devez être connecté pour continuer");
+      return;
+    }
+    if (user.isFondator) {
+      toast.error("Vous êtes déjà abonné");
       return;
     }
     contactModalOnOpen();
@@ -11484,7 +11994,7 @@ const ProductCard = (props) => {
     {
       className: cn(
         products.mostPopular ? "z-10 bg-secondary shadow-xl ring-1 ring-green-900/10" : "bg-gray-800/80 ring-1 ring-white/10 lg:bg-transparent lg:pb-14 lg:ring-0",
-        "relative rounded-2xl md:col-start-2 border border-welcomePrimary"
+        "relative rounded-2xl border border-welcomePrimary md:col-start-2"
       ),
       children: /* @__PURE__ */ jsxs("div", { className: "p-8 lg:pt-12 xl:p-10 xl:pt-14", children: [
         /* @__PURE__ */ jsxs("div", { className: "flex items-center justify-between", children: [
@@ -11499,7 +12009,7 @@ const ProductCard = (props) => {
               children: products.name
             }
           ),
-          products.mostPopular ? /* @__PURE__ */ jsx("p", { className: "rounded-full bg-welcomeBackground text-green-900 px-3.5 py-2 text-xs font-semibold leading-5", children: "Spécial Lancement" }) : null
+          products.mostPopular ? /* @__PURE__ */ jsx("p", { className: "rounded-full bg-welcomeBackground px-3.5 py-2 text-xs font-semibold leading-5 text-green-900", children: "Spécial Lancement" }) : null
         ] }),
         /* @__PURE__ */ jsxs("div", { className: "flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between lg:flex-col lg:items-stretch", children: [
           /* @__PURE__ */ jsxs("div", { className: "mt-2 flex items-center gap-x-4", children: [
@@ -11595,7 +12105,13 @@ const ButtonLink = ({ tier, frequency }) => {
     return null;
   }
   `/subscribe/${tier.id}?recurrence=${frequency.value}`;
-  return /* @__PURE__ */ jsx(Fragment, { children: /* @__PURE__ */ jsx(SubscriptionModalButton, { product: tier, frequency: frequency.value }) });
+  return /* @__PURE__ */ jsx(Fragment, { children: /* @__PURE__ */ jsx(
+    SubscriptionModalButton,
+    {
+      product: tier,
+      frequency: frequency.value
+    }
+  ) });
 };
 const SlideTabs = ({ activeFrequency, setActiveFrequency, frequencies: frequencies2 }) => {
   const [position, setPosition] = useState({
@@ -11710,7 +12226,7 @@ const StarterPrice = forwardRef(
               /* @__PURE__ */ jsx(
                 "div",
                 {
-                  className: "hidden lg:absolute lg:inset-x-px lg:bottom-0 lg:top-4 lg:block lg:rounded-t-2xl lg:bg-welcomePrimary-40 lg:ring-1 lg:ring-white/10",
+                  className: "lg:bg-welcomePrimary-40 hidden lg:absolute lg:inset-x-px lg:bottom-0 lg:top-4 lg:block lg:rounded-t-2xl lg:ring-1 lg:ring-white/10",
                   "aria-hidden": "true"
                 }
               ),
@@ -11723,7 +12239,7 @@ const StarterPrice = forwardRef(
               )
             ] })
           ] }) }),
-          /* @__PURE__ */ jsx("div", { className: "relative bg-background  md:pt-24" })
+          /* @__PURE__ */ jsx("div", { className: "relative bg-background md:pt-24" })
         ]
       }
     );
@@ -11758,25 +12274,50 @@ const data = [
     content: "Intégration d'un système de click and collect pour permettre à vos clients de commander et de venir récupérer leur commande en restaurant. Vous pourrez, en supplément, activer le paiement en ligne de leur commande pour limiter les contacts en restaurant."
   }
 ];
-const Roadmap = () => {
-  return /* @__PURE__ */ jsx("div", { className: " overflow-hidden", children: /* @__PURE__ */ jsxs("div", { className: "relative py-24 px-4 w-full max-w-4xl mx-auto", children: [
-    /* @__PURE__ */ jsx("h3", { className: "text-center mb-10 header-welcome text-neutral-700  font-bold md:text-5xl text-2xl", children: "Roadmap" }),
-    /* @__PURE__ */ jsx("div", { className: " px-4 max-w-4xl mx-auto", children: data.map((item, index) => /* @__PURE__ */ jsxs(
-      "div",
+const Roadmap = forwardRef((props, ref) => {
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.2, delayChildren: 0.4 }
+    }
+  };
+  const children = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
+  };
+  return /* @__PURE__ */ jsx("div", { ref, ...props, id: "Roadmap", className: "overflow-hidden", children: /* @__PURE__ */ jsxs("div", { className: "relative mx-auto w-full max-w-4xl px-4 py-24", children: [
+    /* @__PURE__ */ jsx("h3", { className: "header-welcome mb-10 text-center text-2xl font-bold text-neutral-700 md:text-5xl", children: "Roadmap" }),
+    /* @__PURE__ */ jsx(
+      m.div,
       {
-        className: "relative pl-8 sm:pl-32 py-6 group",
-        children: [
-          /* @__PURE__ */ jsxs("div", { className: "flex flex-col sm:flex-row items-start mb-1 group-last:before:hidden before:absolute before:left-2 sm:before:left-0 before:h-full before:px-px before:bg-welcomePrimary sm:before:ml-[6.5rem] before:self-start before:-translate-x-1/2 before:translate-y-3 after:absolute after:left-2 sm:after:left-0 after:w-2 after:h-2 after:bg-green-900 after:border-4 after:box-content after:border-welcomeBackground/90 after:rounded-full sm:after:ml-[6.5rem] after:-translate-x-1/2 after:translate-y-1.5", children: [
-            /* @__PURE__ */ jsx("time", { className: "sm:absolute left-1 -translate-x-3 translate-y-0.5 inline-flex items-center justify-center text-xs font-semibold uppercase w-fit min-w-20 h-fit px-1.5 min-h-6 mb-3 sm:mb-0 text-green-900 bg-welcomeBackground rounded-full", children: item.date }),
-            /* @__PURE__ */ jsx("div", { className: "text-neutral-800 text-xl font-bold ", children: item.goal })
-          ] }),
-          /* @__PURE__ */ jsx("div", { className: "text-green-900/80", children: item.content })
-        ]
-      },
-      index
-    )) })
+        variants: container,
+        initial: "hidden",
+        whileInView: "show",
+        className: "mx-auto max-w-4xl px-4",
+        children: data.map((item, index) => /* @__PURE__ */ jsxs(
+          m.div,
+          {
+            variants: children,
+            transition: {
+              duration: 1.5,
+              type: "spring"
+            },
+            className: "group relative py-6 pl-8 sm:pl-32",
+            children: [
+              /* @__PURE__ */ jsxs("div", { className: "mb-1 flex flex-col items-start before:absolute before:left-2 before:h-full before:-translate-x-1/2 before:translate-y-3 before:self-start before:bg-welcomePrimary before:px-px after:absolute after:left-2 after:box-content after:h-2 after:w-2 after:-translate-x-1/2 after:translate-y-1.5 after:rounded-full after:border-4 after:border-welcomeBackground/90 after:bg-green-900 group-last:before:hidden sm:flex-row sm:before:left-0 sm:before:ml-[6.5rem] sm:after:left-0 sm:after:ml-[6.5rem]", children: [
+                /* @__PURE__ */ jsx("time", { className: "left-1 mb-3 inline-flex h-fit min-h-6 w-fit min-w-20 -translate-x-3 translate-y-0.5 items-center justify-center rounded-full bg-welcomeBackground px-1.5 text-xs font-semibold uppercase text-green-900 sm:absolute sm:mb-0", children: item.date }),
+                /* @__PURE__ */ jsx("div", { className: "text-xl font-bold text-neutral-800", children: item.goal })
+              ] }),
+              /* @__PURE__ */ jsx("div", { className: "text-green-900/80", children: item.content })
+            ]
+          },
+          index
+        ))
+      }
+    )
   ] }) });
-};
+});
 const createSelectors = (_store) => {
   let store = _store;
   store.use = {};
@@ -12028,66 +12569,75 @@ const AppContactButton = () => {
     /* @__PURE__ */ jsx(AppContatModal, {})
   ] });
 };
-const Contact = () => {
-  return /* @__PURE__ */ jsxs("div", { className: "md:-mt-20 md:mb-20 h-fit md:h-[32rem] md:bg-transparent isolate bg-white px-6 py-24 sm:py-32 lg:px-8", children: [
-    /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-2xl sm:text-center", children: [
-      /* @__PURE__ */ jsx("h3", { className: "header-welcome  text-neutral-800  font-bold md:text-5xl text-2xl", children: "Nous contacter" }),
-      /* @__PURE__ */ jsx("p", { className: "mt-2 text-lg leading-8 text-gray-600", children: "Pour toutes questions, suggestions ou demandes de support, n'hésitez pas à nous contacter." })
-    ] }),
-    /* @__PURE__ */ jsxs("div", { className: "mx-auto mt-20 max-w-lg space-y-4 md:flex items-center justify-between", children: [
-      /* @__PURE__ */ jsxs("div", { className: "space-y-4 ", children: [
-        /* @__PURE__ */ jsxs("div", { className: "flex gap-x-6 items-center", children: [
-          /* @__PURE__ */ jsx("div", { className: "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-welcomeBackground", children: /* @__PURE__ */ jsx(
-            ChatBubbleLeftRightIcon,
-            {
-              className: "h-6 w-6 text-green-900",
-              "aria-hidden": "true"
-            }
-          ) }),
-          /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx("h3", { className: "text-base font-semibold leading-7 text-gray-900", children: "Conseil commercial" }) })
+const Contact = forwardRef((props, ref) => {
+  return /* @__PURE__ */ jsxs(
+    "div",
+    {
+      id: "Contact",
+      ref,
+      ...props,
+      className: "md:-mt-20 md:mb-36 h-fit md:h-[32rem] md:bg-transparent isolate bg-white px-6 py-24 sm:py-32 lg:px-8",
+      children: [
+        /* @__PURE__ */ jsxs("div", { className: "mx-auto max-w-2xl sm:text-center", children: [
+          /* @__PURE__ */ jsx("h3", { className: "header-welcome  text-neutral-800  font-bold md:text-5xl text-2xl", children: "Nous contacter" }),
+          /* @__PURE__ */ jsx("p", { className: "mt-2 text-lg leading-8 text-gray-600", children: "Pour toutes questions, suggestions ou demandes de support, n'hésitez pas à nous contacter." })
         ] }),
-        /* @__PURE__ */ jsxs("div", { className: "flex gap-x-6 items-center", children: [
-          /* @__PURE__ */ jsx("div", { className: "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-welcomeBackground", children: /* @__PURE__ */ jsx(
-            BugAntIcon,
-            {
-              className: "h-6 w-6 text-green-900",
-              "aria-hidden": "true"
-            }
-          ) }),
-          /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx("h3", { className: "text-base font-semibold leading-7 text-gray-900", children: "Rapporter un bug" }) })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: "flex gap-x-6 items-center", children: [
-          /* @__PURE__ */ jsx("div", { className: "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-welcomeBackground", children: /* @__PURE__ */ jsx(
-            ComputerDesktopIcon,
-            {
-              className: "h-6 w-6 text-green-900",
-              "aria-hidden": "true"
-            }
-          ) }),
-          /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx("h3", { className: "text-base font-semibold leading-7 text-gray-900", children: "Support technique" }) })
-        ] }),
-        /* @__PURE__ */ jsxs("div", { className: "flex gap-x-6 items-center", children: [
-          /* @__PURE__ */ jsx("div", { className: "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-welcomeBackground", children: /* @__PURE__ */ jsx(
-            QuestionMarkCircleIcon,
-            {
-              className: "h-6 w-6 text-green-900",
-              "aria-hidden": "true"
-            }
-          ) }),
-          /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx("h3", { className: "text-base font-semibold leading-7 text-gray-900", children: "Autre" }) })
+        /* @__PURE__ */ jsxs("div", { className: "mx-auto mt-20 max-w-lg space-y-4 md:flex items-center justify-between", children: [
+          /* @__PURE__ */ jsxs("div", { className: "space-y-4 ", children: [
+            /* @__PURE__ */ jsxs("div", { className: "flex gap-x-6 items-center", children: [
+              /* @__PURE__ */ jsx("div", { className: "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-welcomeBackground", children: /* @__PURE__ */ jsx(
+                ChatBubbleLeftRightIcon,
+                {
+                  className: "h-6 w-6 text-green-900",
+                  "aria-hidden": "true"
+                }
+              ) }),
+              /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx("h3", { className: "text-base font-semibold leading-7 text-gray-900", children: "Conseil commercial" }) })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "flex gap-x-6 items-center", children: [
+              /* @__PURE__ */ jsx("div", { className: "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-welcomeBackground", children: /* @__PURE__ */ jsx(
+                BugAntIcon,
+                {
+                  className: "h-6 w-6 text-green-900",
+                  "aria-hidden": "true"
+                }
+              ) }),
+              /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx("h3", { className: "text-base font-semibold leading-7 text-gray-900", children: "Rapporter un bug" }) })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "flex gap-x-6 items-center", children: [
+              /* @__PURE__ */ jsx("div", { className: "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-welcomeBackground", children: /* @__PURE__ */ jsx(
+                ComputerDesktopIcon,
+                {
+                  className: "h-6 w-6 text-green-900",
+                  "aria-hidden": "true"
+                }
+              ) }),
+              /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx("h3", { className: "text-base font-semibold leading-7 text-gray-900", children: "Support technique" }) })
+            ] }),
+            /* @__PURE__ */ jsxs("div", { className: "flex gap-x-6 items-center", children: [
+              /* @__PURE__ */ jsx("div", { className: "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-welcomeBackground", children: /* @__PURE__ */ jsx(
+                QuestionMarkCircleIcon,
+                {
+                  className: "h-6 w-6 text-green-900",
+                  "aria-hidden": "true"
+                }
+              ) }),
+              /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx("h3", { className: "text-base font-semibold leading-7 text-gray-900", children: "Autre" }) })
+            ] })
+          ] }),
+          /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-center justify-center gap-5", children: [
+            /* @__PURE__ */ jsx(AppContactButton, {}),
+            /* @__PURE__ */ jsx("p", { children: "OU" }),
+            /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-center gap-3", children: [
+              /* @__PURE__ */ jsx(Phone, { className: "h-6 w-6 text-green-900" }),
+              /* @__PURE__ */ jsx("p", { children: /* @__PURE__ */ jsx("a", { href: "tel:+33612345678", children: "06 79 29 68 89" }) })
+            ] })
+          ] })
         ] })
-      ] }),
-      /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-center justify-center gap-5", children: [
-        /* @__PURE__ */ jsx(AppContactButton, {}),
-        /* @__PURE__ */ jsx("p", { children: "OU" }),
-        /* @__PURE__ */ jsxs("div", { className: "flex flex-col items-center gap-3", children: [
-          /* @__PURE__ */ jsx(Phone, { className: "h-6 w-6 text-green-900" }),
-          /* @__PURE__ */ jsx("p", { children: /* @__PURE__ */ jsx("a", { href: "tel:+33612345678", children: "06 79 29 68 89" }) })
-        ] })
-      ] })
-    ] })
-  ] });
-};
+      ]
+    }
+  );
+});
 const Footer = () => {
   return /* @__PURE__ */ jsxs("div", { children: [
     /* @__PURE__ */ jsxs("div", { className: "h-24 flex flex-col items-center justify-center w-full gap-3", children: [
@@ -12182,9 +12732,10 @@ function Welcome({ auth, products }) {
   });
   const tabs = [
     { id: "Home", label: "Accueil" },
-    { id: "Features", label: "Nos avantages" },
+    { id: "Features", label: "Avantages" },
     { id: "Price", label: "Prix" },
-    { id: "Contact", label: "Contact" }
+    { id: "Contact", label: "Contact" },
+    { id: "Roadmap", label: "Roadmap" }
   ];
   usePage().props;
   return /* @__PURE__ */ jsxs(ToastProvider, { children: [
@@ -12206,15 +12757,14 @@ function Welcome({ auth, products }) {
           products: products.data
         }
       ),
-      /* @__PURE__ */ jsx(Contact, {}),
+      /* @__PURE__ */ jsx(Contact, { ref: (el) => sectionRefs.current[3] = el }),
       /* @__PURE__ */ jsx(NewsletterSection, {}),
-      /* @__PURE__ */ jsx(Roadmap, {}),
-      "ANIMATIONS CASHIER",
+      /* @__PURE__ */ jsx(Roadmap, { ref: (el) => sectionRefs.current[4] = el }),
       /* @__PURE__ */ jsx(Footer, {})
     ] }) })
   ] });
 }
-const __vite_glob_0_73 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const __vite_glob_0_74 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   default: Welcome
 }, Symbol.toStringTag, { value: "Module" }));
@@ -12224,7 +12774,7 @@ createServer(
     page,
     render: ReactDOMServer.renderToString,
     resolve: (name) => {
-      const pages = /* @__PURE__ */ Object.assign({ "./Pages/Auth/ConfirmPassword.tsx": __vite_glob_0_0, "./Pages/Auth/ForgotPassword.tsx": __vite_glob_0_1, "./Pages/Auth/Login.tsx": __vite_glob_0_2, "./Pages/Auth/Partials/Login/LoginForm.tsx": __vite_glob_0_3, "./Pages/Auth/Partials/Register/RegisterForm.tsx": __vite_glob_0_4, "./Pages/Auth/Register.tsx": __vite_glob_0_5, "./Pages/Auth/ResetPassword.tsx": __vite_glob_0_6, "./Pages/Auth/VerifyEmail.tsx": __vite_glob_0_7, "./Pages/Bye.tsx": __vite_glob_0_8, "./Pages/Changelog/Index.tsx": __vite_glob_0_9, "./Pages/Dashboard.tsx": __vite_glob_0_10, "./Pages/Dashboard/Hours/Index.tsx": __vite_glob_0_11, "./Pages/Dashboard/Hours/Partials/AcceptReservation.tsx": __vite_glob_0_12, "./Pages/Dashboard/Hours/Partials/OpeningHours.tsx": __vite_glob_0_13, "./Pages/Dashboard/Hours/Partials/SelectTamponService.tsx": __vite_glob_0_14, "./Pages/Dashboard/Hours/Partials/StopReservation.tsx": __vite_glob_0_15, "./Pages/Dashboard/Messages/Index.tsx": __vite_glob_0_16, "./Pages/Dashboard/Messages/Partials/EnableDisableContactMessage.tsx": __vite_glob_0_17, "./Pages/Dashboard/Messages/Partials/SelectedMessage.tsx": __vite_glob_0_18, "./Pages/Dashboard/Newsletter/Partials/cell-action.tsx": __vite_glob_0_19, "./Pages/Dashboard/Newsletter/Partials/columns.tsx": __vite_glob_0_20, "./Pages/Dashboard/Newsletter/Partials/data-table.tsx": __vite_glob_0_21, "./Pages/Dashboard/Newsletter/Users.tsx": __vite_glob_0_22, "./Pages/Dashboard/Page/Index.tsx": __vite_glob_0_23, "./Pages/Dashboard/Page/Partials/EnablePage.tsx": __vite_glob_0_24, "./Pages/Dashboard/Ratings/Index.tsx": __vite_glob_0_25, "./Pages/Dashboard/Ratings/Partials/AcceptRating.tsx": __vite_glob_0_26, "./Pages/Dashboard/Ratings/Rating/Avis.tsx": __vite_glob_0_27, "./Pages/Dashboard/Ratings/Rating/Note.tsx": __vite_glob_0_28, "./Pages/Dashboard/Ratings/Rating/RatingCard.tsx": __vite_glob_0_29, "./Pages/Dashboard/Reservation/Index.tsx": __vite_glob_0_30, "./Pages/Dashboard/Reservation/Partials/CalendarReservation.tsx": __vite_glob_0_31, "./Pages/Dashboard/Reservation/Partials/ListOfReservation.tsx": __vite_glob_0_32, "./Pages/Dashboard/Settings/Index.tsx": __vite_glob_0_33, "./Pages/Dashboard/Settings/Notifications/Index.tsx": __vite_glob_0_34, "./Pages/Dashboard/Settings/Notifications/Partials/CanNotUseBooking.tsx": __vite_glob_0_35, "./Pages/Dashboard/Settings/Notifications/Partials/CanNotUseMessages.tsx": __vite_glob_0_36, "./Pages/Dashboard/Settings/Notifications/Partials/Forms/AdminNotificationBooking.tsx": __vite_glob_0_37, "./Pages/Dashboard/Settings/Notifications/Partials/Forms/AdminNotificationMessages.tsx": __vite_glob_0_38, "./Pages/Dashboard/Settings/Notifications/Partials/Forms/ClientNotificationBooking.tsx": __vite_glob_0_39, "./Pages/Dashboard/Tables/Index.tsx": __vite_glob_0_40, "./Pages/Dashboard/Tables/Partials/cell-action.tsx": __vite_glob_0_41, "./Pages/Dashboard/Tables/Partials/columns.tsx": __vite_glob_0_42, "./Pages/Dashboard/Tables/Partials/data-table.tsx": __vite_glob_0_43, "./Pages/Error403.tsx": __vite_glob_0_44, "./Pages/Error404.tsx": __vite_glob_0_45, "./Pages/Profile/Edit.tsx": __vite_glob_0_46, "./Pages/Profile/Partials/CancelSubscription.tsx": __vite_glob_0_47, "./Pages/Profile/Partials/DeleteUserForm.tsx": __vite_glob_0_48, "./Pages/Profile/Partials/Invoices.tsx": __vite_glob_0_49, "./Pages/Profile/Partials/UpdatePasswordForm.tsx": __vite_glob_0_50, "./Pages/Profile/Partials/UpdateProfileInformationForm.tsx": __vite_glob_0_51, "./Pages/Public/Contact/Index.tsx": __vite_glob_0_52, "./Pages/Public/Rating/Index.tsx": __vite_glob_0_53, "./Pages/Public/Rating/Partials/Form.tsx": __vite_glob_0_54, "./Pages/Public/Reservation/Form/DateInput.tsx": __vite_glob_0_55, "./Pages/Public/Reservation/Form/Index.tsx": __vite_glob_0_56, "./Pages/Public/Reservation/Form/TableInput.tsx": __vite_glob_0_57, "./Pages/Public/Reservation/Form/TimeAndGuestSelector.tsx": __vite_glob_0_58, "./Pages/Public/Reservation/RestaurantCanNotAcceptReservation.tsx": __vite_glob_0_59, "./Pages/Public/Restaurant/PageNotAvailable.tsx": __vite_glob_0_60, "./Pages/Public/Restaurant/Partials/ContactCard.tsx": __vite_glob_0_61, "./Pages/Public/Restaurant/Partials/DescriptionCard.tsx": __vite_glob_0_62, "./Pages/Public/Restaurant/Partials/HoursCard.tsx": __vite_glob_0_63, "./Pages/Public/Restaurant/Partials/MenuCard.tsx": __vite_glob_0_64, "./Pages/Public/Restaurant/Partials/NewsletterCard.tsx": __vite_glob_0_65, "./Pages/Public/Restaurant/Partials/PageContent.tsx": __vite_glob_0_66, "./Pages/Public/Restaurant/Partials/Rating/Avis.tsx": __vite_glob_0_67, "./Pages/Public/Restaurant/Partials/Rating/Note.tsx": __vite_glob_0_68, "./Pages/Public/Restaurant/Partials/Rating/RatingCard.tsx": __vite_glob_0_69, "./Pages/Public/Restaurant/RestaurantPage.tsx": __vite_glob_0_70, "./Pages/Restaurant/Create/CreateRestaurant.tsx": __vite_glob_0_71, "./Pages/Subscribe/Index.tsx": __vite_glob_0_72, "./Pages/Welcome.tsx": __vite_glob_0_73 });
+      const pages = /* @__PURE__ */ Object.assign({ "./Pages/Auth/ConfirmPassword.tsx": __vite_glob_0_0, "./Pages/Auth/ForgotPassword.tsx": __vite_glob_0_1, "./Pages/Auth/Login.tsx": __vite_glob_0_2, "./Pages/Auth/Partials/Login/LoginForm.tsx": __vite_glob_0_3, "./Pages/Auth/Partials/Register/RegisterForm.tsx": __vite_glob_0_4, "./Pages/Auth/Register.tsx": __vite_glob_0_5, "./Pages/Auth/ResetPassword.tsx": __vite_glob_0_6, "./Pages/Auth/VerifyEmail.tsx": __vite_glob_0_7, "./Pages/Bye.tsx": __vite_glob_0_8, "./Pages/Changelog/Index.tsx": __vite_glob_0_9, "./Pages/Dashboard.tsx": __vite_glob_0_10, "./Pages/Dashboard/Hours/Index.tsx": __vite_glob_0_11, "./Pages/Dashboard/Hours/Partials/AcceptReservation.tsx": __vite_glob_0_12, "./Pages/Dashboard/Hours/Partials/OpeningHours.tsx": __vite_glob_0_13, "./Pages/Dashboard/Hours/Partials/SelectTamponService.tsx": __vite_glob_0_14, "./Pages/Dashboard/Hours/Partials/StopReservation.tsx": __vite_glob_0_15, "./Pages/Dashboard/Messages/Index.tsx": __vite_glob_0_16, "./Pages/Dashboard/Messages/Partials/EnableDisableContactMessage.tsx": __vite_glob_0_17, "./Pages/Dashboard/Messages/Partials/SelectedMessage.tsx": __vite_glob_0_18, "./Pages/Dashboard/Newsletter/Partials/cell-action.tsx": __vite_glob_0_19, "./Pages/Dashboard/Newsletter/Partials/columns.tsx": __vite_glob_0_20, "./Pages/Dashboard/Newsletter/Partials/data-table.tsx": __vite_glob_0_21, "./Pages/Dashboard/Newsletter/Users.tsx": __vite_glob_0_22, "./Pages/Dashboard/Page/Index.tsx": __vite_glob_0_23, "./Pages/Dashboard/Page/Partials/EnablePage.tsx": __vite_glob_0_24, "./Pages/Dashboard/Ratings/Index.tsx": __vite_glob_0_25, "./Pages/Dashboard/Ratings/Partials/AcceptRating.tsx": __vite_glob_0_26, "./Pages/Dashboard/Ratings/Rating/Avis.tsx": __vite_glob_0_27, "./Pages/Dashboard/Ratings/Rating/Note.tsx": __vite_glob_0_28, "./Pages/Dashboard/Ratings/Rating/RatingCard.tsx": __vite_glob_0_29, "./Pages/Dashboard/Reservation/Index.tsx": __vite_glob_0_30, "./Pages/Dashboard/Reservation/Partials/CalendarReservation.tsx": __vite_glob_0_31, "./Pages/Dashboard/Reservation/Partials/ListOfReservation.tsx": __vite_glob_0_32, "./Pages/Dashboard/Settings/Index.tsx": __vite_glob_0_33, "./Pages/Dashboard/Settings/Notifications/Index.tsx": __vite_glob_0_34, "./Pages/Dashboard/Settings/Notifications/Partials/CanNotUseBooking.tsx": __vite_glob_0_35, "./Pages/Dashboard/Settings/Notifications/Partials/CanNotUseMessages.tsx": __vite_glob_0_36, "./Pages/Dashboard/Settings/Notifications/Partials/Forms/AdminNotificationBooking.tsx": __vite_glob_0_37, "./Pages/Dashboard/Settings/Notifications/Partials/Forms/AdminNotificationMessages.tsx": __vite_glob_0_38, "./Pages/Dashboard/Settings/Notifications/Partials/Forms/ClientNotificationBooking.tsx": __vite_glob_0_39, "./Pages/Dashboard/Tables/Index.tsx": __vite_glob_0_40, "./Pages/Dashboard/Tables/Partials/cell-action.tsx": __vite_glob_0_41, "./Pages/Dashboard/Tables/Partials/columns.tsx": __vite_glob_0_42, "./Pages/Dashboard/Tables/Partials/data-table.tsx": __vite_glob_0_43, "./Pages/Error403.tsx": __vite_glob_0_44, "./Pages/Error404.tsx": __vite_glob_0_45, "./Pages/Profile/Billings/Edit.tsx": __vite_glob_0_46, "./Pages/Profile/Edit.tsx": __vite_glob_0_47, "./Pages/Profile/Partials/CancelSubscription.tsx": __vite_glob_0_48, "./Pages/Profile/Partials/DeleteUserForm.tsx": __vite_glob_0_49, "./Pages/Profile/Partials/Invoices.tsx": __vite_glob_0_50, "./Pages/Profile/Partials/UpdatePasswordForm.tsx": __vite_glob_0_51, "./Pages/Profile/Partials/UpdateProfileInformationForm.tsx": __vite_glob_0_52, "./Pages/Public/Contact/Index.tsx": __vite_glob_0_53, "./Pages/Public/Rating/Index.tsx": __vite_glob_0_54, "./Pages/Public/Rating/Partials/Form.tsx": __vite_glob_0_55, "./Pages/Public/Reservation/Form/DateInput.tsx": __vite_glob_0_56, "./Pages/Public/Reservation/Form/Index.tsx": __vite_glob_0_57, "./Pages/Public/Reservation/Form/TableInput.tsx": __vite_glob_0_58, "./Pages/Public/Reservation/Form/TimeAndGuestSelector.tsx": __vite_glob_0_59, "./Pages/Public/Reservation/RestaurantCanNotAcceptReservation.tsx": __vite_glob_0_60, "./Pages/Public/Restaurant/PageNotAvailable.tsx": __vite_glob_0_61, "./Pages/Public/Restaurant/Partials/ContactCard.tsx": __vite_glob_0_62, "./Pages/Public/Restaurant/Partials/DescriptionCard.tsx": __vite_glob_0_63, "./Pages/Public/Restaurant/Partials/HoursCard.tsx": __vite_glob_0_64, "./Pages/Public/Restaurant/Partials/MenuCard.tsx": __vite_glob_0_65, "./Pages/Public/Restaurant/Partials/NewsletterCard.tsx": __vite_glob_0_66, "./Pages/Public/Restaurant/Partials/PageContent.tsx": __vite_glob_0_67, "./Pages/Public/Restaurant/Partials/Rating/Avis.tsx": __vite_glob_0_68, "./Pages/Public/Restaurant/Partials/Rating/Note.tsx": __vite_glob_0_69, "./Pages/Public/Restaurant/Partials/Rating/RatingCard.tsx": __vite_glob_0_70, "./Pages/Public/Restaurant/RestaurantPage.tsx": __vite_glob_0_71, "./Pages/Restaurant/Create/CreateRestaurant.tsx": __vite_glob_0_72, "./Pages/Subscribe/Index.tsx": __vite_glob_0_73, "./Pages/Welcome.tsx": __vite_glob_0_74 });
       return pages[`./Pages/${name}.tsx`];
     },
     setup: ({ App, props }) => /* @__PURE__ */ jsx(App, { ...props })

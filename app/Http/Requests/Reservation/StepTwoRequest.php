@@ -29,7 +29,7 @@ class StepTwoRequest extends FormRequest
             'reservation_date' => ['required', 'date'],
             // 'time' => ['required', 'string', new TimeInServiceRange],
             'time' => ['required', 'string', new TimeInServiceRangeWithOptionParams],
-            'id' => ['required', 'string'],
+            'id' => ['required', 'string', 'exists:restaurants,id'],
         ];
     }
 }

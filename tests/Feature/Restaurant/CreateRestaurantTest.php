@@ -60,12 +60,14 @@ it('can create a restaurant if auth', function () {
 });
 
 
+// liste des actions soumises au pack fondateur : 
+// - enable newsletter + check before display the page in front + in the controller
+// enable mailssss
 
-// can and can't add settings informations
+
 // can and can't add hours
 // can and can't add tables
 
-// can and can't activate the site
 // can and can't book for a client
 // can and can't unsubscribe newsletter client
 
@@ -73,12 +75,11 @@ it('can create a restaurant if auth', function () {
 
 
 
-// can and can't send message
 // can and can't send rating
 // can and can't book: all the possibilities : have table, not have, no hours, restaurant not activate etc
 // can and can't subscribe newsletter
 
-
+// if restaurant not subscribed can not be find on booking and page
 // if restaurant not activate, page not found
 // if message not activate, route message not open
 // if rating not open, mail not sent

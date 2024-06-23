@@ -12,14 +12,14 @@ import { Input } from "@/Components/ui/input";
 import SubmitButton from "@/Components/ui/submit-button";
 import { Switch } from "@/Components/ui/switch";
 import DashboardLayout from "@/Layouts/DashboardLayout";
-import { PageProps } from "@/types";
+import { PageProps, User } from "@/types";
 import { Restaurant } from "@/types/restaurant";
 import { router, useForm } from "@inertiajs/react";
 import axios from "axios";
-import { AlertCircle } from "lucide-react";
+import useToastErrorNotFondator from "@/hooks/fondator/useToastErrorNotFondator";
 import React, { FormEventHandler, useState } from "react";
 import { toast } from "sonner";
-
+import ErrorMustBeFondator from "@/Components/fondator/message-error-must-be-fondator";
 type Props = PageProps & {
     restaurant: {
         data: Restaurant;
@@ -32,10 +32,11 @@ type Props = PageProps & {
 };
 
 const Settings = (props: Props) => {
-    const { restaurant, can, isMissingInfo } = props;
+    const { restaurant, can, isMissingInfo, auth } = props;
+    const user = auth.user;
     const [showButtons, setShowButtons] = useState<boolean>(false);
     const [isActive, setIsActive] = useState<boolean>(restaurant.data.active);
-    const [loading, setLoading] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false);
     const { data, setData, put, processing, errors, reset } = useForm({
         name: restaurant.data.name ?? "",
         phone: restaurant.data.phone ?? "",
@@ -44,11 +45,11 @@ const Settings = (props: Props) => {
         city: restaurant.data.city ?? "",
         zip: restaurant.data.zip ?? "",
     });
-
+    const { showErrorToast } = useToastErrorNotFondator();
     const submit: FormEventHandler = (e) => {
         if (!can.update_settings) {
             toast.error(
-                "Vous n'avez pas les droits pour effectuer cette action."
+                "Vous n'avez pas les droits pour effectuer cette action.",
             );
             return;
         }
@@ -66,19 +67,29 @@ const Settings = (props: Props) => {
                 onError: (error) => {
                     // console.log(error);
                 },
-            }
+            },
         );
     };
 
-
     const restaurantStatusSubmit = (e: boolean) => {
-       
+        if (user?.isFondator == false) {
+            showErrorToast({
+                message: "Votre niveau d'abonnement ne vous permet pas d'activer le système de messagerie.",
+                action: "Mettre à niveau",
+            });
+            return;
+        }
         setLoading(true);
-    
+
         axios
-            .put(route('dashboard.settings.change-status', {restaurant: restaurant.data.id}), {
-                active: e,
-            })
+            .put(
+                route("dashboard.settings.change-status", {
+                    restaurant: restaurant.data.id,
+                }),
+                {
+                    active: e,
+                },
+            )
             .then((response) => {
                 // console.log(response);
                 toast.success("Statut modifié !");
@@ -86,7 +97,7 @@ const Settings = (props: Props) => {
             })
             .catch((error) => {
                 toast.error(
-                    "Une erreur est survenue, veuillez réessayer plus tard"
+                    "Une erreur est survenue, veuillez réessayer plus tard",
                 );
             })
             .finally(() => {
@@ -95,30 +106,43 @@ const Settings = (props: Props) => {
     };
     return (
         <div>
-              <FormFieldLayout
-                    label="Status du restaurant"
-                    fieldName="name"
-                    className="flex gap-6 w-fit items-center border border-muted rounded-lg p-4
-                    bg-background space-y-0
-                    "
-                >
-                    {isActive == true && "Actif"}
-                    <Switch
-                        checked={isActive}
-                        disabled={loading || processing || !can.change_status}
-                        onCheckedChange={(e) => {
-                            if(!can.change_status) {
-                                toast.error("Vous n'avez pas les droits pour effectuer cette action.");
-                                return;
-                            }
-                            setIsActive(() => {
-                                restaurantStatusSubmit(e);
-                                return e;
+            <FormFieldLayout
+                label="Status du restaurant"
+                fieldName="name"
+                className="flex w-fit items-center gap-6 space-y-0 rounded-lg border border-muted bg-background p-4"
+            >
+                {isActive == true && "Actif"}
+                <Switch
+                    checked={isActive}
+                    disabled={
+                        loading ||
+                        processing
+                    }
+                    onCheckedChange={(e) => {
+                        if (!user?.isFondator) {
+                            showErrorToast({
+                                message: "Votre niveau d'abonnement ne vous permet pas d'activer le système de messagerie.",
+                                action: "Mettre à niveau",
                             });
-                        }}
-                    />
-                    {!isActive && "Inactif"}
-                </FormFieldLayout>
+                            return;
+                        }
+                        if (!can.change_status) {
+                            toast.error(
+                                "Vous n'avez pas les droits pour effectuer cette action.",
+                            );
+                            return;
+                        }
+                        setIsActive(() => {
+                            restaurantStatusSubmit(e);
+                            return e;
+                        });
+                    }}
+                />
+                {!isActive && "Inactif"}
+                {!user?.isFondator && (
+                    <ErrorMustBeFondator message="Il faut être abonné pour pouvoir activer le système de contact." />
+                )}
+            </FormFieldLayout>
             {isMissingInfo && (
                 <AlertBanner>
                     <ul className="list-disc pl-6">
@@ -132,7 +156,7 @@ const Settings = (props: Props) => {
             )}
             <form onSubmit={submit}>
                 <div className="flex items-center justify-between">
-                    <h1 className="text-4xl font-semibold tracking-wide p-2">
+                    <h1 className="p-2 text-4xl font-semibold tracking-wide">
                         Paramètre de votre restaurant: {restaurant.data.name}
                     </h1>
 
@@ -152,7 +176,7 @@ const Settings = (props: Props) => {
                                 </Button>
 
                                 <SubmitButton
-                                    disabled={processing ||loading}
+                                    disabled={processing || loading}
                                     type="submit"
                                 >
                                     Enregistrer
@@ -165,7 +189,7 @@ const Settings = (props: Props) => {
                 <div className="space-y-3">
                     <Card
                         x-chunk="dashboard-settings-adresse"
-                        className="md:col-span-1 bg-accent"
+                        className="bg-accent md:col-span-1"
                     >
                         <CardHeader className="px-7">
                             <CardTitle>Informations principales</CardTitle>
@@ -187,7 +211,7 @@ const Settings = (props: Props) => {
                                         name="name"
                                         value={data.name}
                                         placeholder="Nom du restaurant"
-                                        className="mt-1 block w-full py-3 border"
+                                        className="mt-1 block w-full border py-3"
                                         autoComplete="username"
                                         onChange={(e) => {
                                             setData("name", e.target.value);
@@ -207,7 +231,7 @@ const Settings = (props: Props) => {
                                         name="email"
                                         placeholder="Adresse mail du restaurant"
                                         value={data.email}
-                                        className="mt-1 block w-full py-3 border"
+                                        className="mt-1 block w-full border py-3"
                                         onChange={(e) => {
                                             setData("email", e.target.value);
                                             setShowButtons(true);
@@ -226,7 +250,7 @@ const Settings = (props: Props) => {
                                         name="phone"
                                         placeholder="Téléphone du restaurant"
                                         value={data.phone}
-                                        className="mt-1 block w-full py-3 border"
+                                        className="mt-1 block w-full border py-3"
                                         onChange={(e) => {
                                             setData("phone", e.target.value);
                                             setShowButtons(true);
@@ -239,7 +263,7 @@ const Settings = (props: Props) => {
 
                     <Card
                         x-chunk="dashboard-settings-adresse"
-                        className="md:col-span-2 bg-accent"
+                        className="bg-accent md:col-span-2"
                     >
                         <CardHeader className="px-7">
                             <CardTitle>Localisation</CardTitle>
@@ -257,7 +281,7 @@ const Settings = (props: Props) => {
                                         name="address"
                                         placeholder="3 rue du Port"
                                         value={data.address}
-                                        className="mt-1 block w-full py-3 border"
+                                        className="mt-1 block w-full border py-3"
                                         autoComplete="address"
                                         onChange={(e) => {
                                             setData("address", e.target.value);
@@ -277,7 +301,7 @@ const Settings = (props: Props) => {
                                         name="zip"
                                         placeholder="72000"
                                         value={data.zip}
-                                        className="mt-1 block w-full py-3 border"
+                                        className="mt-1 block w-full border py-3"
                                         autoComplete="zip"
                                         onChange={(e) => {
                                             setData("zip", e.target.value);
@@ -297,7 +321,7 @@ const Settings = (props: Props) => {
                                         name="city"
                                         placeholder="Le Mans"
                                         value={data.city}
-                                        className="mt-1 block w-full py-3 border"
+                                        className="mt-1 block w-full border py-3"
                                         autoComplete="city"
                                         onChange={(e) => {
                                             setData("city", e.target.value);

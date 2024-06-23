@@ -12,17 +12,24 @@ import {
     CardTitle,
 } from "@/Components/ui/card";
 import { router } from "@inertiajs/react";
+import MissingInfoRestaurant from "@/Components/MissingInfoRestaurant";
+import RestaurantStatus from "@/Components/restaurant-message-status/RestaurantStatus";
+import ReservationStatus from "@/Components/restaurant-message-status/ReservationStatus";
+import ServicesStatus from "@/Components/restaurant-message-status/ServicesStatus";
+import CanNotUseBooking from "../../Settings/Notifications/Partials/CanNotUseBooking";
 
 interface Props {
     restaurant: Restaurant;
     can: {
         enable_rating: boolean;
     };
+    isMissingInfo: boolean;
 }
 
 const AcceptRating = (props: Props) => {
     const {
         restaurant,
+        isMissingInfo,
         can = {
             enable_rating: false,
         },
@@ -30,7 +37,7 @@ const AcceptRating = (props: Props) => {
 
     const [loading, setLoading] = useState<boolean>(false);
     const [acceptRating, setAcceptRating] = useState<boolean>(
-        restaurant.accept_rating
+        restaurant.accept_rating,
     );
 
     const [errors, setErrors] = useState({
@@ -38,8 +45,10 @@ const AcceptRating = (props: Props) => {
     });
 
     const submit = (e: boolean) => {
-        if(!can.enable_rating) {
-            toast.error("Vous n'avez pas les droits pour effectuer cette action");
+        if (!can.enable_rating) {
+            toast.error(
+                "Vous n'avez pas les droits pour effectuer cette action",
+            );
             return;
         }
         setLoading(true);
@@ -58,7 +67,7 @@ const AcceptRating = (props: Props) => {
             })
             .catch((error) => {
                 toast.error(
-                    "Une erreur est survenue, veuillez réessayer plus tard"
+                    "Une erreur est survenue, veuillez réessayer plus tard",
                 );
                 setErrors(error.response.data.errors);
                 // console.log(error)
@@ -71,7 +80,7 @@ const AcceptRating = (props: Props) => {
     return (
         <Card
             x-chunk="dashboard-05-chunk-3"
-            className="md:col-span-1 bg-accent h-fit"
+            className="h-fit bg-accent md:col-span-1"
         >
             <CardHeader className="px-7">
                 <CardTitle>Statut du formulaire d'évaluation</CardTitle>
@@ -81,25 +90,35 @@ const AcceptRating = (props: Props) => {
                 </CardDescription>
             </CardHeader>
             <CardContent className="gap-2">
-                <FormFieldLayout
-                    label="Activer les évaluations ?"
-                    fieldName="name"
-                    className="flex gap-6 w-full items-center border border-muted rounded-lg p-4
-                    bg-background space-y-0
-                    "
-                    error={errors?.accept_rating ?? ""}
-                >
-                    <Switch
-                        checked={acceptRating}
-                        disabled={loading || !can.enable_rating}
-                        onCheckedChange={(e) => {
-                            setAcceptRating(() => {
-                                submit(e);
-                                return e;
-                            });
-                        }}
-                    />
-                </FormFieldLayout>
+                {isMissingInfo && (
+                    <MissingInfoRestaurant restaurant={restaurant} />
+                )}
+
+                {!isMissingInfo && !restaurant.can.accept_booking ? (
+                    <div className="w-full">
+                        <CanNotUseBooking restaurant={restaurant} 
+                        sectionClassNames="md:w-full"
+                        message="Vous ne pouvez pas activer ce service voici les raisons possibles : " />
+                    </div>
+                ) : (
+                    <FormFieldLayout
+                        label="Activer les évaluations ?"
+                        fieldName="name"
+                        className="flex w-full items-center gap-6 space-y-0 rounded-lg border border-muted bg-background p-4"
+                        error={errors?.accept_rating ?? ""}
+                    >
+                        <Switch
+                            checked={acceptRating}
+                            disabled={loading || !can.enable_rating}
+                            onCheckedChange={(e) => {
+                                setAcceptRating(() => {
+                                    submit(e);
+                                    return e;
+                                });
+                            }}
+                        />
+                    </FormFieldLayout>
+                )}
             </CardContent>
         </Card>
     );

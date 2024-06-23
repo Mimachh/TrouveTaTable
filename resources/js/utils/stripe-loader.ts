@@ -11,14 +11,14 @@ const StripeLoader = () => {
         script.src = "https://js.stripe.com/v3/";
         script.async = true;
         
-        script.onload = () => {
-            console.log("Stripe script loaded successfully.");
-            // Vous pouvez initialiser Stripe ou appeler d'autres fonctions ici
-        };
+        // script.onload = () => {
+        //     console.log("Stripe script loaded successfully.");
+        //     // Vous pouvez initialiser Stripe ou appeler d'autres fonctions ici
+        // };
         
-        script.onerror = (error) => {
-            console.error("Failed to load the Stripe script.", error);
-        };
+        // script.onerror = (error) => {
+        //     console.error("Failed to load the Stripe script.", error);
+        // };
 
         document.body.appendChild(script);
 

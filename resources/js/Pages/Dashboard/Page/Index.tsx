@@ -8,6 +8,7 @@ import { LazyMotion, domAnimation } from "framer-motion";
 import React from "react";
 import EnablePage from "./Partials/EnablePage";
 import { Avis } from "@/types/avis";
+import ErrorMustBeFondator from "@/Components/fondator/message-error-must-be-fondator";
 
 type Props = PageProps & {
     restaurant: {
@@ -29,10 +30,15 @@ type Props = PageProps & {
 };
 
 const Page = (props: Props) => {
-    const { hours, restaurant, can, avis } = props;
-
+    const { hours, restaurant, can, avis, auth } = props;
+    const user = auth.user;
     return (
         <LazyMotion features={domAnimation}>
+                   {!user?.isFondator && (
+                    <ErrorMustBeFondator
+                    classNames="justify-between"
+                    message="Il faut être abonné pour pouvoir activer le système de contact." />
+                )}
             <div className="md:grid md:grid-cols-3">
                 <div className="md:col-span-1 md:col-start-3">
                     {" "}

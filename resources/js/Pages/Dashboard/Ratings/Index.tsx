@@ -4,11 +4,10 @@ import { Restaurant } from "@/types/restaurant";
 import RatingCard from "./Rating/RatingCard";
 import { ExtendedAvis } from "@/types/avis";
 import { format } from "date-fns";
-import { Button } from "@/Components/ui/button";
-import { router } from "@inertiajs/react";
 import { LinkDataType, MetaDataType } from "@/types/meta";
 import Pagination from "@/Components/Pagination";
 import AcceptRating from "./Partials/AcceptRating";
+import { is } from "date-fns/locale";
 
 type Props = PageProps & {
     restaurant: {
@@ -22,12 +21,14 @@ type Props = PageProps & {
     can: {
         enable_rating: boolean;
     };
+    isMissingInfo: boolean;
 };
 
 const Ratings = (props: Props) => {
     const {
         ratings,
         restaurant,
+        isMissingInfo,
         can = {
             enable_rating: false,
         },
@@ -40,7 +41,7 @@ const Ratings = (props: Props) => {
                 </h1>
             </div>
 
-            <AcceptRating restaurant={restaurant.data} can={can}/>
+            <AcceptRating restaurant={restaurant.data} can={can} isMissingInfo={isMissingInfo}/>
             <div className="md:grid grid-cols-3 gap-2">
                 {ratings &&
                     ratings.data.map((rating: any) => (

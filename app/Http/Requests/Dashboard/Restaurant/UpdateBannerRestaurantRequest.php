@@ -22,7 +22,7 @@ class UpdateBannerRestaurantRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "banner" => ["nullable", "image"]
+            "banner" => ["nullable", "image", "mimes:jpeg,png,jpg,webp", "max:2048"]
         ];
     }
 }
