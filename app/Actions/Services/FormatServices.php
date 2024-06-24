@@ -50,9 +50,6 @@ class FormatServices
         }
     }
 
-    public function getServicesWithTheOptionsStartAndEnd()
-    {
-    }
 
     public function filterOffTheServiceWhenEndReservationIsPastToday($services, $date_reservation_no_format, $restaurant)
     {
@@ -80,7 +77,8 @@ class FormatServices
             $servicesWithOptions->each(function ($service) use (&$servicesWithOptionsArray, &$currentTime, &$stop_time_reservation) {
                 // $start_time = (new FormatServices)->getTheStartTimeWithOption($service->start_time, $stop_time_reservation);
                 // le start time au dessus serait lié à l'heure du service..Moi je préfère mettre l'heure d'ouverture.
-                $start_time = substr($service->start_time, 0, 5);
+                $start_time = $service->start_time ? substr($service->start_time, 0, 5) : null;
+                
                 // list($hours, $minutes) = explode(':', $stop_time_reservation);
                 // $time_to_stop_in_seconds = $hours * 3600 + $minutes * 60;
                 // $endReservationTime = date('H:i', strtotime($start_time) - $time_to_stop_in_seconds);

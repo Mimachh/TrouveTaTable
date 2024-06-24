@@ -49,9 +49,14 @@ const DateInput = ({
                         const adjustedDisabledDays = disabledDays.map((day) =>
                             day === 7 ? 0 : day
                         );
+                        const dateTimestamp = date.setHours(0, 0, 0, 0);
+                        const beforeTodayTimestamp = new Date(before_today).getTime();
+                
+                       
+                        
                         // Désactiver la date si elle est avant aujourd'hui ou si le jour de la semaine est dans adjustedDisabledDays
                         return (
-                            date < new Date(before_today) ||
+                            dateTimestamp < beforeTodayTimestamp ||
                             adjustedDisabledDays.includes(date.getDay())
                         );
                     }}

@@ -11,7 +11,7 @@ class StoreTamponDurationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->user()->can('handle_services', $this->restaurant);
     }
 
     /**

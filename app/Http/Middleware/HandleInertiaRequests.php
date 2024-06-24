@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -23,19 +25,8 @@ class HandleInertiaRequests extends Middleware
         return parent::version($request);
     }
 
-    /**
-     * Define the props that are shared by default.
-     *
-     * @return array<string, mixed>
-     */
-    public $isSub;
     public function share(Request $request): array
     {
-        $user = $request->user();
-        if($user) {
-            $this->isSub = User::where('id', $user->id)->with('subscriptions')->first();
-        }
-
         return [
             ...parent::share($request),
             // 'auth' => [
@@ -49,11 +40,7 @@ class HandleInertiaRequests extends Middleware
             'csrf_token' => csrf_token(),
             'auth' => function () use ($request) {
                 $user = $request->user();
-                if ($user) {
-                    $user = $request->user()->load('roles');
-                    $user->isSub = $this->isSub->subscriptions->count() > 0 ? true : false;
-                }
-                return ['user' => $user];
+                return ['user' => $user ? (new UserResource($user)) : null];
             },
         ];
     }

@@ -13,7 +13,7 @@ class ChangeReservationStatusRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->user()->can('update_reservation_client', $this->restaurant);
     }
 
     /**

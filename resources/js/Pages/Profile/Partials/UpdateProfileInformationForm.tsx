@@ -35,11 +35,11 @@ export default function UpdateProfileInformation({
     return (
         <section className={className}>
             <header>
-                <h2 className="text-lg font-medium text-gray-900">
+                <h2 className="text-lg font-medium text-foreground">
                     Information du profil
                 </h2>
 
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="mt-1 text-sm text-muted-foreground">
                     Modifier vos informations de profil et votre adresse e-mail.
                 </p>
             </header>

@@ -11,7 +11,7 @@ class EnableOrDisableRestaurantContactController extends Controller
 {
     public function __invoke(EnableOrDisableRestaurantContactRequest $request, Restaurant $restaurant)
     {
-        $data = $request->validated();
+        $data = $request->validated();        
         $restaurant->update($data);
         return ApiResponse::created([
             'message' => 'Restaurant contact has been updated successfully',

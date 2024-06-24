@@ -1,7 +1,5 @@
 <?php
 
-use App\Actions\CreateRestaurantJWT;
-use App\Actions\DecodeJWT;
 use App\Http\Controllers\Api\Reservation\ShowByServiceAndDateController;
 use App\Http\Controllers\Api\Reservation\ShowReservationController;
 use App\Http\Controllers\Api\Restaurant\GetAllMyRestaurants;
@@ -40,6 +38,7 @@ use App\Http\Controllers\Dashboard\Tables\DeleteTableController;
 use App\Http\Controllers\Dashboard\Tables\IndexTableController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Newsletter\SubscribeToNewsletterController;
+use App\Http\Controllers\Profile\BillingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Public\Contact\IndexRestaurantContactController;
 use App\Http\Controllers\Public\PageController;
@@ -54,17 +53,11 @@ use App\Http\Controllers\Subscribe\CancelSubscriptionController;
 use App\Http\Controllers\Subscribe\CreateController;
 use App\Http\Controllers\Subscribe\Modal\CreateController as ModalCreateController;
 use App\Http\Controllers\Subscribe\StoreController;
+use App\Http\Controllers\Support\CreateSupportController;
 use App\Http\Controllers\Welcome\AppNewsletterController;
 use App\Http\Controllers\Welcome\CreateContactController;
 use App\Http\Controllers\WelcomeController;
-use App\Http\Resources\RatingRestaurantResource;
-use App\Http\Resources\ReservationResource;
-use App\Http\Resources\RestaurantResource;
-use App\Models\Product;
-use App\Models\RatingRestaurant;
 use App\Models\Reservation;
-use App\Models\Restaurant;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -94,9 +87,19 @@ Route::get('/user/invoice/{invoice}', function (string $invoiceId) {
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::prefix('profile')->as('profile.')->group(function () {
+        Route::get('/', [ProfileController::class, 'edit'])->name('edit');
+        Route::patch('/', [ProfileController::class, 'update'])->name('update');
+        Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('billings')->as('billings.')->group(function () {
+        Route::get('/', [BillingController::class, 'edit'])->name('edit');
+        Route::delete('/payment-method/{paymentMethod}', [BillingController::class, 'deletePaymentMethod'])->name('payment-method.delete');
+        Route::put('/payment-method/{paymentMethod}', [BillingController::class, 'updatePaymentMethod'])->name('payment-method.update');
+        Route::post('/store/new-payment-method', [BillingController::class, 'storeNewPaymentMethod'])->name('payment-method.create-new');
+    });
+
 
     Route::middleware('must.have.restaurant')->group(function () {
 
@@ -109,9 +112,9 @@ Route::middleware(['auth'])->group(function () {
                 // Restaurant hours
                 Route::prefix('hours')->as('hours.')->group(function () {
                     Route::get('', IndexHoursController::class)->name('index');
-                    Route::post('', [CreateHoursController::class, 'store'])->name('store');
-                    Route::put('/storeTamponDuration', [CreateHoursController::class, 'storeTamponDuration'])->name('store.tampon.duration');
-                    Route::put('/storeEndReservation', [CreateHoursController::class, 'storeEndReservation'])->name('store.end.reservation');
+                    Route::post('', [CreateHoursController::class, 'store'])->name('store'); // TESTED
+                    Route::put('/storeTamponDuration', [CreateHoursController::class, 'storeTamponDuration'])->name('store.tampon.duration'); // TESTED
+                    Route::put('/storeEndReservation', [CreateHoursController::class, 'storeEndReservation'])->name('store.end.reservation'); // TESTED
                 });
 
                 Route::prefix('reservation')->as('reservation.')->group(function () {
@@ -119,7 +122,7 @@ Route::middleware(['auth'])->group(function () {
 
                     // API
                     Route::get('getReservationsByDate/{date}', ShowByServiceAndDateController::class)->name('get.by.date');
-                    Route::put('/status', EnableOrDisableRestaurantReservationController::class)->name('status');
+                    Route::put('/status', EnableOrDisableRestaurantReservationController::class)->name('status'); // TESTED
                 });
 
                 Route::prefix('tables')->as('tables.')->group(function () {
@@ -130,14 +133,12 @@ Route::middleware(['auth'])->group(function () {
 
                 Route::prefix('messages')->as('messages.')->group(function () {
                     Route::get('/', IndexMessagesController::class)->name('index');
-
-                    Route::put('/status', EnableOrDisableRestaurantContactController::class)->name('status');
+                    Route::put('/status', EnableOrDisableRestaurantContactController::class)->name('status'); // TESTED
                 });
 
                 Route::prefix('page')->as('page.')->group(function () {
                     Route::get('/', IndexPageController::class)->name('index');
-
-                    Route::put('/enablePage', EnablePageController::class)->name('enable');
+                    Route::put('/enablePage', EnablePageController::class)->name('enable');  // TESTED
                 });
 
                 Route::prefix('newsletter')->as('newsletter.')->group(function () {
@@ -147,66 +148,61 @@ Route::middleware(['auth'])->group(function () {
 
                 Route::prefix('ratings')->as('ratings.')->group(function () {
                     Route::get('/', IndexRatingController::class)->name('index');
-
-                    Route::put('/status', UpdateRatingStatusClientFormController::class)->name('status');
+                    Route::put('/status', UpdateRatingStatusClientFormController::class)->name('status'); // TESTED
                 });
 
                 Route::prefix('settings')->as('settings.')->group(function () {
                     Route::get('/', IndexSettingsController::class)->name('index');
-                    Route::put('/', UpdateSettingsController::class)->name('update');
-
-                    Route::put('/change-status', ChangeRestaurantStatusController::class)->name('change-status');
+                    Route::put('/', UpdateSettingsController::class)->name('update'); // TESTED
+                    Route::put('/change-status', ChangeRestaurantStatusController::class)->name('change-status'); // TESTED
 
 
                     Route::prefix('notifications')->as('notifications.')->group(function () {
                         Route::get('/', IndexRestaurantNotificationController::class)->name('index');
-
-                        Route::put('/update-after-booking-restaurant', UpdateNotifyRestaurantAfterBookingStatusController::class)->name('notify-after-booking-restaurant');
-                        Route::put('/update-after-booking-client', UpdateNotifyClientAfterBookingStatusController::class)->name('notify-after-booking-client');
-                        Route::put('/update-day-before-booking-client', UpdateNotifyClientDayBeforeBookingStatusController::class)->name('notify-day-before-booking-client');
-                        Route::put('/update-after-message-restaurant', UpdateNotifyRestaurantMessageStatusController::class)->name("notify-after-message-restaurant");
+                        Route::put('/update-after-booking-restaurant', UpdateNotifyRestaurantAfterBookingStatusController::class)->name('notify-after-booking-restaurant'); // TESTED
+                        Route::put('/update-after-booking-client', UpdateNotifyClientAfterBookingStatusController::class)->name('notify-after-booking-client'); // TESTED
+                        Route::put('/update-day-before-booking-client', UpdateNotifyClientDayBeforeBookingStatusController::class)->name('notify-day-before-booking-client'); // TESTED
+                        Route::put('/update-after-message-restaurant', UpdateNotifyRestaurantMessageStatusController::class)->name("notify-after-message-restaurant"); // TESTED
                     });
                 });
 
-
                 Route::prefix('avatar')->as('avatar.')->group(function () {
-                    Route::post('/', UpdateAvatarRestaurantController::class)->name('update');
-                    Route::delete('/', DeleteAvatarRestaurantController::class)->name('delete');
+                    Route::post('/', UpdateAvatarRestaurantController::class)->name('update'); // TESTED
+                    Route::delete('/', DeleteAvatarRestaurantController::class)->name('delete'); // TESTED
                 });
 
                 Route::prefix('media')->as('media.')->group(function () {
-                    Route::post('/', UpdateMediaRestaurantController::class)->name('update');
-                    Route::delete('/', DeleteMediaRestaurantController::class)->name('delete');
+                    Route::post('/', UpdateMediaRestaurantController::class)->name('update'); // TESTED
+                    Route::delete('/', DeleteMediaRestaurantController::class)->name('delete'); // TESTED
                 });
 
                 Route::prefix('banner')->as('banner.')->group(function () {
-                    Route::post('/', UpdateBannerRestaurantController::class)->name('update');
-                    Route::delete('/', DeleteBannerRestaurantController::class)->name('delete');
+                    Route::post('/', UpdateBannerRestaurantController::class)->name('update'); // TESTED
+                    Route::delete('/', DeleteBannerRestaurantController::class)->name('delete'); // TESTED
                 });
             });
         });
 
 
         // API LIKE USED BY AXIOS
-        // Every route here must have policy to check if the restaurant is owned by the user
         Route::get('/getAllMyRestaurants', GetAllMyRestaurants::class)->name('get.my.restaurants');
 
 
         Route::middleware('abort.not.my.restaurant')->group(function () {
             Route::get('/{restaurant}/getHoursByDayId/{day}', [CreateHoursController::class, 'getHoursByDayId'])->name('get.hours.by.day');
             Route::get('/{restaurant}/reservation/{reservation}', ShowReservationController::class)->name('show');
-            Route::post('/{restaurant}/reservation/changeStatus/{reservation}', ChangeReservationStatusController::class)->name('reservation.change.status');
-            Route::post('/{restaurant}/reservation/create/stepOne', [CreateReservationController::class, "getTables"])->name('reservation.create.stepOne');
-            Route::post('/{restaurant}/reservation/create/stepTwo', [CreateReservationController::class, "steptwo"])->name('reservation.create.stepTwo');
-            Route::post('/{restaurant}/reservation/create/stepThree', [CreateReservationController::class, "stepthree"])->name('reservation.create.stepThree');
-
+            Route::post('/{restaurant}/reservation/changeStatus/{reservation}', ChangeReservationStatusController::class)->name('reservation.change.status'); // TESTED
+            Route::post('/{restaurant}/reservation/create/stepOne', [CreateReservationController::class, "getTables"])->name('reservation.create.stepOne'); // TESTED
+            Route::post('/{restaurant}/reservation/create/stepTwo', [CreateReservationController::class, "steptwo"])->name('reservation.create.stepTwo'); // TESTED
+            Route::post('/{restaurant}/reservation/create/stepThree', [CreateReservationController::class, "stepthree"])->name('reservation.create.stepThree'); // TESTED
             Route::get('/{restaurant}/message/{message}', ShowMessageController::class)->name('message.show');
         });
     });
 
+    Route::post('/support', CreateSupportController::class)->name("support.send"); // TESTED
 
     Route::prefix('restaurant')->as('restaurant.')->group(function () {
-        Route::post('store', [CreateRestaurantController::class, 'store'])->name('store');
+        Route::post('store', [CreateRestaurantController::class, 'store'])->name('store'); // TESTED
         Route::get('create', function () {
             return Inertia::render('Restaurant/Create/CreateRestaurant', [
                 'canGoHome' => Route::has('home'),
@@ -222,7 +218,7 @@ Route::middleware(['auth'])->group(function () {
     //         Route::get('/{product}', CreateController::class)->name('create');
     //         Route::post('store', StoreController::class)->name('store');
     //         Route::delete('cancel', CancelSubscriptionController::class)->name('cancel')->withoutMiddleware('redirect.subscribed');
-    
+
     //         Route::get('modal/{product}', ModalCreateController::class)->name('modal.create');
     //     });
     // });
@@ -236,7 +232,7 @@ Route::middleware(["auth"])->group(function () {
         Route::get('/{product}', CreateController::class)->name('create');
         Route::post('store', StoreController::class)->name('store');
         Route::delete('cancel', CancelSubscriptionController::class)->name('cancel')
-        // ->withoutMiddleware('redirect.subscribed')
+            // ->withoutMiddleware('redirect.subscribed')
         ;
 
         Route::get('modal/{product}', ModalCreateController::class)->name('modal.create');
@@ -254,20 +250,16 @@ Route::prefix('book')->group(function () {
 Route::prefix('rating')->as('rating.')->group(function () {
     Route::get('/', IndexRatingFormController::class)->name('index');
     Route::post('/', CreateRatingController::class)->name('store');
-
     Route::get('/createToken', CreateTokenController::class)->name('createToken');
 });
 
 
 Route::get('/restaurant/{slug}', PageController::class)->name('restaurant');
 Route::get('/restaurant/{slug}/contact', IndexRestaurantContactController::class)->name('restaurant.contact.get');
-// Route::get('/book/{id}', ReservationCreateController::class)->name('reservation');
-// Route::post('/book/step-one', [ReservationStoreController::class, 'stepOne'])->name('reservation.step-one');
-// Route::post('/book/step-two', [ReservationStoreController::class, 'stepTwo'])->name('reservation.step-two');
-// Route::post('/book/step-three', [ReservationStoreController::class, 'stepThree'])->name('reservation.step-three');
-// Route::post('/book/step-four', [ReservationStoreController::class, 'stepFour'])->name('reservation.step-four');
 
-Route::post('/send-message-to-restaurant', SendMessageToRestaurantController::class)->name('message.send');
+
+
+Route::post('/send-message-to-restaurant', SendMessageToRestaurantController::class)->name('message.send'); // TESTED
 Route::post('/subscribe-to-newsletter-restaurant/{restaurant}', SubscribeToNewsletterController::class)->name('newsletter.subscribe');
 
 
@@ -286,60 +278,61 @@ Route::get('restaurant/notFound', function () {
 
 // Route::get('/mail', function () {
 
-//     $reservationResource = new ReservationResource(Reservation::find(1));
 //     $reservation = Reservation::where('id', 1)->first();
 
 
-//     $restaurant = new RestaurantResource($reservation->table->restaurant);
-
-//     return new App\Mail\Reservation\ChangeStatusMail(
-//         $restaurant,
+//     return new App\Mail\Reservation\RemindBookingMail(
 //         $reservation,
-//         'refusé',
-//         "sujet",
-//         "Malheuresement le restaurant sera fermé demain."
 //     );
 // });
-Route::get('/rating-mail', function () {
+// Route::get('/rating-mail', function () {
 
-    $ratingRestaurant = new RatingRestaurantResource(RatingRestaurant::find(1));
-    $restaurant = Restaurant::first();
-
-
-    return new App\Mail\Rating\NewRatingNotifyRestaurant(
-        $restaurant,
-        $ratingRestaurant
-    );
-});
+//     $ratingRestaurant = new RatingRestaurantResource(RatingRestaurant::find(1));
+//     $restaurant = Restaurant::first();
 
 
-Route::post('/buy', function () {
-    $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
-    $product = Product::first();
-       
-       
-        // $stripeProductIds = json_decode($product->stripe_product_id, true);
+//     return new App\Mail\Rating\NewRatingNotifyRestaurant(
+//         $restaurant,
+//         $ratingRestaurant
+//     );
+// });
 
-      
-        $price = json_decode($product->price, true);
 
-        // $stripeProductId = $stripeProductIds['monthly'];
+// Route::post('/buy', function () {
+//      {/* <form action={route("credit.buy")}
+//                             method="POST"
+//                             className="w-full"
+//                             >
+//                                 <input
+//                                     type="hidden"
+//                                     name="_token"
+//                                     value={csrf_token as string}
+//                                 />
+//                                 <Button className="w-full">Get started</Button>
+//                             </form> */}
+//     $stripe = new \Stripe\StripeClient(env('STRIPE_SECRET'));
+//     $product = Product::first();
 
-      
 
-    $checkout_session = $stripe->checkout->sessions->create([
-        'line_items' => [
-            [
-                'price' => $product->stripe_product_id['monthly'],
-                'quantity' => 1,
-            ],
-        ],
-        'mode' => 'subscription',
-        'success_url' => route('home', [], true),
-        'cancel_url' => route('home', [], true),
-    ]);
-    return redirect($checkout_session->url);
-})->name('credit.buy');
+//         // $stripeProductIds = json_decode($product->stripe_product_id, true);
+
+
+//         $price = json_decode($product->price, true);
+
+//         // $stripeProductId = $stripeProductIds['monthly'];
+//     $checkout_session = $stripe->checkout->sessions->create([
+//         'line_items' => [
+//             [
+//                 'price' => $product->stripe_product_id['monthly'],
+//                 'quantity' => 1,
+//             ],
+//         ],
+//         'mode' => 'subscription',
+//         'success_url' => route('home', [], true),
+//         'cancel_url' => route('home', [], true),
+//     ]);
+//     return redirect($checkout_session->url);
+// })->name('credit.buy');
 
 
 require __DIR__ . '/auth.php';

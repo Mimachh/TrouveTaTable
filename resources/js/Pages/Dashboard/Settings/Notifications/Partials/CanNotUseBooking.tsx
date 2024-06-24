@@ -4,59 +4,65 @@ import ReservationStatus from "@/Components/restaurant-message-status/Reservatio
 import RestaurantStatus from "@/Components/restaurant-message-status/RestaurantStatus";
 import SupportButton from "@/Components/ui/support-button";
 import { isRestaurantMissInformation } from "@/lib/check-missing-information";
+import { cn } from "@/lib/utils";
 import { Restaurant } from "@/types/restaurant";
 import { Link } from "@inertiajs/react";
 
-const CanNotUseBooking = ({ restaurant }: { restaurant: Restaurant }) => {
+interface Props {
+    restaurant: Restaurant;
+    message?: string;
+    sectionClassNames?: string;
+}
+const CanNotUseBooking = (props: Props) => {
+    const {
+        restaurant,
+        message = " Le système de réservation est actuellement désactivé voici les raisons possibles :",
+        sectionClassNames
+    } = props;
     return (
         <div className="">
             <AlertBanner>
                 <div className="space-y-2 text-secondary-foreground">
-                    <p className="text-lg font-semibold">
-                        Le système de réservation est actuellement désactivé
-                        voici les raisons possibles :
-                    </p>
+                    <p className="text-lg font-semibold">{message}</p>
 
-                    <div className="md:w-2/3">
+                    <div className={cn("md:w-2/3", sectionClassNames)}>
                         {!restaurant.accept_reservations && (
                             <ReservationStatus restaurant={restaurant} />
                         )}
                     </div>
-                    <div className="md:w-2/3">
+                    <div className={cn("md:w-2/3", sectionClassNames)}>
                         {!restaurant.active && (
                             <RestaurantStatus restaurant={restaurant} />
                         )}
                     </div>
                     {isRestaurantMissInformation(restaurant) && (
-                        <div className="pl-0.5 w-full flex items-center gap-1">
+                        <div className="flex w-full items-center gap-1 pl-0.5">
                             <Error
                                 message="Des informations nécessaires au
                                             fonctionnement des services sont
                                             manquantes. Veuillez les"
                             />
                             <Link
-                                className="underline text-primaryBlue"
+                                className="text-primaryBlue underline"
                                 href={route(
                                     "dashboard.settings.index",
-                                    restaurant.id
+                                    restaurant.id,
                                 )}
                             >
                                 compléter
                             </Link>
                         </div>
                     )}
-
-                    <div className="pl-0.5">
-                        <Error message="Votre niveau d'abonnement ne le permet pas." />
-                    </div>
                 </div>
             </AlertBanner>
-            <div className="text-muted-foreground text-sm">
+            <div className="text-sm text-muted-foreground">
                 <p>
                     Si vous ne comprenez pas pourquoi vous avez ce message vous
                     pouvez contacter le support client :{" "}
                 </p>
-                <SupportButton />
+            </div>
+            <div className="mt-5 max-w-[280px]">
+                <SupportButton variant="primaryBlue" />
             </div>
         </div>
     );

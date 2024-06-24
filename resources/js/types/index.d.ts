@@ -10,6 +10,7 @@ export interface User {
     invoices: any[];
     isSub: boolean;
     roles: Role[];
+    isFondator: boolean;
 }
 
 export interface Role {

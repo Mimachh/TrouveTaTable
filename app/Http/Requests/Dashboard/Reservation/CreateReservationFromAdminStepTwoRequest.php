@@ -12,7 +12,7 @@ class CreateReservationFromAdminStepTwoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->user()->can('enableBookingForm', $this->route('restaurant'));
     }
 
     /**

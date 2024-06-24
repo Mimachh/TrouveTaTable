@@ -13,7 +13,7 @@ class MailRepository
 
     public function isRestaurantCanSendReservationMail(Restaurant $restaurant): bool
     {
-        return $this->canSendMail($restaurant);
+        return $this->canSendMail($restaurant) && $restaurant->is_notify_client_after_booking;
     }
 
     public function isRestaurantCanSendRatingMail(Restaurant $restaurant): bool
@@ -25,7 +25,7 @@ class MailRepository
 
     }
 
-    private function canSendMail(Restaurant $restaurant): bool {
+    public function canSendMail(Restaurant $restaurant): bool {
         $isMissingInfo = $this->restaurantRepository->isRestaurantMissingInformation($restaurant);
         return !$isMissingInfo && $restaurant->active;
     }

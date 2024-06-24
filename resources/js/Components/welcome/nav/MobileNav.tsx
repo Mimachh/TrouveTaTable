@@ -64,7 +64,7 @@ const MobileNav = (props: ExtendedWelcomeNavProps) => {
                                         open: { rotate: 45, y: 5 },
                                     }}
                                     className={cn(
-                                        "w-6 h-[1px]  block",
+                                        "w-6 h-[1px]  block cursor-pointor",
                                         !mobileNav ? "bg-black" : "bg-green-200"
                                     )}
                                 />

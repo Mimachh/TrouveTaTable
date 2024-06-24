@@ -17,7 +17,7 @@ class DeleteBannerRestaurantController extends Controller
     public function __invoke(Restaurant $restaurant)
     {
         $banner = $restaurant->banner;
-        if($banner) {
+        if($banner && auth()->user()->can('updateBanner', $restaurant)) {
             $reformatPath = $this->restaurantRepository->reformatFileURL($restaurant->banner);
             Storage::disk('public')->delete($reformatPath);
             $restaurant->update(['banner' => null]);

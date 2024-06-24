@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\Dashboard\Settings;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
 
 class ChangeRestaurantStatusRequest extends FormRequest
 {

@@ -11,7 +11,7 @@ class EnableOrDisableRestaurantReservationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return auth()->user()->can('enableBookingForm', $this->restaurant);
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Http\Resources\ReservationResource;
 use App\Http\Resources\RestaurantResource;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -26,8 +27,9 @@ class ReservationCreatedMail extends Mailable implements ShouldQueue
      */
     public function envelope(): Envelope
     {
+        $defaultAddress = config('mail.from.address');
         return new Envelope(
-            // from: new Address($this->restaurant['email'], $this->restaurant['name']),
+            from: new Address($defaultAddress, $this->restaurant['name']),
             subject: 'Nouvelle réservation !',
         );
     }

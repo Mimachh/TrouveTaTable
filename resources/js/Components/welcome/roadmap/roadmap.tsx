@@ -1,4 +1,5 @@
-import React from "react";
+import { m } from "framer-motion";
+import { forwardRef } from "react";
 const data = [
     {
         date: "Juillet 2024",
@@ -25,10 +26,21 @@ const data = [
             "Intégration d'un système de click and collect pour permettre à vos clients de commander et de venir récupérer leur commande en restaurant. Vous pourrez, en supplément, activer le paiement en ligne de leur commande pour limiter les contacts en restaurant.",
     },
 ];
-const Roadmap = () => {
+const Roadmap = forwardRef<HTMLDivElement>((props, ref) => {
+    const container = {
+        hidden: { opacity: 0 },
+        show: {
+            opacity: 1,
+            transition: { staggerChildren: 0.2, delayChildren: 0.4 },
+        },
+    };
+    const children = {
+        hidden: { opacity: 0, y: 20 },
+        show: { opacity: 1, y: 0 },
+    };
     return (
-        <div className=" overflow-hidden">
-            <div className="relative py-24 px-4 w-full max-w-4xl mx-auto">
+        <div ref={ref} {...props} id="Roadmap" className="overflow-hidden">
+            <div className="relative mx-auto w-full max-w-4xl px-4 py-24">
                 {/* <svg
                     viewBox="0 0 1208 1024"
                     aria-hidden="true"
@@ -48,20 +60,30 @@ const Roadmap = () => {
                         </radialGradient>
                     </defs>
                 </svg> */}
-                <h3 className="text-center mb-10 header-welcome text-neutral-700  font-bold md:text-5xl text-2xl">
+                <h3 className="header-welcome mb-10 text-center text-2xl font-bold text-neutral-700 md:text-5xl">
                     Roadmap
                 </h3>
-                <div className=" px-4 max-w-4xl mx-auto">
+                <m.div
+                    variants={container}
+                    initial="hidden"
+                    whileInView={"show"}
+                    className="mx-auto max-w-4xl px-4"
+                >
                     {data.map((item, index) => (
-                        <div
+                        <m.div
                             key={index}
-                            className="relative pl-8 sm:pl-32 py-6 group"
+                            variants={children}
+                            transition={{
+                                duration: 1.5,
+                                type: "spring",
+                            }}
+                            className="group relative py-6 pl-8 sm:pl-32"
                         >
-                            <div className="flex flex-col sm:flex-row items-start mb-1 group-last:before:hidden before:absolute before:left-2 sm:before:left-0 before:h-full before:px-px before:bg-welcomePrimary sm:before:ml-[6.5rem] before:self-start before:-translate-x-1/2 before:translate-y-3 after:absolute after:left-2 sm:after:left-0 after:w-2 after:h-2 after:bg-green-900 after:border-4 after:box-content after:border-welcomeBackground/90 after:rounded-full sm:after:ml-[6.5rem] after:-translate-x-1/2 after:translate-y-1.5">
-                                <time className="sm:absolute left-1 -translate-x-3 translate-y-0.5 inline-flex items-center justify-center text-xs font-semibold uppercase w-fit min-w-20 h-fit px-1.5 min-h-6 mb-3 sm:mb-0 text-green-900 bg-welcomeBackground rounded-full">
+                            <div className="mb-1 flex flex-col items-start before:absolute before:left-2 before:h-full before:-translate-x-1/2 before:translate-y-3 before:self-start before:bg-welcomePrimary before:px-px after:absolute after:left-2 after:box-content after:h-2 after:w-2 after:-translate-x-1/2 after:translate-y-1.5 after:rounded-full after:border-4 after:border-welcomeBackground/90 after:bg-green-900 group-last:before:hidden sm:flex-row sm:before:left-0 sm:before:ml-[6.5rem] sm:after:left-0 sm:after:ml-[6.5rem]">
+                                <time className="left-1 mb-3 inline-flex h-fit min-h-6 w-fit min-w-20 -translate-x-3 translate-y-0.5 items-center justify-center rounded-full bg-welcomeBackground px-1.5 text-xs font-semibold uppercase text-green-900 sm:absolute sm:mb-0">
                                     {item.date}
                                 </time>
-                                <div className="text-neutral-800 text-xl font-bold ">
+                                <div className="text-xl font-bold text-neutral-800">
                                     {item.goal}
                                 </div>
                             </div>
@@ -69,12 +91,12 @@ const Roadmap = () => {
                             <div className="text-green-900/80">
                                 {item.content}
                             </div>
-                        </div>
+                        </m.div>
                     ))}
-                </div>
+                </m.div>
             </div>
         </div>
     );
-};
+});
 
 export default Roadmap;

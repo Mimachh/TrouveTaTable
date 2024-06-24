@@ -11,16 +11,28 @@ import {
     CardHeader,
     CardTitle,
 } from "@/Components/ui/card";
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { Button } from "@/Components/ui/button";
 import { ArrowRight, Copy } from "lucide-react";
+import useToastErrorNotFondator from "@/hooks/fondator/useToastErrorNotFondator";
+import { User } from "@/types";
 
 interface Props {
     restaurant: Restaurant;
+    can: {
+        deleteRestaurantService: boolean;
+        enableBookingForm: boolean;
+    };
 }
 
 const AcceptReservation = (props: Props) => {
-    const { restaurant } = props;
+    const { restaurant, can } = props;
+
+    const pageProps = usePage().props;
+    const auth = pageProps.auth as unknown as any;
+    const user = auth.user as User;
+    
+    const { showErrorToast } = useToastErrorNotFondator();
 
     const [loading, setLoading] = useState<boolean>(false);
     const [acceptReservation, setAcceptReservation] = useState<boolean>(
@@ -32,6 +44,17 @@ const AcceptReservation = (props: Props) => {
     });
 
     const submit = (e: boolean) => {
+        if(!user?.isFondator) {
+            showErrorToast({
+                message: "Votre niveau d'abonnement ne vous permet pas d'activer le système de messagerie.",
+                action: "Mettre à niveau",
+            });
+            return;
+        }
+        if(!can.enableBookingForm) {
+            toast.error("Vous n'avez pas la permission de modifier ce paramètre");
+            return
+        }
         setLoading(true);
         setErrors({
             accept_reservations: "",
@@ -81,11 +104,23 @@ const AcceptReservation = (props: Props) => {
                     className="flex gap-6 w-full items-center border border-muted rounded-lg p-4
                     bg-background space-y-0
                     "
-                    error={errors.accept_reservations}
+                    error={errors?.accept_reservations ?? ""}
                 >
                     <Switch
                         checked={acceptReservation}
+                        disabled={loading}
                         onCheckedChange={(e) => {
+                            if(!user?.isFondator) {
+                                showErrorToast({
+                                    message: "Votre niveau d'abonnement ne vous permet pas d'activer le système de messagerie.",
+                                    action: "Mettre à niveau",
+                                });
+                                return; 
+                            }
+                            if(!can.enableBookingForm) {
+                                toast.error("Vous n'avez pas la permission de modifier ce paramètre");
+                                return
+                            }
                             setAcceptReservation(() => {
                                 submit(e);
                                 return e;

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\Settings\ChangeRestaurantStatusRequest;
 use App\Http\Responses\ApiResponse;
 use App\Models\Restaurant;
-
 class ChangeRestaurantStatusController extends Controller
 {
     public function __invoke(ChangeRestaurantStatusRequest $request, Restaurant $restaurant)

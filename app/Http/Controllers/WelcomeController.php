@@ -9,15 +9,12 @@ use Inertia\Inertia;
 
 class WelcomeController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
+
     public function __invoke(Request $request)
     {
-        $products = new ProductResource(Product::first());
-   
+        $products = new ProductResource(Product::first());   
         return Inertia::render('Welcome', [
-            'products' => $products
+            'products' => $products,
         ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Restaurant\Contact;
 use App\Http\Requests\SendMessageToRestaurantRequest;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
@@ -16,6 +17,6 @@ class SendMessageToRestaurantController extends Controller
         $data = $request->validated();
         $restaurant = Restaurant::findOrFail($data['restaurant_id']);
         $restaurant->messages()->create($data);
-        
+        (new Contact())->sendMail($restaurant);
     }
 }

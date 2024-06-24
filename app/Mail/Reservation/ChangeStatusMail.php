@@ -52,8 +52,9 @@ class ChangeStatusMail extends Mailable
      */
     public function envelope(): Envelope
     {
+        $defaultAddress = config('mail.from.address');
         return new Envelope(
-            from: new Address($this->restaurant['email'], $this->restaurant['name']),
+            from: new Address($defaultAddress, $this->restaurant['name']),
             subject: $this->subject,
         );
     }

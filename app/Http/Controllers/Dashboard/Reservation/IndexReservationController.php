@@ -17,6 +17,9 @@ class IndexReservationController extends Controller
         $restaurantResource = new RestaurantResource($restaurant);
         return inertia('Dashboard/Reservation/Index', [
             "restaurant" => $restaurantResource,
+            "can" => [
+                "enableBookingForm" => auth()->user()->can('enableBookingForm', $restaurant),
+            ],
         ]);
     }
 }

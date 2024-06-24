@@ -7,10 +7,14 @@ import {
     QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";
 import { Phone } from "lucide-react";
+import { forwardRef } from "react";
 
-const Contact = () => {
+const Contact = forwardRef<HTMLDivElement>((props, ref) => {
     return (
-        <div className="md:-mt-20 md:mb-20 h-fit md:h-[32rem] md:bg-transparent isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
+        <div
+        id="Contact"
+        ref={ref} {...props}
+        className="md:-mt-20 md:mb-36 h-fit md:h-[32rem] md:bg-transparent isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
             <div className="mx-auto max-w-2xl sm:text-center">
                 <h3 className="header-welcome  text-neutral-800  font-bold md:text-5xl text-2xl">
                     Nous contacter
@@ -89,6 +93,6 @@ const Contact = () => {
             </div>
         </div>
     );
-};
+});
 
 export default Contact;
