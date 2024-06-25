@@ -8,7 +8,6 @@ export interface User {
     available_credits: number;
     subscriptions? : Subscription[];
     invoices: any[];
-    isSub: boolean;
     roles: Role[];
     isFondator: boolean;
 }

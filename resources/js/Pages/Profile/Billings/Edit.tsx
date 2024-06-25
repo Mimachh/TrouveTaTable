@@ -92,7 +92,7 @@ function Edit({
                     </div>
 
                     <div className="bg-secondary p-4 shadow sm:rounded-lg sm:p-8">
-                        {auth.user?.isSub ? (
+                        {auth.user?.isFondator ? (
                             <CancelSubscription
                                 className=""
                                 subscriptions={subscriptions}

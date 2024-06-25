@@ -3,7 +3,6 @@ import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
-import { Button } from "../ui/button";
 import { User } from "@/types";
 import { useState } from "react";
 import { isRole } from "@/lib/user-roles";
@@ -40,7 +39,7 @@ const MainNav = ({ user }: { user: User }) => {
                                 Devis
                             </NavLink>
 
-                            {user.isSub || isAdmin ? (
+                            {user.isFondator || isAdmin ? (
                                 <NavLink
                                     href={route("facture.index")}
                                     active={route().current("facture.index")}
@@ -56,7 +55,7 @@ const MainNav = ({ user }: { user: User }) => {
                     </div>
 
                     <div className="flex items-center">
-                        {isAdmin ? null : user.isSub ? null : (
+                        {isAdmin ? null : user.isFondator ? null : (
                             <>
                                 <p className="font-semibold text-sm text-muted-foreground">
                                     {user.available_credits} crédits restants

@@ -23,7 +23,6 @@ class UserResource extends JsonResource
             'email_verified_at' => $this->email_verified_at,
             'roles' => $this->roles,
             'trial_ends_at' => $this->trial_ends_at,
-            'isSub' => $this->isSub(),
             'isFondator' => (new UserRepository())->isFondator($this->id),
             'subscriptions' => $this->whenLoaded('subscriptions'),
         ];

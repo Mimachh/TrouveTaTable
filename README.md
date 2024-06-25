@@ -51,3 +51,4 @@ nettoyer et clarifier index de reservation.
 - CE SOIR : 
     - corriger le message d'erreur qui apparait vite fait
     - vérifier les crons : le rappel fonctionne, les mails normaux s'envoient.
+    

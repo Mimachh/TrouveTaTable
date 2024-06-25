@@ -9,6 +9,7 @@ use App\Mail\Rating\SendRatingMailToClient;
 use App\Models\RatingToken;
 use App\Models\Reservation;
 use App\Models\Restaurant;
+use App\Repositories\UserRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 
@@ -98,8 +99,8 @@ class GenerateRatingMail
 
     private function ownerCanEnableRating($owner): bool 
     {
-        return $owner->isSub($owner);
-
+        return (new UserRepository())->isFondator($owner->id);
+        
 
         // $user = new UserResource($owner->id);
         // return $user->isFondator();
