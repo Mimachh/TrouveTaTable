@@ -5,11 +5,13 @@ import { Input } from "@/Components/ui/input";
 import { router, useForm } from "@inertiajs/react";
 import { FormEventHandler, useEffect } from "react";
 import { AuthFormProps } from "../Register/RegisterForm";
+import { useAuthModal } from "@/hooks/usAuthModal";
 
 interface Props extends AuthFormProps {
     canResetPassword?: boolean;
 }
 const LoginForm = (props: Props) => {
+    const contactModalOnClose = useAuthModal.use.onClose();
     const {
         canResetPassword = true,
         mode,
@@ -29,9 +31,14 @@ const LoginForm = (props: Props) => {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-
+      
         post(route("login"), {
             preserveScroll: true,
+            onSuccess: () => {
+                if(mode == "modal") {
+                    contactModalOnClose()
+                }
+            }
         });
     };
     return (

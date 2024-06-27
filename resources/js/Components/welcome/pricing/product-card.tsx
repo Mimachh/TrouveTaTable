@@ -20,7 +20,7 @@ const ProductCard = (props: Props) => {
         <div
             className={cn(
                 products.mostPopular
-                    ? "z-10 bg-secondary shadow-xl ring-1 ring-green-900/10"
+                    ? "z-10 dark:bg-secondary-foreground bg-secondary shadow-xl ring-1 ring-green-900/10"
                     : "bg-gray-800/80 ring-1 ring-white/10 lg:bg-transparent lg:pb-14 lg:ring-0",
                 "relative rounded-2xl border border-welcomePrimary md:col-start-2",
             )}
@@ -33,7 +33,7 @@ const ProductCard = (props: Props) => {
                             products.mostPopular
                                 ? "text-gray-900"
                                 : "text-white",
-                            "text-sm font-semibold leading-6",
+                            "text-lg font-semibold leading-6",
                         )}
                     >
                         {products.name}
@@ -51,7 +51,7 @@ const ProductCard = (props: Props) => {
                                 products.mostPopular
                                     ? "text-gray-900"
                                     : "text-white",
-                                "text-4xl font-bold tracking-tight",
+                                "text-4xl font-bold tracking-tight w-full text-center",
                             )}
                         >
                             <PricingContent
@@ -59,7 +59,7 @@ const ProductCard = (props: Props) => {
                                 frequency={frequency}
                             />{" "}
                         </div>
-                        <div className="text-sm leading-5">
+                        {/* <div className="text-sm leading-5">
                             <p
                                 className={
                                     products.mostPopular
@@ -82,7 +82,7 @@ const ProductCard = (props: Props) => {
                                     {frequency.label}
                                 </span>
                             </p>
-                        </div>
+                        </div> */}
                     </div>
                     <ButtonLink tier={products} frequency={frequency} />
                 </div>
@@ -134,13 +134,13 @@ function PricingContent({ tier, frequency }: { tier: any; frequency: any }) {
         : `${formatPriceFromCents(price, false)} €`;
 
     return (
-        <div className="w-full">
+        <div className="w-full my-2">
             {priceText && (
                 <>
-                    <span className="text-4xl font-bold tracking-tight text-gray-900">
+                    <span className="text-5xl font-bold tracking-tight text-gray-900">
                         {priceText}
                     </span>
-                    <span className="text-sm font-semibold leading-6 text-gray-600">
+                    <span className="text-base font-semibold leading-6 text-gray-600">
                         {frequency.priceSuffix}
                     </span>
                 </>

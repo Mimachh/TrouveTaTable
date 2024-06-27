@@ -1,3 +1,4 @@
+import { router } from "@inertiajs/react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -12,7 +13,9 @@ const useToastErrorNotFondator = () => {
         toast.error(message, {
             action: {
                 label: action,
-                onClick: () => {},
+                onClick: () => {
+                    router.visit(route('prices'))
+                },
             },
         });
     };

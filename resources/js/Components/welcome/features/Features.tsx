@@ -92,14 +92,14 @@ const Features = forwardRef<HTMLDivElement>((props, ref) => {
                 <h3 className="header-welcome tracking-tight text-center mb-10 mt-6 text-2xl font-bold text-neutral-800 md:mt-0  md:text-5xl">
                     Est-ce que ce service est fait pour moi ?
                 </h3>
-                <div className="items-center justify-center p-4 md:max-w-4xl mx-auto">
+                <div className="items-center justify-center p-4 md:max-w-4xl mx-auto overflow-x-hidden">
                     <div className="items-center justify-between md:flex">
                         <m.div
                             variants={container}
                             initial="hidden"
                             whileInView={"show"}
                             
-                            className="gap-5 space-y-5 md:grid md:grid-cols-2 md:space-y-0"
+                            className="gap-5 space-y-5 md:grid md:grid-cols-2 md:space-y-0 "
                         >
                             <m.div variants={childrenX}
                             transition={{
@@ -107,9 +107,9 @@ const Features = forwardRef<HTMLDivElement>((props, ref) => {
                                 type: "spring",
                             }}
                             >
-                                <Card className="h-full bg-[#D87093]/5 py-5">
+                                <Card className="h-full bg-[#D87093]/5 py-5 dark:text-secondary">
                                     <CardContent>
-                                        <span className="font-semibold text-[#D87093]">
+                                        <span className="font-semibold text-[#D87093] ">
                                             Vous dirigez un restaurant
                                         </span>{" "}
                                         et cherchez à automatiser la
@@ -126,7 +126,7 @@ const Features = forwardRef<HTMLDivElement>((props, ref) => {
                                 type: "spring",
                             }}
                             >
-                                <Card className="h-full bg-welcomeBackground/40 py-5">
+                                <Card className="h-full bg-welcomeBackground/40 py-5 dark:text-secondary">
                                     <CardContent>
                                         <span className="font-semibold text-green-950">
                                             Vous êtes restaurateur / gérant d'un
@@ -144,7 +144,7 @@ const Features = forwardRef<HTMLDivElement>((props, ref) => {
                                 type: "spring",
                             }}
                             >
-                                <Card className="h-full bg-[#4682B4]/20 py-5">
+                                <Card className="h-full bg-[#4682B4]/20 py-5 dark:text-secondary">
                                     <CardContent>
                                         <span className="font-semibold text-[#4682B4]">
                                             Vous avez un restaurant{" "}
@@ -160,7 +160,7 @@ const Features = forwardRef<HTMLDivElement>((props, ref) => {
                                 type: "spring",
                             }}
                             >
-                                <Card className="h-full bg-[#f9a825]/15 py-5">
+                                <Card className="h-full bg-[#f9a825]/15 py-5 dark:text-secondary">
                                     <CardContent>
                                         <span className="font-semibold text-[#f9a825]">
                                             Votre restaurant{" "}

@@ -14,7 +14,7 @@ const GoProfileButton = (props: Props) => {
     onClick={() => {
         router.visit(route('profile.edit'))
     }}
-    variant={"default"} className={cn("px-5 rounded-full text-muted/90 bg-neutral-800", className)} type="button">
+    variant={"default"} className={cn("px-5 rounded-full text-muted/90 dark:text-white bg-neutral-800", className)} type="button">
         <span>Mon profil</span>
         <ArrowRight className="w-4 h-4 ml-2" />
     </Button>

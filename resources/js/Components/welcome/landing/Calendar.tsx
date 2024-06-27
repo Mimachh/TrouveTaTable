@@ -100,7 +100,7 @@ const LandingCalendar = ({
                 </Button>
             </div>
             <div className="border mt-10 rounded-lg border-welcomePrimary overflow-hidden">
-                <div className="bg-welcomeBackground/60 py-1   grid grid-cols-7 text-center text-xs leading-6 text-secondary-foreground">
+                <div className="bg-welcomeBackground/60 py-1   grid grid-cols-7 text-center text-xs leading-6 dark:text-secondary text-secondary-foreground">
                     <div>L</div>
                     <div>Ma</div>
                     <div>Mer</div>
@@ -123,7 +123,7 @@ const LandingCalendar = ({
                                 type="button"
                                 className={classNames(
                                     isEqual(day, selectedDay) &&
-                                        "text-secondary-foreground/80",
+                                        "text-secondary-foreground/80 dark:text-secondary/80",
                                     !isEqual(day, selectedDay) &&
                                         isToday(day) &&
                                         "text-primaryBlue/80",
@@ -133,7 +133,7 @@ const LandingCalendar = ({
                                             day,
                                             firstDayCurrentMonth
                                         ) &&
-                                        "text-foreground",
+                                        "text-foreground dark:text-background hover:dark:text-foreground",
                                     !isEqual(day, selectedDay) &&
                                         !isToday(day) &&
                                         !isSameMonth(
@@ -148,7 +148,7 @@ const LandingCalendar = ({
                                         !isToday(day) &&
                                         "bg-secondary",
                                     !isEqual(day, selectedDay) &&
-                                        "hover:bg-secondary",
+                                        "hover:bg-secondary ",
 
                                     "mx-auto flex h-9 w-9 items-center justify-center rounded-full relative"
                                 )}

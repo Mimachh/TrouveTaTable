@@ -80,7 +80,7 @@ const Contact = forwardRef<HTMLDivElement>((props, ref) => {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col items-center justify-center gap-5">
+                <div className="flex flex-col items-center justify-center gap-5 text-neutral-950">
                     <AppContactButton />
                     <p>OU</p>
                     <div className="flex flex-col items-center gap-3">

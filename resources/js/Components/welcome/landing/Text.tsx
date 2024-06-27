@@ -30,7 +30,7 @@ const Text = () => {
                     </span>
                     <Link
                         href={"/changelog"}
-                        className="flex items-center gap-1"
+                        className="flex items-center gap-1 dark:text-neutral-600"
                     >
                         <span>Lancement de la v1 </span>
                         <ChevronRight className="w-4 h-4" />
@@ -81,7 +81,7 @@ const Text = () => {
                     delay: 0.5,
                     ease: [0.4, 0.0, 0.2, 1],
                 }}
-                className="w-full flex-wrap"
+                className="w-full flex-wrap dark:text-muted"
             >
                 Découvrez TrouveTaTable.fr notre plateforme pour restaurateurs.
                 Concentrez-vous sur vos clients, pas sur la gestion.

@@ -148,7 +148,7 @@ const MobileNav = (props: ExtendedWelcomeNavProps) => {
                                                 handleTabClick(tab.id);
                                                 toggleMobileNav();
                                             }}
-                                            className="text-5xl rounded-full transition px-3 py-2 font-normal text-green-850/40 outline-2 outline-welcomeBackground focus-visible:outline"
+                                            className="text-4xl rounded-full transition px-5 py-2 font-normal text-green-850/40 outline-2 outline-welcomeBackground focus-visible:outline"
                                         >
                                             {activeTab === tab.id && (
                                                 <motion.span
@@ -159,14 +159,14 @@ const MobileNav = (props: ExtendedWelcomeNavProps) => {
                                                     className="bg-welcomePrimary/70 absolute inset-0"
                                                 />
                                             )}
-                                            <span className="relative z-10 mix-blend-darken">
+                                            <span className="relative z-10 !dark:mix-blend-darken dark:text-black">
                                                 {tab.label}
                                             </span>
                                         </p>
                                     </li>
                                 ))}
 
-                                <li>
+                                {/* <li>
                                     <a
                                         href="#"
                                         className="text-5xl font-semibold text-white"
@@ -181,9 +181,9 @@ const MobileNav = (props: ExtendedWelcomeNavProps) => {
                                     >
                                         Link #3
                                     </a>
-                                </li>
+                                </li> */}
                             </motion.ul>
-                            <motion.div
+                            {/* <motion.div
                                 variants={{
                                     hide: {
                                         y: "25%",
@@ -218,7 +218,7 @@ const MobileNav = (props: ExtendedWelcomeNavProps) => {
                                 <li>
                                     <div className="bg-white rounded-lg w-8 h-8"></div>
                                 </li>
-                            </motion.ul>
+                            </motion.ul> */}
                         </motion.div>
                     </MotionConfig>
                 )}

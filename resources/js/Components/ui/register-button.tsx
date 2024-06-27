@@ -20,7 +20,7 @@ const RegisterButton = (props: Props) => {
             authModalSetTab("register")
             authModalOnOpen()
         }}
-        variant={"default"} className={cn("px-5 rounded-full text-muted/90 bg-neutral-800", className)} type="button">
+        variant={"default"} className={cn("px-5 rounded-full text-muted/90 dark:text-muted-foreground bg-neutral-800", className)} type="button">
             <span>Inscription</span>
             <ArrowRight className="w-4 h-4 ml-2" />
         </Button>

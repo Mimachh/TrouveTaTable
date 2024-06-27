@@ -4,8 +4,8 @@ import { router } from "@inertiajs/react";
 const Footer = () => {
     return (
         <div>
-            <div className="h-24 flex flex-col items-center justify-center w-full gap-3">
-                <div>LOGO</div>
+            <div className="h-20 flex flex-col items-center justify-center w-full gap-3">
+                {/* <div>LOGO</div> */}
                 <div>
                     <ul className="flex items-center justify-center gap-3 leading-4 text-sm text-green-800 tracking-tight">
                         <li>
@@ -36,7 +36,7 @@ const Footer = () => {
                     </ul>
                 </div>
             </div>
-            <div className="border-t h-12 flex items-center justify-center">
+            <div className="border-t h-12 flex items-center justify-center dark:text-neutral-800">
                 <small>
                     © {new Date().getFullYear()} TrouveTaTable.fr - Tous droits réservés
                 </small>

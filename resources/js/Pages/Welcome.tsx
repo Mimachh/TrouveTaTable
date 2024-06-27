@@ -40,7 +40,7 @@ export default function Welcome({ auth, products }: WelcomeProps) {
         <ToastProvider>
             <AuthModal />
             <LazyMotion features={domAnimation}>
-                <div className="min-h-[300vh] bg-background">
+                <div className="min-h-[300vh] bg-background dark:bg-foreground">
                     <Head title="Welcome" />
                     <Index tabs={tabs} sectionRefs={sectionRefs} />
                     <LandingHeader

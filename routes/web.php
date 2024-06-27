@@ -38,6 +38,7 @@ use App\Http\Controllers\Dashboard\Tables\DeleteTableController;
 use App\Http\Controllers\Dashboard\Tables\IndexTableController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Newsletter\SubscribeToNewsletterController;
+use App\Http\Controllers\PricingController;
 use App\Http\Controllers\Profile\BillingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Public\Contact\IndexRestaurantContactController;
@@ -71,6 +72,7 @@ Route::middleware('guest')->get('/compte-supprime', function () {
 
 
 Route::get('/', WelcomeController::class)->name('home');
+Route::get('/prices', PricingController::class)->name('prices');
 Route::get('/changelog', IndexChangelogController::class)->name('changelog');
 Route::post('/newsletter', AppNewsletterController::class)->name('newsletter.app.subscribe');
 Route::post('/contact', CreateContactController::class)->name('contact.create');

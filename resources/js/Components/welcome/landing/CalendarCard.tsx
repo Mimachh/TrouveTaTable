@@ -63,16 +63,16 @@ const CalendarCard = () => {
                     <HeroHighlight containerClassName="h-fit block">
                         <div className="grid grid-cols-5 gap-3">
                             <div className="col-span-2">
-                                <h3 className="font-semibold  text-lg mt-10">
+                                <h3 className="font-semibold  text-lg mt-10 dark:text-black">
                                     Réserver votre table
                                 </h3>
-                                <small className="py-3 inline-block italic">
+                                <small className="dark:text-muted py-3 inline-block italic">
                                     Restaurant Le Superbe
                                 </small>
 
-                                <p className="flex items-center gap-3 text-sm pb-3">
+                                <p className="flex items-center gap-3 text-sm pb-3 dark:text-muted/80">
                                     <span>
-                                        <Calendar className="w-5 h-5 fill-welcomeBackground/80" />
+                                        <Calendar className="w-5 h-5 fill-welcomeBackground/80 dark:fill-welcomeBackground" />
                                     </span>
                                     <span>
                                         {format(selectedDay, "dd MMMM yyyy", {
@@ -81,9 +81,9 @@ const CalendarCard = () => {
                                     </span>
                                 </p>
 
-                                <p className="flex items-center gap-3 text-sm pb-3">
+                                <p className="flex items-center gap-3 text-sm pb-3 dark:text-muted/80">
                                     <span>
-                                        <Clock className="w-5 h-5 fill-welcomeBackground/80" />
+                                        <Clock className="w-5 h-5 fill-welcomeBackground/80 dark:fill-welcomeBackground" />
                                     </span>
                                     <span>
                                         {format(new Date(), "HH:mm", {
@@ -92,9 +92,9 @@ const CalendarCard = () => {
                                     </span>
                                 </p>
 
-                                <p className="flex items-center gap-3 text-sm">
+                                <p className="flex items-center gap-3 text-sm dark:text-muted/80">
                                     <span>
-                                        <User2 className="w-5 h-5 fill-welcomeBackground/80" />
+                                        <User2 className="w-5 h-5 fill-welcomeBackground/80 dark:fill-welcomeBackground" />
                                     </span>
                                     <span>3 personnes</span>
                                 </p>

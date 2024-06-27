@@ -83,12 +83,12 @@ const Roadmap = forwardRef<HTMLDivElement>((props, ref) => {
                                 <time className="left-1 mb-3 inline-flex h-fit min-h-6 w-fit min-w-20 -translate-x-3 translate-y-0.5 items-center justify-center rounded-full bg-welcomeBackground px-1.5 text-xs font-semibold uppercase text-green-900 sm:absolute sm:mb-0">
                                     {item.date}
                                 </time>
-                                <div className="text-xl font-bold text-neutral-800">
+                                <div className="text-lg font-bold text-neutral-800">
                                     {item.goal}
                                 </div>
                             </div>
 
-                            <div className="text-green-900/80">
+                            <div className="text-green-900/80 text-sm">
                                 {item.content}
                             </div>
                         </m.div>

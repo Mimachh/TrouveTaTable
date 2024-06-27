@@ -18,11 +18,12 @@ interface StarterPriceProps {
 
 const StarterPrice = forwardRef<HTMLDivElement, StarterPriceProps>(
     ({ products, ...props }, ref) => {
+
         const [frequency, setFrequency] = useState(frequencies[0]);
 
         return (
             <div
-                ref={ref}
+          
                 {...props}
                 id="Price"
                 className="isolate overflow-hidden"
@@ -37,7 +38,7 @@ const StarterPrice = forwardRef<HTMLDivElement, StarterPriceProps>(
                                 Un prix unique, tout inclus, tout illimité. Pas
                                 de frais cachés. Pas de surprises. Vous avez
                                 accès à toutes les fonctionnalités actuelles et
-                                à futures de notre plateforme.
+                                futures de notre plateforme.
                             </p>
                             <div className="mt-16 flex justify-center">
                                 <fieldset aria-label="Payment frequency">
@@ -80,7 +81,7 @@ const StarterPrice = forwardRef<HTMLDivElement, StarterPriceProps>(
                         </div>
                     </div>
                 </div>
-                <div className="relative bg-background md:pt-24">
+                <div className="relative bg-background dark:bg-foreground md:pt-24">
                     {/* <div className="mx-auto max-w-7xl px-6 py-24 sm:py-32 lg:px-8">
             
                 </div> */}
