@@ -77,6 +77,15 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        
+        $user2 = User::factory()->create(
+            [
+                'name' => 'Franck',
+                'email' => 'franck@franck.com',
+                'password' => bcrypt('password'),
+            ]
+        );
+
         $adminRole = Role::where('slug', 'admin')->first();
 
         if ($adminRole) {
