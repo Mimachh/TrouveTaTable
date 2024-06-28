@@ -59,7 +59,7 @@ class Stats
         $totalReservationOfThePreviousMonth
     )
     {
-        if ($reservationsOfTheMonth->sum('guests') === 0) {
+        if ($totalReservationOfThePreviousMonth->sum('guests') === 0) {
             return 0;
         }
 

@@ -53,6 +53,10 @@ return Application::configure(basePath: dirname(__DIR__))
             ->dailyAt('17:00')
             ->withoutOverlapping();
 
+        $schedule->command('app:generate-sitemap')
+            ->dailyAt('23:00')
+            ->withoutOverlapping();
+
         $schedule->command('app:check-subscription-job')
             ->dailyAt('00:00')
             ->withoutOverlapping();
