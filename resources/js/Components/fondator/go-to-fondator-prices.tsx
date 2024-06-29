@@ -2,6 +2,7 @@ import React, { FC } from "react";
 
 import { LoaderCircle } from "lucide-react";
 import { Button } from "../ui/button";
+import { router } from "@inertiajs/react";
 
 interface SubmitButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
     disabled?: boolean;
@@ -23,7 +24,7 @@ const GoToFondatorPrices: FC<SubmitButtonProps> = ({
             type={"button"}
             size={s}
             onClick={() => {
-                console.log("Go to fondator prices");
+                router.visit(route('prices'))
             }}
         >
             {disabled ? (
