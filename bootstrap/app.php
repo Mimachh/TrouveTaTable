@@ -48,7 +48,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('app:send-mail-after-reservation-job')
             ->dailyAt('08:00')
             ->withoutOverlapping();
-            
+        
+            $schedule->command('app:send-mail-after-reservation-job')
+            ->everyMinute()
+            ->withoutOverlapping();
+
         $schedule->command('app:booking-reminder-job')
             ->dailyAt('17:00')
             ->withoutOverlapping();
