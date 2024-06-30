@@ -4,25 +4,31 @@ export type IconName =
   | "x"
   | "visa"
   | "user"
+  | "up"
   | "trash"
   | "settings"
   | "plus"
   | "pencil"
   | "mastercard"
+  | "kitchen"
   | "credit-card"
   | "check"
+  | "cal"
   | "arrow-left"
 
 export const iconNames = [
   "x",
   "visa",
   "user",
+  "up",
   "trash",
   "settings",
   "plus",
   "pencil",
   "mastercard",
+  "kitchen",
   "credit-card",
   "check",
+  "cal",
   "arrow-left",
 ] as const

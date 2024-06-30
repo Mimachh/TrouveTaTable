@@ -9,9 +9,9 @@ class ScheduleBootstrapper
     // php artisan schedule:list
     public function __invoke(Schedule $schedule): void
     {
-        $schedule->command('queue:work --stop-when-empty')
-            ->everyMinute()
-            ->withoutOverlapping();
+        // $schedule->command('queue:work --stop-when-empty')
+        //     ->everyMinute()
+        //     ->withoutOverlapping();
 
         // $schedule->command('backup:run')
         //     ->hourly()

@@ -1,8 +1,7 @@
-import { Head, Link } from "@inertiajs/react";
+import { Head } from "@inertiajs/react";
 import { PageProps, User } from "@/types";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import { Restaurant } from "@/types/restaurant";
-import { ChartBarIcon } from "@heroicons/react/24/outline";
 import ReservationStatus from "@/Components/restaurant-message-status/ReservationStatus";
 import RestaurantStatus from "@/Components/restaurant-message-status/RestaurantStatus";
 import MessageStatus from "@/Components/restaurant-message-status/MessageStatus";
@@ -10,6 +9,8 @@ import ServicesStatus from "@/Components/restaurant-message-status/ServicesStatu
 import MissingInfoRestaurant from "@/Components/MissingInfoRestaurant";
 
 import ErrorMustBeFondator from "@/Components/fondator/message-error-must-be-fondator";
+import Stats from "./Partials/Stats";
+import ServiceOfToday from "./Partials/ServiceOfToday";
 
 type DashboardProps = PageProps & {
     restaurants: Restaurant[];
@@ -17,20 +18,14 @@ type DashboardProps = PageProps & {
         data: Restaurant;
     };
     isMissingInfo: boolean;
-    stats: {
-        reservation_percentage: number | null;
-        guests_percentage: number | null;
-        reservation_month: number | null;
-        guests_month: number | null;
-    }
 };
+
 const Dashboard = ({
     auth,
     flash,
     restaurants,
     restaurant: resto,
     isMissingInfo,
-    stats
 }: DashboardProps) => {
     const restaurant = resto.data;
     const user = auth.user as User;
@@ -52,10 +47,9 @@ const Dashboard = ({
                 restaurant={restaurant}
                 user={user}
             />
-      
 
-            <div className="grid gap-2 md:grid-cols-3">
-                <div className="bg-secondary md:col-span-1">
+            <div className="flex items-center gap-3">
+                <div className="rounded-md border bg-secondary md:w-2/3 w-full h-48">
                     <div className="flex flex-col items-center gap-2 py-8">
                         <h1 className="text-4xl font-extrabold lg:text-6xl">
                             {time}
@@ -66,25 +60,11 @@ const Dashboard = ({
                         <p>Restaurant : {restaurant.name}</p>
                     </div>
                 </div>
-                <div className="bg-secondary md:col-span-2">
-                    Service du jour : 
-                </div>
+                <ServiceOfToday restaurant={restaurant} />
+            
             </div>
-            <div className="relative h-80 w-full rounded border bg-secondary/80 stroke-current text-secondary-foreground">
-                <ChartBarIcon className="absolute right-4 top-4 w-8 min-w-8 stroke-inherit stroke-[0.75]" />
-                Nombre de réservation du mois : {stats.reservation_month} 
-                - poucentage : {stats.reservation_percentage}% par rapport au mois précédent
-            </div>
-            <div className="relative h-80 w-full rounded border bg-secondary/80 stroke-current text-secondary-foreground">
-                <ChartBarIcon className="absolute right-4 top-4 w-8 min-w-8 stroke-inherit stroke-[0.75]" />
-                Nombre de couverts du mois {stats.guests_month}
-                - poucentage : {stats.guests_percentage}% par rapport au mois précédent
-            </div>
-
-            <div className="flex w-full flex-row gap-5">
-                <div className="h-60 w-1/2 rounded border bg-secondary/80" />
-                <div className="h-60 w-1/2 rounded border bg-secondary/80" />
-            </div>
+            <h2 className="font-bold text-xl">Vos statistiques du mois </h2>
+            <Stats restaurant={restaurant}/>
         </>
     );
 };

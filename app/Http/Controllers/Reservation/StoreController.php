@@ -37,9 +37,14 @@ class StoreController extends Controller
         if ($this->restaurantRepository->isRestaurantCanAcceptReservation($restaurant)) {
             $servicesOfTheDay = $this->restaurantRepository->getServicesFromTheSelectedDate($restaurant, $request->get('reservation_date'));
 
+
             $servicesWithOptions = (new FormatServices)->filterOffTheServiceWhenEndReservationIsPastToday($servicesOfTheDay, $request->get('reservation_date'), $restaurant);
           
             $servicesResource = ServiceResource::collection($servicesOfTheDay);
+            
+            // $dayOfWeekIndex = $date->dayOfWeekIso; 
+            // return $dayOfWeekIndex;
+
             return ApiResponse::ok([
                 'services' => $servicesResource,
                 "transformedServices" => $servicesWithOptions,

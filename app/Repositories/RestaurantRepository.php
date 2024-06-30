@@ -18,8 +18,9 @@ class RestaurantRepository
         $date = Carbon::parse($date);
         $date->setLocale('fr');
         // $dayOfWeekIndex = $date->dayOfWeek;
+        
         $dayOfWeekIndex = $date->dayOfWeekIso; 
-
+        // return $dayOfWeekIndex;
         return $restaurant->services->where('day_id', $dayOfWeekIndex);
     }
 

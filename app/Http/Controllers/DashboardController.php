@@ -25,15 +25,10 @@ class DashboardController extends Controller
         $restaurant = Restaurant::find($restaurantId);
         $isMissingInfo = (new RestaurantRepository())->isRestaurantMissingInformation($restaurant);
 
-
-        $stats = (new Stats())->handle($restaurant);
-  
-
-        return inertia("Dashboard", [
+        return inertia("Dashboard/Dashboard", [
             "restaurant" => new RestaurantResource($restaurant),
             "restaurants" => $restaurants,
-            "isMissingInfo" => $isMissingInfo,
-            "stats" => $stats
+            "isMissingInfo" => $isMissingInfo
         ]);
     }
 }

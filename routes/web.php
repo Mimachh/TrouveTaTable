@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\Reservation\ShowByServiceAndDateController;
 use App\Http\Controllers\Api\Reservation\ShowReservationController;
 use App\Http\Controllers\Api\Restaurant\GetAllMyRestaurants;
 use App\Http\Controllers\Changelog\IndexChangelogController;
+use App\Http\Controllers\Dashboard\GetReservationCountByDate;
+use App\Http\Controllers\Dashboard\GetStatsController;
 use App\Http\Controllers\Dashboard\Hours\CreateHoursController;
 use App\Http\Controllers\Dashboard\Hours\IndexHoursController;
 use App\Http\Controllers\Dashboard\Messages\EnableOrDisableRestaurantContactController;
@@ -58,7 +60,6 @@ use App\Http\Controllers\Support\CreateSupportController;
 use App\Http\Controllers\Welcome\AppNewsletterController;
 use App\Http\Controllers\Welcome\CreateContactController;
 use App\Http\Controllers\WelcomeController;
-use App\Models\Reservation;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -182,6 +183,9 @@ Route::middleware(['auth'])->group(function () {
                     Route::post('/', UpdateBannerRestaurantController::class)->name('update'); // TESTED
                     Route::delete('/', DeleteBannerRestaurantController::class)->name('delete'); // TESTED
                 });
+
+                Route::get('/stats', GetStatsController::class)->name('stats');
+                Route::get('getReservationCountByDate/{date}', GetReservationCountByDate::class)->name('get.reservation.count.by.date');
             });
         });
 

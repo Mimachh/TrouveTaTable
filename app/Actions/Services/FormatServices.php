@@ -66,7 +66,7 @@ class FormatServices
         
         $today = Carbon::today();
         $today->setLocale('fr');
-
+        
         // $now->setTimezone('UTC');
        
         // $stop_time_reservation = substr($restaurant->time_to_stop_reservation, 0, 5);
