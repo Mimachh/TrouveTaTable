@@ -9,6 +9,9 @@ use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
 use Inertia\Ssr\HttpGateway;
 
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Request;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -25,10 +28,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Inertia::share([ 'errors' => function () { return Session::get('errors') ? Session::get('errors')->getBag('default')->getMessages() : (object) []; }]);
-       
+        if (Request::is('dashboard/*')) {
+            Config::set('inertia.ssr.enabled', false);
+        }
     }
 
-    public $bindings = [
-        HttpGateway::class => InertiaHttpGateway::class,
-    ]; 
+    // public $bindings = [
+    //     HttpGateway::class => InertiaHttpGateway::class,
+    // ]; 
 }

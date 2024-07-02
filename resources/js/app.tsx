@@ -25,10 +25,10 @@ createInertiaApp({
             import.meta.glob("./Pages/**/*.tsx"),
         ),
     setup({ el, App, props }) {
-        // const root = createRoot(el);
+        const root = createRoot(el);
         // preloadSprite();
-        // root.render(<App {...props} />);
-        hydrateRoot(el, <App {...props} />);
+        root.render(<App {...props} />);
+        // hydrateRoot(el, <App {...props} />);
     },
     progress: {
         color: "#4B5563",
