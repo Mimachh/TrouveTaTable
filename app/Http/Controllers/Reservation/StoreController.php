@@ -11,6 +11,7 @@ use App\Http\Requests\Reservation\StepOneRequest;
 use App\Http\Requests\Reservation\StepThreeRequest;
 use App\Http\Requests\Reservation\StepTwoRequest;
 use App\Http\Resources\ServiceResource;
+use App\Http\Resources\ServiceWithOptionResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Reservation;
 use App\Models\Restaurant;
@@ -45,9 +46,17 @@ class StoreController extends Controller
             // $dayOfWeekIndex = $date->dayOfWeekIso; 
             // return $dayOfWeekIndex;
 
+
+
+
+
+
+            
             return ApiResponse::ok([
                 'services' => $servicesResource,
                 "transformedServices" => $servicesWithOptions,
+
+     
             ]);
         }
 

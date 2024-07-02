@@ -91,7 +91,7 @@ class GenerateRatingMail
     {
         $proprio = $restaurant->owner;
         // ici il faut enlever je crois
-        if (!$this->ownerCanEnableRating($proprio)) {
+        if ($this->ownerCanEnableRating($proprio)) {
             return $restaurant->reservations;
         }
         return [];

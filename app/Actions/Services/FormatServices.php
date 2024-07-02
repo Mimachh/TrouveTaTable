@@ -94,7 +94,9 @@ class FormatServices
                         $servicesWithOptionsArray[] = $service;
                     }
                 } else {
-                    $servicesWithOptionsArray[] = $service;
+                    if($service->start_time > $currentTime) {
+                        $servicesWithOptionsArray[] = $service;
+                    }
                 }
             });
 

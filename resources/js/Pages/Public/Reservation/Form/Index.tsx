@@ -114,7 +114,7 @@ const Index = ({
                 })
                 .then((response) => {
                     // Traiter les données de la réponse ici
-                    // console.log(response.data);
+                    console.log(response.data);
                     setServices(response.data.data.services);
                     setTransformedServices(
                         response.data.data.transformedServices
