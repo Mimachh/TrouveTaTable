@@ -20,6 +20,7 @@ import { formatDateToIsoMidDay } from "@/lib/format-date-to-iso-mid-day";
 import { Restaurant } from "@/types/restaurant";
 import { toast } from "sonner";
 import { useContactRestaurantModal } from "@/hooks/useContactRestaurantModal";
+import SiteBanner from "@/Components/SiteBanner";
 
 type ResaFormProps = PageProps & {
     before_today: Date;
@@ -262,6 +263,7 @@ const Index = ({
             <Head title="Réservation" />
 
             <form onSubmit={onSubmit}>
+            <SiteBanner />
                 <div className="space-y-5">
                     {step}
                     {!isLastStep && (

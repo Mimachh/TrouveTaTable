@@ -11,7 +11,7 @@ const Footer = () => {
                         <li>
                             <Button 
                             onClick={() => {
-                                router.visit(route('home'))
+                                router.visit(route('legal'))
                             }}
                             className="text-green-800"
                             variant={"link"}>Mentions légales</Button>

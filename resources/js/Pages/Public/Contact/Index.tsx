@@ -1,3 +1,4 @@
+import SiteBanner from "@/Components/SiteBanner";
 import { ContactRestaurant } from "@/Components/modales/ContactRestaurant";
 import { useContactRestaurantModal } from "@/hooks/useContactRestaurantModal";
 import { PageProps } from "@/types";
@@ -27,7 +28,7 @@ const Index = (props: Props) => {
             <Head
                 title={`Page de contact du restaurant ${restaurant.data.name}`}
             />
-
+            <SiteBanner />
             {!contactModalIsOpen && (
                 <p className="p-3 rounded-md bg-background">Si vous nous avez transmis un message nous vous recontacterons au plus vite !</p>
             )}

@@ -4,6 +4,7 @@ import { router, useForm } from "@inertiajs/react";
 import { useState } from "react";
 import StarButton from "@/Components/ui/star-button";
 import { RatingRestaurantItem } from "@/types/rating-restaurant-item";
+import SiteBanner from "@/Components/SiteBanner";
 
 type Props = PageProps & {
     errorMessage: string | null;
@@ -51,7 +52,8 @@ const Index = (props: Props) => {
     });
 
     return (
-        <div className="flex items-center justify-center bg-gradient-to-b from-yellow-300 to-pink-800 min-h-screen">
+        <div className="flex items-center justify-center  min-h-screen">
+            <SiteBanner />
             <div className="max-w-4xl bg-white mx-auto w-full border rounded-md shadow-sm">
                 {errorMessage ? (
                     <div

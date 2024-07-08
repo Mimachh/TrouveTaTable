@@ -75,6 +75,9 @@ Route::middleware('guest')->get('/compte-supprime', function () {
 Route::get('/', WelcomeController::class)->name('home');
 Route::get('/prices', PricingController::class)->name('prices');
 Route::get('/changelog', IndexChangelogController::class)->name('changelog');
+Route::get('mentions-legales', function () {
+    return Inertia::render('Mentions/Index');
+})->name('legal');
 Route::post('/newsletter', AppNewsletterController::class)->name('newsletter.app.subscribe');
 Route::post('/contact', CreateContactController::class)->name('contact.create');
 

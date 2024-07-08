@@ -49,7 +49,7 @@ const Dashboard = ({
             />
 
             <div className="flex items-center gap-3">
-                <div className="rounded-md border bg-secondary md:w-2/3 w-full h-48">
+                <div className="h-48 w-full rounded-md border bg-secondary md:w-2/3">
                     <div className="flex flex-col items-center gap-2 py-8">
                         <h1 className="text-4xl font-extrabold lg:text-6xl">
                             {time}
@@ -61,10 +61,9 @@ const Dashboard = ({
                     </div>
                 </div>
                 <ServiceOfToday restaurant={restaurant} />
-            
             </div>
-            <h2 className="font-bold text-xl">Vos statistiques du mois </h2>
-            <Stats restaurant={restaurant}/>
+            <h2 className="text-xl font-bold">Vos statistiques du mois </h2>
+            <Stats restaurant={restaurant} />
         </>
     );
 };
@@ -89,18 +88,26 @@ const MissingInfo = ({
             {isMissingInfo && <MissingInfoRestaurant restaurant={restaurant} />}
 
             {!isMissingInfo && (
-                <div className="space-y-1.5 rounded-lg border bg-primaryBlue/20 p-4 md:col-start-3">
-                    <RestaurantStatus restaurant={restaurant} />
-                    <MessageStatus restaurant={restaurant} />
-                    <ReservationStatus restaurant={restaurant} />
-                    <ServicesStatus restaurant={restaurant} />
-                    {!user?.isFondator && (
-                        <ErrorMustBeFondator
-                            classNames="bg-background/60 justify-between"
-                            message="Votre niveau d'abonnement ne vous permet pas de profiter pleinement de nos services."
-                        />
+                <>
+                    {restaurant.active &&
+                    restaurant.accept_messages &&
+                    restaurant.accept_reservations &&
+                    restaurant.services.length > 0 &&
+                    user?.isFondator ? null : (
+                        <div className="space-y-1.5 rounded-lg border bg-primaryBlue/20 p-4 md:col-start-3">
+                            <RestaurantStatus restaurant={restaurant} />
+                            <MessageStatus restaurant={restaurant} />
+                            <ReservationStatus restaurant={restaurant} />
+                            <ServicesStatus restaurant={restaurant} />
+                            {!user?.isFondator && (
+                                <ErrorMustBeFondator
+                                    classNames="bg-background/60 justify-between"
+                                    message="Votre niveau d'abonnement ne vous permet pas de profiter pleinement de nos services."
+                                />
+                            )}
+                        </div>
                     )}
-                </div>
+                </>
             )}
         </>
     );

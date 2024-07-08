@@ -21,6 +21,13 @@ type WelcomeProps = PageProps & {
     };
 };
 
+declare global {
+    interface Window {
+        dataLayer: any[];
+        gtag: (...args: any[]) => void;
+    }
+}
+
 export default function Welcome({ auth, products }: WelcomeProps) {
     const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
     const setUser = useUser.use.setUser();
@@ -35,6 +42,26 @@ export default function Welcome({ auth, products }: WelcomeProps) {
         { id: "Contact", label: "Contact" },
         { id: "Roadmap", label: "Roadmap" },
     ];
+
+    useEffect(() => {
+        // Créer le script pour gtag.js
+        const scriptTagManager = document.createElement('script');
+        scriptTagManager.async = true;
+        scriptTagManager.src = "https://www.googletagmanager.com/gtag/js?id=G-JQP35X3M8T";
+        document.head.appendChild(scriptTagManager);
+    
+        // Initialiser le dataLayer et configurer gtag
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function(){ window.dataLayer.push(arguments); }
+        window.gtag('js', new Date());
+        window.gtag('config', 'G-JQP35X3M8T');
+    
+        // Nettoyage en retirant le script lors du démontage du composant
+        return () => {
+            document.head.removeChild(scriptTagManager);
+        };
+    }, []);
+
     const { csrf_token } = usePage().props;
     return (
         <ToastProvider>
@@ -61,3 +88,14 @@ export default function Welcome({ auth, products }: WelcomeProps) {
         </ToastProvider>
     );
 }
+
+
+// <!-- Google tag (gtag.js) -->
+// <script async src="https://www.googletagmanager.com/gtag/js?id=G-JQP35X3M8T"></script>
+// <script>
+//   window.dataLayer = window.dataLayer || [];
+//   function gtag(){dataLayer.push(arguments);}
+//   gtag('js', new Date());
+
+//   gtag('config', 'G-JQP35X3M8T');
+// </script>

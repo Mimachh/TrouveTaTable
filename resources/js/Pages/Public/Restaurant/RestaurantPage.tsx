@@ -2,10 +2,11 @@ import RestaurantPageLayout from "@/Layouts/RestaurantPageLayout";
 import { FormatedDayAndHour } from "@/types/days";
 import { Restaurant } from "@/types/restaurant";
 import { Head } from "@inertiajs/react";
-import React, { useState } from "react";
+import React from "react";
 
 import PageContent from "./Partials/PageContent";
 import { Avis } from "@/types/avis";
+import SiteBanner from "@/Components/SiteBanner";
 
 interface Props {
     restaurant: {
@@ -32,6 +33,8 @@ const RestaurantPage = (props: Props) => {
             </Head>
 
             <PageContent restaurant={restaurant.data} hours={hours} avis={avis} />
+
+            <SiteBanner />
         </div>
     );
 };
