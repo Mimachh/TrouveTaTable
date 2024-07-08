@@ -14,7 +14,7 @@
         @vite(['resources/js/app.tsx', "resources/js/Pages/{$page['component']}.tsx"])
         @inertiaHead
     </head>
-    <body class="font-poppins antialiased">
+    <body class=" antialiased">
         @inertia
 
         <!-- <script src="https://js.stripe.com/v3/"></script> -->

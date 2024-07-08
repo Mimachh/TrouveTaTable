@@ -39,7 +39,7 @@ const DesktopNav = (props: ExtendedWelcomeNavProps) => {
             }}
             className="fixed top-2 z-50 w-full"
         >
-            <div className="hidden h-14 w-full items-center justify-between rounded-full border border-welcomePrimary/70 bg-welcomeBackground/30 backdrop-blur-md md:mx-auto md:flex md:w-[770px] md:px-6">
+            <div className="hidden h-14 w-full items-center justify-between rounded-full border border-welcomePrimary/70 bg-white/60 backdrop-blur-md md:mx-auto md:flex md:w-[770px] md:px-6">
                 <div className="flex items-center md:gap-6">
                     <p>Logo</p>
                     <div className="flex items-center md:gap-4">

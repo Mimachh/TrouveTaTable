@@ -8,7 +8,7 @@ import { useUser } from "@/hooks/useUser";
 const Text = () => {
     const user = useUser.use.user();
     return (
-        <div className="px-4 max-w-2xl space-y-5 md:mt-0 mt-24">
+        <div className="w-full px-2 md:px-4 max-w-6xl flex flex-col justify-center gap-3 md:gap-4 items-center pt-8 md:pt-12 min-h-[75vh] md:min-h-[85vh]">
             <m.div
                 initial={{
                     opacity: 0,
@@ -24,7 +24,7 @@ const Text = () => {
                 }}
                 className="max-w-fit"
             >
-                <div className="relative rounded-full px-1 py-1 text-sm leading-2 text-foreground ring-[1px] ring-muted hover:ring-neutral-500 transition-all flex items-center gap-1">
+                <div className="bg-white border border-neutral-900 relative rounded-full px-1 py-1 text-sm leading-2 text-foreground ring-[1px] ring-muted hover:ring-neutral-500 transition-all flex items-center gap-1">
                     <span className="uppercase text-white bg-neutral-900 py-1 rounded-full px-2 mr-1 text-xs">
                         NEW
                     </span>
@@ -51,18 +51,18 @@ const Text = () => {
                     duration: 0.5,
                     ease: [0.4, 0.0, 0.2, 1],
                 }}
-                className="header-welcome"
+                className="header-welcome text-center"
             >
-                <span className="text-shadow shadow-gray-400">
+                <span className="">
                     {" "}
-                    Modernisez votre restaurant avec notre outil innovant et{" "}
+                    Trouve ta {" "} <br />
                 </span>
                 <span className="relative w-fit inline-block">
                     <span className="z-1 absolute  md:translate-x-[-2px] md:translate-y-[3px] translate-x-[-1px] translate-y-[2px] text-neutral-800">
-                        complet !
+                        table
                     </span>
                     <span className="z-2 relative font-outline-2 text-white">
-                        complet !
+                        table
                     </span>
                 </span>
             </m.h1>
@@ -81,9 +81,8 @@ const Text = () => {
                     delay: 0.5,
                     ease: [0.4, 0.0, 0.2, 1],
                 }}
-                className="w-full flex-wrap dark:text-muted"
+                className="w-full flex-wrap dark:text-muted text-center text-lg md:text-xl"
             >
-                Découvrez TrouveTaTable.fr notre plateforme pour restaurateurs.
                 Concentrez-vous sur vos clients, pas sur la gestion.
             </m.div>
 

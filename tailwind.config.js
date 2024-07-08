@@ -92,6 +92,13 @@ module.exports = {
             },
             fontFamily: {
                 poppins: ["Poppins", "sans-serif"],
+                "clashVariable": [ 'ClashDisplay-Variable', 'system-ui'],
+                "clashExtraLight": [ 'ClashDisplay-Extralight', 'system-ui'],
+                "clashLight": [ 'ClashDisplay-Light', 'system-ui'],
+                "clashRegular": [ 'ClashDisplay-Regular', 'system-ui'],
+                "clashMedium": [ 'ClashDisplay-Medium', 'system-ui'],
+                "clashSemiBold": [ 'ClashDisplay-Semibold', 'system-ui'],
+                "clashBold": [ 'ClashDisplay-Bold', 'system-ui']
             },
             textShadow: {
               sm: '0 1px 2px var(--tw-shadow-color)',
@@ -99,6 +106,7 @@ module.exports = {
               
               lg: '0 8px 16px var(--tw-shadow-color)',
             },
+
         },
     },
     plugins: [

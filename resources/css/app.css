@@ -75,8 +75,10 @@
     }
 
     .header-welcome {
-        @apply text-3xl  md:text-4xl lg:text-[3.25rem] font-bold text-neutral-800 tracking-tight leading-relaxed lg:leading-snug
+        @apply relative  font-bold tracking-wide  text-7xl md:text-9xl leading-none;
     }
+
+    /* bg-gradient-to-l to-welcomePrimary/80 from-neutral-950 bg-clip-text text-transparent */
 }
 
 @layer components {
@@ -89,7 +91,7 @@
     }
 
     .header-title {
-        @apply font-semibold text-xl text-gray-800 leading-tight;
+        @apply text-xl font-semibold leading-tight text-gray-800;
     }
 
     .radial-gradient {
@@ -123,9 +125,11 @@
             hsl(var(--primary-blue)) calc(var(--x) + 25%),
             rgba(255, 255, 255, 0.1) calc(var(--x) + 100%)
         );
-        mask: linear-gradient(black, black) content-box,
+        mask:
+            linear-gradient(black, black) content-box,
             linear-gradient(black, black);
-        -webkit-mask: linear-gradient(black, black) content-box,
+        -webkit-mask:
+            linear-gradient(black, black) content-box,
             linear-gradient(black, black);
         mask-composite: exclude;
         -webkit-mask-composite: exclude;

@@ -36,7 +36,7 @@ const CalendarCard = () => {
                 delay: 0.2,
                 ease: [0.4, 0.0, 0.2, 1],
             }}
-            className="w-full"
+            className="w-full max-w-4xl mx-auto"
             onMouseMove={handleMouseMove}
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => {
@@ -59,8 +59,8 @@ const CalendarCard = () => {
                 }}
                 className=" border-welcomePrimary/20 w-full p-1 border-2 rounded-2xl"
             >
-                <div className=" border border-welcomePrimary p-4 rounded-xl bg-welcomeBackground/5">
-                    <HeroHighlight containerClassName="h-fit block">
+                <div className="bg-white border border-welcomePrimary p-4 rounded-xl">
+                    {/* <HeroHighlight containerClassName="h-fit block"> */}
                         <div className="grid grid-cols-5 gap-3">
                             <div className="col-span-2">
                                 <h3 className="font-semibold  text-lg mt-10 dark:text-black">
@@ -109,7 +109,7 @@ const CalendarCard = () => {
                                 />
                             </div>
                         </div>
-                    </HeroHighlight>
+                    {/* </HeroHighlight> */}
                 </div>
             </m.div>
         </m.div>
