@@ -42,6 +42,7 @@ class HandleInertiaRequests extends Middleware
                 $user = $request->user();
                 return ['user' => $user ? (new UserResource($user)) : null];
             },
+            'app_name' => config('app.name'),
         ];
     }
 }

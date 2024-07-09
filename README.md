@@ -52,3 +52,5 @@ nettoyer et clarifier index de reservation.
     - corriger le message d'erreur qui apparait vite fait
     - vérifier les crons : le rappel fonctionne, les mails normaux s'envoient.
     
+
+Supprimer : dans les composants navigation->dashboard et navigation->sidebar

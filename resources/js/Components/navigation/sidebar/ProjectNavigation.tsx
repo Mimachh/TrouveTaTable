@@ -31,6 +31,7 @@ interface Props {
     isOpen: boolean;
     setSelectedProject: (project: string | null) => void;
     restaurant: Restaurant;
+    setIsOpen: (isOpen: boolean) => void;
 }
 
 const ProjectNavigation = ({
@@ -39,6 +40,7 @@ const ProjectNavigation = ({
     isOpen,
     setSelectedProject,
     restaurant,
+    setIsOpen,
 }: Props) => {
     return (
         <>
@@ -49,6 +51,7 @@ const ProjectNavigation = ({
                     isOpen={isOpen}
                     setSelectedProject={setSelectedProject}
                     restaurant={restaurant}
+                    setIsOpen={setIsOpen}
                 />
             ) : selectedProject === "Paramètres" ? (
                 <SettingsProjectNavigation
@@ -57,6 +60,7 @@ const ProjectNavigation = ({
                     isOpen={isOpen}
                     setSelectedProject={setSelectedProject}
                     restaurant={restaurant}
+                    setIsOpen={setIsOpen}
                 />
             ) : (
                 <DefaultProjectNavigation
@@ -65,6 +69,7 @@ const ProjectNavigation = ({
                     isOpen={isOpen}
                     setSelectedProject={setSelectedProject}
                     restaurant={restaurant}
+                    setIsOpen={setIsOpen}
                 />
             )}
         </>
@@ -74,7 +79,8 @@ const ProjectNavigation = ({
 export default ProjectNavigation;
 
 const DefaultProjectNavigation = (props: Props) => {
-    const { id, selectedProject, isOpen, setSelectedProject } = props;
+    const { id, selectedProject, isOpen, setSelectedProject, setIsOpen } =
+        props;
     return (
         <motion.nav
             variants={variants}
@@ -86,22 +92,27 @@ const DefaultProjectNavigation = (props: Props) => {
                 duration: 0.25,
                 ease: "easeInOut",
             }}
-            className={`h-full min-h-screen flex flex-col gap-8 w-64 absolute bg-secondary ml-0 z-50 ${
+            className={`absolute z-50 ml-0 flex h-full min-h-screen w-64 flex-col gap-8 bg-secondary ${
                 isOpen ? "left-64" : "left-20"
             } border-r border-secondary-foreground/20 p-5`}
         >
-            <div className="flex flex-row w-full justify-between place-items-center">
-                <h1 className="tracking-wide text-secondary-foreground/80 text-lg">
+            <div className="flex w-full flex-row place-items-center justify-between">
+                <h1 className="text-lg tracking-wide text-secondary-foreground/80">
                     {selectedProject}
                 </h1>
-                <button onClick={() => setSelectedProject(null)}>
+                <button
+                    onClick={() => {
+                        setSelectedProject(null);
+                        setIsOpen(false);
+                    }}
+                >
                     <XMarkIcon className="w-8 stroke-secondary-foreground/60" />
                 </button>
             </div>
             <input
                 placeholder="Search"
                 type="text"
-                className="px-3 py-2 tracking-wide rounded-lg bg-background text-muted-foreground/80"
+                className="rounded-lg bg-background px-3 py-2 tracking-wide text-muted-foreground/80"
             />
             <div className="flex flex-col gap-3">
                 <NavigationLink
@@ -109,62 +120,62 @@ const DefaultProjectNavigation = (props: Props) => {
                     href={route("dashboard")}
                     active={route().current("dashboard")}
                 >
-                    <ArrowTrendingUpIcon className="stroke-[0.75] stroke-inherit min-w-8 w-8" />
+                    <ArrowTrendingUpIcon className="w-8 min-w-8 stroke-inherit stroke-[0.75]" />
                 </NavigationLink>
                 <NavigationLink
                     name="Team Members"
                     href={route("dashboard")}
                     active={route().current("dashboard")}
                 >
-                    <UserGroupIcon className="stroke-[0.75] stroke-inherit min-w-8 w-8" />
+                    <UserGroupIcon className="w-8 min-w-8 stroke-inherit stroke-[0.75]" />
                 </NavigationLink>
                 <NavigationLink
                     name="In Review"
                     href={route("dashboard")}
                     active={route().current("dashboard")}
                 >
-                    <PencilIcon className="stroke-[0.75] stroke-inherit min-w-8 w-8" />
+                    <PencilIcon className="w-8 min-w-8 stroke-inherit stroke-[0.75]" />
                 </NavigationLink>
                 <NavigationLink
                     name="In Progress"
                     href={route("dashboard")}
                     active={route().current("dashboard")}
                 >
-                    <BoltIcon className="stroke-[0.75] stroke-inherit min-w-8 w-8" />
+                    <BoltIcon className="w-8 min-w-8 stroke-inherit stroke-[0.75]" />
                 </NavigationLink>
                 <NavigationLink
                     name="Up Next"
                     href={route("dashboard")}
                     active={route().current("dashboard")}
                 >
-                    <CursorArrowRaysIcon className="stroke-[0.75] stroke-inherit min-w-8 w-8" />
+                    <CursorArrowRaysIcon className="w-8 min-w-8 stroke-inherit stroke-[0.75]" />
                 </NavigationLink>
                 <NavigationLink
                     name="Project Settings"
                     href={route("dashboard")}
                     active={route().current("dashboard")}
                 >
-                    <AdjustmentsHorizontalIcon className="stroke-[0.75] stroke-inherit min-w-8 w-8" />
+                    <AdjustmentsHorizontalIcon className="w-8 min-w-8 stroke-inherit stroke-[0.75]" />
                 </NavigationLink>
             </div>
             <div className="flex flex-col gap-5">
                 <h1 className="tracking-wide text-secondary-foreground/80">
                     Team Members
                 </h1>
-                <a href="#" className="flex flex-row gap-3 place-items-center">
-                    <UserIcon className="w-8 p-1 rounded-full stroke-2 stroke-rose-800 bg-rose-200/70" />
+                <a href="#" className="flex flex-row place-items-center gap-3">
+                    <UserIcon className="w-8 rounded-full bg-rose-200/70 stroke-rose-800 stroke-2 p-1" />
                     <p className="tracking-wide text-secondary-foreground/60">
                         Steve Jobs
                     </p>
                 </a>
-                <a href="#" className="flex flex-row gap-3 place-items-center">
-                    <UserIcon className="w-8 p-1 rounded-full stroke-2 stroke-emerald-800 bg-emerald-200/70" />
+                <a href="#" className="flex flex-row place-items-center gap-3">
+                    <UserIcon className="w-8 rounded-full bg-emerald-200/70 stroke-emerald-800 stroke-2 p-1" />
                     <p className="tracking-wide text-secondary-foreground/60">
                         Bill Gates
                     </p>
                 </a>
-                <a href="#" className="flex flex-row gap-3 place-items-center">
-                    <UserIcon className="w-8 p-1 rounded-full stroke-2 stroke-indigo-800 bg-indigo-200/70" />
+                <a href="#" className="flex flex-row place-items-center gap-3">
+                    <UserIcon className="w-8 rounded-full bg-indigo-200/70 stroke-indigo-800 stroke-2 p-1" />
                     <p className="tracking-wide text-secondary-foreground/60">
                         Jeff Bezos
                     </p>
@@ -175,8 +186,14 @@ const DefaultProjectNavigation = (props: Props) => {
 };
 
 const UserProjectNavigation = (props: Props) => {
-    const { id, selectedProject, isOpen, setSelectedProject, restaurant } =
-        props;
+    const {
+        id,
+        selectedProject,
+        isOpen,
+        setSelectedProject,
+        restaurant,
+        setIsOpen,
+    } = props;
     return (
         <motion.nav
             variants={variants}
@@ -188,15 +205,20 @@ const UserProjectNavigation = (props: Props) => {
                 duration: 0.25,
                 ease: "easeInOut",
             }}
-            className={`h-full min-h-screen flex flex-col gap-16 w-64 absolute bg-secondary ml-0 z-50 ${
+            className={`absolute z-50 ml-0 flex h-full min-h-screen w-64 flex-col gap-16 bg-secondary ${
                 isOpen ? "left-64" : "left-20"
             } border-r border-secondary-foreground/20 p-5`}
         >
-            <div className="flex flex-row w-full h-fit justify-between place-items-center">
-                <h1 className="tracking-wide text-secondary-foreground/80 text-lg">
+            <div className="flex h-fit w-full flex-row place-items-center justify-between">
+                <h1 className="text-lg tracking-wide text-secondary-foreground/80">
                     {selectedProject}
                 </h1>
-                <button onClick={() => setSelectedProject(null)}>
+                <button
+                    onClick={() => {
+                        setSelectedProject(null);
+                        setIsOpen(false);
+                    }}
+                >
                     <XMarkIcon className="w-8 stroke-secondary-foreground/60" />
                 </button>
             </div>
@@ -206,7 +228,7 @@ const UserProjectNavigation = (props: Props) => {
                     href={route("dashboard")}
                     active={route().current("dashboard")}
                 >
-                    <UserGroupIcon className="stroke-[0.75] stroke-inherit min-w-8 w-8" />
+                    <UserGroupIcon className="w-8 min-w-8 stroke-inherit stroke-[0.75]" />
                 </NavigationLink>
 
                 <NavigationLink
@@ -214,7 +236,7 @@ const UserProjectNavigation = (props: Props) => {
                     href={route("dashboard")}
                     active={route().current("dashboard")}
                 >
-                    <ArrowTrendingUpIcon className="stroke-[0.75] stroke-inherit min-w-8 w-8" />
+                    <ArrowTrendingUpIcon className="w-8 min-w-8 stroke-inherit stroke-[0.75]" />
                 </NavigationLink>
 
                 <NavigationLink
@@ -222,20 +244,20 @@ const UserProjectNavigation = (props: Props) => {
                     href={route("dashboard.newsletter.index", restaurant.id)}
                     active={route().current(
                         "dashboard.newsletter.index",
-                        restaurant.id
+                        restaurant.id,
                     )}
                 >
-                    <PencilIcon className="stroke-[0.75] stroke-inherit min-w-8 w-8" />
+                    <PencilIcon className="w-8 min-w-8 stroke-inherit stroke-[0.75]" />
                 </NavigationLink>
                 <NavigationLink
                     name="Avis clients"
                     href={route("dashboard.ratings.index", restaurant.id)}
                     active={route().current(
                         "dashboard.ratings.index",
-                        restaurant.id
+                        restaurant.id,
                     )}
                 >
-                    <BoltIcon className="stroke-[0.75] stroke-inherit min-w-8 w-8" />
+                    <BoltIcon className="w-8 min-w-8 stroke-inherit stroke-[0.75]" />
                 </NavigationLink>
             </div>
         </motion.nav>
@@ -243,8 +265,14 @@ const UserProjectNavigation = (props: Props) => {
 };
 
 const SettingsProjectNavigation = (props: Props) => {
-    const { id, selectedProject, isOpen, setSelectedProject, restaurant } =
-        props;
+    const {
+        id,
+        selectedProject,
+        isOpen,
+        setSelectedProject,
+        restaurant,
+        setIsOpen,
+    } = props;
     return (
         <motion.nav
             variants={variants}
@@ -256,47 +284,48 @@ const SettingsProjectNavigation = (props: Props) => {
                 duration: 0.25,
                 ease: "easeInOut",
             }}
-            className={`h-full min-h-screen flex flex-col gap-16 w-64 absolute bg-secondary ml-0 z-50 ${
+            className={`absolute z-50 ml-0 flex h-full min-h-screen w-64 flex-col gap-16 bg-secondary ${
                 isOpen ? "left-64" : "left-20"
             } border-r border-secondary-foreground/20 p-5`}
         >
-            <div className="flex flex-row w-full h-fit justify-between place-items-center">
-                <h1 className="tracking-wide text-secondary-foreground/80 text-lg">
+            <div className="flex h-fit w-full flex-row place-items-center justify-between">
+                <h1 className="text-lg tracking-wide text-secondary-foreground/80">
                     {selectedProject}
                 </h1>
-                <button onClick={() => setSelectedProject(null)}>
+                <button
+                    onClick={() => {
+                        setSelectedProject(null);
+                        setIsOpen(false);
+                    }}
+                >
                     <XMarkIcon className="w-8 stroke-secondary-foreground/60" />
                 </button>
             </div>
             <div className="flex flex-col gap-3">
                 <NavigationLink
                     name="Généraux"
-                    href={route(
-                        "dashboard.settings.index",
-                        restaurant.id
-                    )}
+                    href={route("dashboard.settings.index", restaurant.id)}
                     active={route().current(
                         "dashboard.settings.index",
-                        restaurant.id
+                        restaurant.id,
                     )}
                 >
-                    <Settings className="stroke-inherit stroke-[0.75] min-w-6 w-6 h-6" />
+                    <Settings className="h-6 w-6 min-w-6 stroke-inherit stroke-[0.75]" />
                 </NavigationLink>
 
                 <NavigationLink
                     name="Notifications"
                     href={route(
                         "dashboard.settings.notifications.index",
-                        restaurant.id
+                        restaurant.id,
                     )}
                     active={route().current(
                         "dashboard.settings.notifications.index",
-                        restaurant.id
+                        restaurant.id,
                     )}
                 >
-                    <BellAlertIcon className="stroke-inherit stroke-[0.75] min-w-6 w-6 h-6" />
+                    <BellAlertIcon className="h-6 w-6 min-w-6 stroke-inherit stroke-[0.75]" />
                 </NavigationLink>
-
             </div>
         </motion.nav>
     );

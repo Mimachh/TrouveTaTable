@@ -4,7 +4,6 @@ import UpdateProfileInformationForm from "./Partials/UpdateProfileInformationFor
 import { Head, usePage } from "@inertiajs/react";
 import { PageProps, User } from "@/types";
 import ProfileLayout from "@/Layouts/ProfileLayout";
-import { Button } from "@/Components/ui/button";
 
 type EditProps = PageProps & {
     mustVerifyEmail: boolean;

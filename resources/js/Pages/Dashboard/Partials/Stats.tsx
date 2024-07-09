@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import { Restaurant } from "@/types/restaurant";
 import { StatsProps } from "@/types/stats";
 import axios from "axios";
-import { Calendar } from "lucide-react";
+import { Beef, Calendar } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface Props {
@@ -65,9 +65,9 @@ const Stats = (props: Props) => {
                     <CardTitle className="text-sm font-medium">
                         Couverts
                     </CardTitle>
-                    <Icon
-                        name="kitchen"
-                        className="h-6 w-6 min-w-6 stroke-muted-foreground stroke-[0.75] text-muted-foreground"
+                    <Beef
+  
+                        className="h-6 w-6 min-w-6  stroke-muted-foreground stroke-[0.75] text-muted-foreground"
                     />
                 </CardHeader>
                 <CardContent>

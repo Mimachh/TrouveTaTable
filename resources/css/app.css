@@ -75,7 +75,7 @@
     }
 
     .header-welcome {
-        @apply relative  font-bold tracking-wide  text-7xl md:text-9xl leading-none;
+        @apply relative  font-bold tracking-wide text-neutral-800  text-7xl md:text-9xl leading-none;
     }
 
     /* bg-gradient-to-l to-welcomePrimary/80 from-neutral-950 bg-clip-text text-transparent */

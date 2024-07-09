@@ -142,7 +142,7 @@ const Navigation = () => {
                             </svg>
                         </button>
                     </div>
-                    <div className="flex flex-col gap-3 ">
+                    <div className="flex flex-col gap-3 overflow-hidden">
                         <NavigationLink
                             name="Dashboard"
                             href={route("dashboard", current_restaurant.id)}
@@ -164,6 +164,7 @@ const Navigation = () => {
                         >
                             <ChatBubbleLeftRightIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
                         </NavigationLink>
+
                         <NavigationLink name="Ma page"
                         href={route("dashboard.page.index", current_restaurant.id)}
                         active={route().current("dashboard.page.index", current_restaurant.id)}
@@ -178,6 +179,7 @@ const Navigation = () => {
                         >
                             <HandPlatter className="stroke-inherit stroke-[0.75] min-w-8 w-8 h-8"  />
                         </NavigationLink>
+
                         <NavigationLink
                             name="Horaires"
                             href={route("dashboard.hours.index", current_restaurant.id)}
@@ -185,6 +187,7 @@ const Navigation = () => {
                         >
                             <ClockIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
                         </NavigationLink>
+                        
                         <NavigationLink
                             name="Réservations"
                             href={route("dashboard.reservation.index", current_restaurant.id)}
@@ -240,6 +243,7 @@ const Navigation = () => {
                 {selectedProject && (
                     <ProjectNavigation
                         id="project-navigation"
+                        setIsOpen={setIsOpen}
                         selectedProject={selectedProject}
                         setSelectedProject={setSelectedProject}
                         isOpen={isOpen}

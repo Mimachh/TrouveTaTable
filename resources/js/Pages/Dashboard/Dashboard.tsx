@@ -48,8 +48,8 @@ const Dashboard = ({
                 user={user}
             />
 
-            <div className="flex items-center gap-3">
-                <div className="h-48 w-full rounded-md border bg-secondary md:w-2/3">
+            <div className="flex flex-col md:flex-row items-center gap-3">
+                <div className="md:h-48 w-full rounded-md border bg-secondary md:w-2/3">
                     <div className="flex flex-col items-center gap-2 py-8">
                         <h1 className="text-4xl font-extrabold lg:text-6xl">
                             {time}
